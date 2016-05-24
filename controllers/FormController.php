@@ -52,6 +52,9 @@ class FormController extends Common {
 			$data['userid']		= empty($this->memberinfo) ? 0  : $this->memberinfo['id'];
 			$data['username']	= empty($this->memberinfo) ? '' : $this->memberinfo['username'];
 			$data['inputtime']	= $data['updatetime'] = time();
+			$data['dealunqiue'] = $this->model['setting']['dealunqiue'];
+			var_dump($data);
+			exit();
 			if ($data['id']		= $this->form->set(0, $data)) {
 				if (isset($this->model['setting']['form']['url']['tohtml']) && $this->model['setting']['form']['url']['tohtml'] && $data['status'] == 1) {
 					$this->createForm($this->modelid, $data);

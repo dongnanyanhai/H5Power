@@ -726,8 +726,22 @@ abstract class Model extends Fn_base {
 		//清空不必要的内存占用
 		unset($field_array);
 		unset($content_array);
-		$sql_str = 'INSERT INTO ' . $this->table_name . ' (' . $field_str . ') VALUES (' . $content_str . ')';
+		// 阿海新增，处理唯一索引数据
+		// var_dump($data);
+		// exit();
+		if($data['dealunqiue'] == 1){
+			// 忽略数据
+			$sql_str = 'INSERT IGNORE INTO ' . $this->table_name . ' (' . $field_str . ') VALUES (' . $content_str . ')';
+		}elseif($data['dealunqiue'] == 2){
+			// 更新数据
+			$sql_str = 'REPLACE INTO ' . $this->table_name . ' (' . $field_str . ') VALUES (' . $content_str . ')';
+		}else{
+			// 正常处理
+			$sql_str = 'INSERT INTO ' . $this->table_name . ' (' . $field_str . ') VALUES (' . $content_str . ')';
+		}
 		return $this->db->query($sql_str) ? $this->db->insert_id() : false;
+		
+		
 	}
 	
 	/**

@@ -88,15 +88,22 @@
 						<tr>
 							<th>{lang('a-fnx-47')}： </th>
 							<td>
-								<input class="input-text" type="text" name="setting[msgtpl]" value="{$setting['msgtpl']}" size="30" />
-								<div class="onShow">{lang('a-fnx-48')}</div>
+								<input class="input-text" type="text" name="setting[msgtpl]" value="{$setting['msgtpl']}" size="30" /><div class="onShow">{lang('a-fnx-48')}</div>
 							</td>
 						</tr>
 						<tr>
 							<th>{lang('a-fnx-10')}： </th>
 							<td>
-								<input class="input-text" type="text" name="setting[email]" value="{$setting['email']}" size="30" />
-								<div class="onShow">{lang('a-fnx-11')}</div>
+								<input class="input-text" type="text" name="setting[email]" value="{$setting['email']}" size="30" /><div class="onShow">{lang('a-fnx-11')}</div>
+							</td>
+						</tr>
+						<tr>
+							<th>{lang('a-fnx-70')}： </th>
+							<td>
+								<input name="setting[dealunqiue]" type="radio" value="0"{if $setting['dealunqiue']==0} checked{/if} />&nbsp;{lang('a-fnx-71')}&nbsp;&nbsp;
+								<input name="setting[dealunqiue]" type="radio" value="1"{if $setting['dealunqiue']==1} checked{/if} />&nbsp;{lang('a-fnx-72')}&nbsp;&nbsp;
+								<input name="setting[dealunqiue]" type="radio" value="2"{if $setting['dealunqiue']==2} checked{/if} />&nbsp;{lang('a-fnx-73')}
+								<!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="onShow">{lang('a-fnx-74')}</div> -->
 							</td>
 						</tr>
 					{/if}

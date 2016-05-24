@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="{ADMIN_THEME}images/reset.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/system.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/dialog.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/main.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/switchbox.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/table_form.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{ADMIN_THEME}js/jquery.min.js"></script>
+<script type="text/javascript" src="{ADMIN_THEME}js/dialog.js"></script>
+<script type="text/javascript">var sitepath = "{SITE_PATH}{ENTRY_SCRIPT_NAME}";</script>
+<script type="text/javascript" src="{LANG_PATH}lang.js"></script>
+<script type="text/javascript" src="{ADMIN_THEME}js/core.js"></script>
+<script type="text/javascript" src="{ADMIN_THEME}js/colorpicker.js"></script>
+<title>admin</title>
+</head>
+<body style="font-weight: normal;">
+<div class="subnav">
+	<div class="content-menu ib-a blue line-x">
+		<a href="{url('admin/menu/')}"><em>{lang('a-fnx-62')}</em></a><span>|</span>
+		<a href="{url('admin/menu/list/',array('menuid'=>$menuid))}"><em>{lang('a-pos-0')}</em></a><span>|</span>
+		<a href="{url('admin/menu/adddata/',array('menuid'=>$menuid))}" class="on"><em>{lang('a-add')}</em></a><span>|</span>
+		<a href="{url('admin/menu/cache')}"><em>{lang('a-cache')}</em></a>
+	</div>
+	<div class="bk10"></div>
+	<div class="table-list">
+		<form method="post" action="" id="myform" name="myform">
+		<input name="data[catid]" type="hidden" id="catid" value="{$data['catid']}">
+		<input name="data[contentid]" type="hidden" id="contentid" value="{$data['contentid']}">
+		<table width="100%" class="table_form ">
+		<tbody>
+		<tr>
+			<th width="200">{lang('a-fnx-65')}：</th>
+			<td>{$menu['name']}</td>
+		</tr>
+		<tr>
+			<th><font color="red">*</font> {lang('a-cat-32')}：</th>
+			<td>
+				<select id="parentid" name="data[parentid]">
+				<option value="0">{lang('a-cat-33')}</option>
+				{$menu_data_tree}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>{lang('a-name')}：</th>
+			<td>
+				<input type="text" class="input-text" size="50" id="name" value="{$data['name']}" name="data[name]" required />
+			</td>
+		</tr>
+		<tr>
+			<th>{lang('a-con-59')}：</th>
+			<td>
+            <input type="text" class="input-text" size="50" id="url" value="{if $data['url']}{$data['url']}{else}{/if}" name="data[url]" required />
+            </td>
+		</tr>
+		<tr>
+			<th>{lang('a-fnx-67')}：</th>
+			<td>
+            <input type="text" class="input-text" size="50" id="query" value="{if $data['query']}{$data['query']}{else}{/if}" name="data[query]" />
+            </td>
+		</tr>
+		<tr>
+			<th>{lang('a-fnx-68')}：</th>
+			<td>
+            <input type="text" class="input-text" size="50" id="option" value="{if $data['option']}{$data['option']}{else}{/if}" name="data[option]" />
+            </td>
+		</tr>
+		<tr>
+			<th>{lang('a-desc')}：</th>
+			<td>
+			{php App::auto_load('fields');echo content_editor('description', array(0=>$data['description']), array('type'=>0, 'width'=>70, 'height'=>300,'system'=>1));}
+			<br><div class="onShow">{lang('a-blo-11')}</div>
+			</td>
+		</tr>
+		<tr>
+			<th>{lang('a-cat-38')}：</th>
+			<td>
+				<input type="radio" {if !isset($data['ismenu']) || $data['ismenu']==1}checked{/if} value="1" name="data[ismenu]" /> {lang('a-yes')}&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" {if isset($data['ismenu']) && $data['ismenu']==0}checked{/if} value="0" name="data[ismenu]" /> {lang('a-no')}
+				<div class="onShow">{lang('a-cat-39')}</div>
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><input type="submit" class="button" value="{lang('a-submit')}" name="submit"></td>
+		</tr>
+		</tbody>
+		</table>
+		</form>
+	</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+function loadInfo() {
+	var url = '{url("admin/menu/ajaxloadinfo/")}';
+	var winid = 'loadinfo';
+	window.top.art.dialog(
+	    {id:winid, okVal:fc_lang[6], cancelVal:fc_lang[7], iframe:url, title:'{lang('a-con-50')}', width:'660', height:'280', lock:true}, 
+		function(){
+		    var d  = window.top.art.dialog({id:winid}).data.iframe;
+			var id = d.document.getElementById('select').value;
+			if (id) {
+				var title = d.document.getElementById('title_'+id).value;
+				var url   = d.document.getElementById('url_'+id).value;
+				var thumb = d.document.getElementById('thumb_'+id).value;
+				var catid = d.document.getElementById('catid_'+id).value;
+				var desc  = d.document.getElementById('desc_'+id).value;
+				$("#title").val(title);
+				$("#url").val(url);
+				$("#thumb").val(thumb);
+				$("#catid").val(catid);
+				$("#description").val(desc);
+				$("#contentid").val(id);
+			} else {
+				return false;
+			}
+		},
+		function(){
+			window.top.art.dialog({id:winid}).close();
+	    }
+	);
+	void(0);
+}
+function check_show(){
+	var fileval = $("#file").val();
+	var point = fileval.lastIndexOf(".");
+	var filetype = fileval.substr(point);
+	if( filetype == ".jpg" || filetype == ".gif" || filetype == ".png" || filetype == ".JPG" || filetype == ".GIF" || filetype == ".PNG" ){
+		preview('file');
+	}else{
+		file_info('file');
+	}
+}
+</script>

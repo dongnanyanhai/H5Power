@@ -50,6 +50,7 @@ return array (
 						106 => array('name' => 'a-men-18', 'url' => url('admin/index/log'),    						'option' => 'index-log'),
 						117 => array('name' => 'a-men-66', 'url' => url('admin/index/attack'), 						'option' => 'index-attack'),
 						118 => array('name' => 'a-men-67', 'url' => url('admin/ip/index'),     						'option' => 'ip-index'),
+						119 => array('name' => 'a-fnx-62', 'url' => url('admin/menu/index'),                        'option' => 'menu-index'),
 					),
 					'a-men-72' => array(
 						121 => array('name' => 'a-men-12', 'url' => url('admin/site/config'),	'option' => 'site-config'),

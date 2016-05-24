@@ -9,7 +9,9 @@ return array(
 	'admin'=>array(
         'index-index',
         'index-main',
-        'login'
+        'login',
+        'content',
+        'form'
     )
 );
 

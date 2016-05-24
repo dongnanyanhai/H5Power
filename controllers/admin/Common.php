@@ -32,51 +32,80 @@ class Admin extends Common {
      * 系统默认菜单
      */
     protected function sysMenu() {
-		$menu = $this->load_config('admin.menu');
+		// $menu = $this->load_config('admin.menu');
+		$menu['top']  = $this->cache->get('menu_top_'.App::get_site_id());
+		$menu['list']  = $this->cache->get('menu_list_'.App::get_site_id());
+		$content_menu = 0;
+		$form_menu = 0;
+		$plugin_menu = 0;
+		$member_menu = 0;
+		foreach ($menu['list'] as $k => $v) {
+			# code...
+			foreach ($v as $kk => $vv) {
+				if($kk == '内容管理'){
+					$content_menu = $k;
+				}
+				if($kk == '表单管理'){
+					$form_menu = $k;
+				}
+				if($kk == '插件列表'){
+					$plugin_menu = $k;
+				}
+				if($kk == '会员扩展'){
+					$member_menu = $k;
+				}
+			}
+		}
+		
 		$data = $this->cache->get('plugin');
-		if ($data) {
+
+		if ($data && $plugin_menu) {
 			foreach ($data as $t) {
 				$id   = $t['pluginid'];
 				$url  = $t['typeid'] ? url($t['dir'] . '/admin/index/', array('siteid' => $this->siteid)) : url('admin/plugin/set', array('pluginid' => $id));
-				$menu['list'][5]['a-men-61']['5' . $id] = array('name' => $t['name'], 'url' => $url);
+				$menu['list'][$plugin_menu]['插件列表']['995' . $id] = array('id'=>'995' . $id,'name' => $t['name'], 'url' => $url);
 			}
 		}
+		
 		$model = $this->get_model('content');	//内容模型
-		if ($model) {
+		if ($model && $content_menu) {
 		    foreach ($model as $t) {
 				if ($this->adminPost($t['setting']['auth'])) continue;
 				$id   = $t['modelid'];
-				$url  = url('admin/content/', array('modelid' => $id));
-				$menu['list'][2]['a-men-29']['281' . $id] = array('name' => $t['modelname'], 'url' => $url, 'clz' => 1);
+				$url  = url('admin/content/', array('modelid' => $id)); 
+				$menu['list'][$content_menu]['内容管理']['999' . $id] = array('id'=>'999' . $id,'name' => $t['modelname'], 'url' => $url, 'clz' => 1);
 			}
-			krsort($menu['list'][2]['a-men-29']);
+			krsort($menu['list'][$content_menu]['内容管理']);
 		}
 		$model = $this->get_model('form');	//表单模型
-		if ($model) {
+		if ($model && $form_menu) {
 			$f = null;
 		    foreach ($model as $t) {
 				if ($this->adminPost($t['setting']['auth'])) continue;
 				$id   = $t['modelid'];
 				$url  = url('admin/form/list', array('modelid' => $id));
-				$menu['list'][2]['a-men-59']['7' . $id] = array('name' => $t['modelname'], 'url' => $url);
+				$menu['list'][$form_menu]['表单管理']['998' . $id] = array('id'=>'998' . $id,'name' => $t['modelname'], 'url' => $url);
 				if (is_null($f)) $f = array('url' => $url, 'id' => '7' . $id);
 			}
 		} else {
-			unset($menu['list'][2]['a-men-59']);
+			unset($menu['list'][$form_menu]['表单管理']);
 		}
+		
 		$model = $this->cache->get('model_member_extend');	//会员扩展模型
-		if ($model) {
+		if ($model && $member_menu) {
 			$f = null;
 		    foreach ($model as $t) {
 				if ($this->adminPost($t['setting']['auth'])) continue;
 				$id   = $t['modelid'];
 				$url  = url('admin/member/extend', array('modelid' => $id));
-				$menu['list'][3]['a-mod-167']['7' . $id] = array('name' => $t['modelname'], 'url' => $url);
-				if (is_null($f)) $f = array('url' => $url, 'id' => '7' . $id);
+				// $menu['list'][3]['a-mod-167']['7' . $id] = array('name' => $t['modelname'], 'url' => $url);
+				$menu['list'][$member_menu]['会员扩展']['997' . $id] = array('id'=>'997' . $id,'name' => $t['modelname'], 'url' => $url);
+				if (is_null($f)) $f = array('url' => $url, 'id' => '997' . $id);
 			}
 		} else {
-			unset($menu['list'][3]['a-mod-167']);
+			unset($menu['list'][$member_menu]['会员扩展']);
 		}
+		
 		return $menu;
     }
 	
@@ -143,38 +172,49 @@ class Admin extends Common {
         $roleid   = $roleid ? $roleid : $this->roleid;
 		//加载用户自定义菜单
 		$usermenu = string2array($this->userinfo['usermenu']);
-        if ($roleid == 1) {
+		$member_menu = 0;
+		foreach ($menu['list'] as $k => $v) {
+			# code...
+			foreach ($v as $kk => $vv) {
+				if($kk == '快捷菜单'){
+					$member_menu = $k;
+				}
+			}
+		}
+		
+        if ($roleid == 1 && $member_menu) {
 			if (!empty($usermenu)) {
 				foreach ($usermenu as $k => $t) {
 					$t['sys'] = 1;
-					$menu['list'][0]['a-men-9']['19' . $k] = str_replace('{site}', $this->siteid, $t);
+					$t['id'] = '996' . $k;
+					$menu['list'][$member_menu]['快捷菜单']['996' . $k] = str_replace('{site}', $this->siteid, $t);					
 				}
 			}
 			return $menu;
 		}
-        $data     = array();
-        $menu['list'][0] = array(
-	        'a-men-62' => array(
-	            01 => array('name' => 'a-men-8',  'url' => url('admin/index/main'), 'option' => ''),
-	            02 => array('name' => 'a-men-63', 'url' => url('admin/user/ajaxedit')),
-	        ),
-	        'a-men-10' => array(
-	            05 => array('name' => CMS_NAME . ' ' . CMS_VERSION, 'sys' => 1)
-	        ),
-	    );
-		if (!empty($usermenu)) {
+
+
+		if (!empty($usermenu) && $member_menu) {
 			foreach ($usermenu as $k => $t) {
-				$menu['list'][0]['a-men-62']['19' . $k] = $t;
+				$t['id'] = '996' . $k;
+				$menu['list'][$member_menu]['快捷菜单']['996' . $k] = $t;
 			}
 		}
+
 		$menuid = $menudata	= array();
+
 	    foreach ($menu['list'] as $id => $t) {
 	        if ($id == 0) continue;
 	        foreach ($t as $oid => $v) {
 	            foreach ($v as $iid => $r) {
 	                //内菜单控制
-	                if ($r['option'] && !$this->checkUserAuth(array($r['option']), $roleid)) {
-	                    if ($r['url'] == $menu['top'][$id]['url']) $menu['top'][$id]['url'] = url('admin/index/main');
+	                
+	                if ($r['option'] && !$this->checkUserAuth(explode(',',$r['option']), $roleid)) {
+
+	                    if ($r['url'] == $menu['top'][$id]['url']) {
+	                    	$menu['top'][$id]['url'] = url('admin/index/main');
+	                    }
+
 	                    unset($menu['list'][$id][$oid][$iid]);
 	                } else {
 						$menuid[]	= $iid;
@@ -187,7 +227,7 @@ class Admin extends Common {
 	    }
 	    foreach ($menu['top'] as $id => $t) {
 	        if ($id == 0) continue;
-	        if (!$this->checkUserAuth($t['option'], $roleid)) unset($menu['top'][$id]);
+	        if (!$this->checkUserAuth(explode(',',$t['option']), $roleid)) unset($menu['top'][$id]);
 			if (!in_array($t['select'], $menuid) && isset($menu['top'][$id])) {
 				$menu['top'][$id]['url']	= $menudata[$id]['url'];
 				$menu['top'][$id]['select']	= $menudata[$id]['select'];
@@ -204,7 +244,9 @@ class Admin extends Common {
         $roleid    = $roleid ? $roleid : $this->roleid;
         $role      = $data_role[$roleid];
         if (!$role) return false;
+        
         if (!is_array($option)) $option = array($option);
+
         foreach ($role as $t) {
             if (in_array($t, $option)) return true;
         }

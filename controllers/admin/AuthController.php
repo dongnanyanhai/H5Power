@@ -21,7 +21,9 @@ class AuthController extends Admin {
         $data_role = require $data_file;
         $role      = $data_role[$roleid];
         //权限模块配置
-        $data_auth = require CONFIG_DIR . 'auth.option.ini.php';
+        // $data_auth = require CONFIG_DIR . 'auth.option.ini.php';
+        // $cache = new cache_file();
+        $data_auth = $data  = $this->cache->get('menu_list_'.App::get_site_id());
         if ($this->post('submit')) {
             if ($roleid == 1) $this->adminMsg(lang('a-aut-1'));
             $auth = array();

@@ -10,21 +10,7 @@ class IndexController extends Admin {
 	 * 首页
 	 */
 	public function indexAction() {
-		$config = self::load_config('config');
 		$menu = $this->optionMenu();
-		//var_dump($config);
-		if (!$config['SITE_FNX_HTML']){
-			unset($menu['top'][6]);
-		}
-		if (!$config['SITE_FNX_MEMBER']){
-			unset($menu['top'][3]);
-		}
-		if (!$config['SITE_FNX_THEME']){
-			unset($menu['top'][4]);
-		}
-		if (!$config['SITE_FNX_PLUGIN']){
-			unset($menu['top'][5]);
-		}
 	    $this->view->assign('menu', $menu);
 		$this->view->display('admin/index');
 	}
@@ -93,10 +79,6 @@ class IndexController extends Admin {
 			'SITE_KEYWORD_CACHE'      => lang('a-cfg-55'),
 			'SITE_TAG_URL'            => lang('a-cfg-56'),
 
-			'SITE_FNX_HTML'           => lang('a-fnx-3'),
-			'SITE_FNX_MEMBER'         => lang('a-fnx-4'),
-			'SITE_FNX_THEME'          => lang('a-fnx-5'),
-			'SITE_FNX_PLUGIN'         => lang('a-fnx-6'),
 			'SITE_FNX_FILESIZE'       => lang('a-fnx-30'),
 			'SITE_FNX_FILETYPE'       => lang('a-fnx-29'),
 			'SITE_FNX_CATID2'         => lang('a-fnx-40'),
@@ -187,7 +169,11 @@ class IndexController extends Admin {
 		}
 		//多网站导航栏缓存
 		foreach ($sites as $sid => $t) {
-			$caches[] = array('31', 'navbar', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
+			$caches[] = array('241', 'navbar', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
+		}
+		//多网站导航栏缓存
+		foreach ($sites as $sid => $t) {
+			$caches[] = array('242', 'menu', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
 		}
 		//多网站联动菜单缓存
 		foreach ($sites as $sid => $t) {

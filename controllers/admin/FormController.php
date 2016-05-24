@@ -258,6 +258,7 @@ class FormController extends Admin {
 			$data['userid']		= 0;
 			$data['username']	= $this->userinfo['username'];
 			$data['inputtime']	= $data['updatetime'] = time();
+			$data['dealunqiue'] = $this->model['setting']['dealunqiue'];
 			if ($data['id'] = $this->form->set(0, $data)) {
 				if (isset($this->model['setting']['form']['url']['tohtml']) && $this->model['setting']['form']['url']['tohtml'] && $data['status'] == 1) {
 					$this->createForm($this->modelid, $data);	//生成静态

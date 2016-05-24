@@ -173,12 +173,12 @@ class tree extends Fn_base {
 			if ($value[$this->parentid] == $parent_id) {
 				$this->data[$key] = $value;
 				$this->data[$key]['prefix'] = $pre_fix . $value[$this->name];
+				unset($data[$key]);
 				$this->get_tree_data($data, $value[$this->id], '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $pre_fix);
 			}
 		}
 		return $this->data ;
-	}
-	
+	}	
 	
 	/**
 	 * 无限级分类树-获取子类

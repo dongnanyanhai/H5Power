@@ -18,7 +18,9 @@ class auth extends Fn_base {
 	    list($c, $m) = explode("-", $action);
 	    if (@in_array($c, $rules)) {
 	        return true;
-	    } elseif (@in_array($action, $rules)) {
+	    } elseif (@in_array($c.'-index', $rules)) {
+	        return true;
+	    }  elseif (@in_array($action, $rules)) {
 	        return true;
 	    } else {
 	        //无权限操作

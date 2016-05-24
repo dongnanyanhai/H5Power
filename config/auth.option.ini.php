@@ -126,6 +126,21 @@ return array(
 		)
     ),
     
+    'menu' => array(
+	    'name'   => 'a-fnx-62', 
+		'option' => array(
+		    'index'    => 'a-list', 
+			'add'      => 'a-add', 
+			'edit'     => 'a-edit',
+			'del'      => 'a-del', 
+			'list'     => 'a-pos-0', 
+			'adddata'  => 'a-pos-1', 
+			'editdata' => 'a-aut-24', 
+			'deldata'  => 'a-aut-23', 
+			'cache'    => 'a-cache'
+		)
+    ),
+    
     'theme' => array(
 	    'name'   => 'a-men-6', 
 		'option' => array(

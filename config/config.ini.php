@@ -36,8 +36,8 @@ return array(
 	'SITE_MAIL_PORT'          => '25',  //邮件端口号
 	'SITE_MAIL_FROM'          => '',  //发送人地址
 	'SITE_MAIL_AUTH'          => '1',  //是否AUTH LOGIN验证
-	'SITE_MAIL_USER'          => '',  //验证用户名
-	'SITE_MAIL_PASSWORD'      => '',  //验证密码
+	'SITE_MAIL_USER'          => 'h5power',  //验证用户名
+	'SITE_MAIL_PASSWORD'      => 'h5p666666',  //验证密码
 	'SITE_MAP_UPDATE'         => '30',  //更新周期，单位为分钟搜索引擎将遵照此周期访问该页面，使页面上的新闻更及时地出现在百度新闻中
 	'SITE_MAP_TIME'           => '10',  //天之内
 	'SITE_MAP_NUM'            => '30',  //条数据
@@ -59,13 +59,9 @@ return array(
 	'SITE_TAG_CACHE'          => '',  //TAG列表缓存时间，单位小时
 	'SITE_TAG_URLRULE'        => '',  //TAG列表URL规则
 	'SITE_TAG_URL'            => '',  //TAG的URL规则
-	'SITE_FNX_HTML'           => true,  //后台“生成静态”开关
-	'SITE_FNX_MEMBER'         => true,  //后台“会员中心”开关
-	'SITE_FNX_THEME'          => true,  //后台“模板管理”开关
-	'SITE_FNX_PLUGIN'         => true,  //后台“插件管理”开关
 	'SITE_FNX_WXAPPID'        => 'wx94a3e27fe7ef0baf',  //微信JS-SDK AppId
 	'SITE_FNX_WXAPPSSCRET'    => 'ca9551d488125ac866f86a88ba0f1706',  //微信JS-SDK AppSecret
-	'SITE_FNX_WXTOKEN'        => 'ahaitest',  //微信TOKEN
-	'SITE_FNX_WXAES_KEY'      => 'ijnokmlqwwww',  //微信AES_KEY
+	'SITE_FNX_WXTOKEN'        => 'ahaitest',  //
+	'SITE_FNX_WXAES_KEY'      => 'ijnokmlqwwww',  //
 
 );
