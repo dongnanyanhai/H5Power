@@ -222,8 +222,16 @@ abstract class App {
 				self::load_file(EXTENSION_DIR .'LaneWeChat'.DIRECTORY_SEPARATOR . 'config.php');
 				self::load_file(EXTENSION_DIR .'LaneWeChat'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR. strtolower($class_name) . '.lib.php');
 			} else {
-				Controller::halt('The File:' . $class_name . '.php is not exists!');
-			}		
+				// 判断是否为命名空间
+				$temp_class = str_replace('\\', '/', $class);
+                $file = EXTENSION_DIR .DIRECTORY_SEPARATOR. $temp_class . '.php';
+                if (is_file($file))
+                {
+                    self::load_file($file);
+                }else{
+                	Controller::halt('The File:' . $class_name . '.php is not exists!');
+                }
+			}
 		}
 	}
 	
