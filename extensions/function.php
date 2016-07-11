@@ -1372,9 +1372,23 @@ function list_url($param, $name=NULL, $value=NULL) {
 
 // 微信sdk
 function wxjs(){
-	$jssdk = new JsApiSign();
-	$signPackage = $jssdk->GetSignPackage();
-	return $signPackage;
+
+	$config = App::get_config();
+
+	$appId          = $config['SITE_FNX_WXAPPID'];
+	$secret         = $config['SITE_FNX_WXAPPSSCRET'];
+
+	$js = new Overtrue\Wechat\Js($appId, $secret);
+
+	return $js;
+	
+	// html代码中可按下面方式进行调用
+	/*
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		wx.config(<?php echo $js->config(array('onMenuShareQQ', 'onMenuShareWeibo'), true, true) ?>);
+	</script>
+	*/
 }
 
 // 微信sdk

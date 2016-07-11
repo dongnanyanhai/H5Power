@@ -72,7 +72,7 @@ class BlockController extends Admin {
 			}else{
 				$data['content'] = $data['content_' . $data['type']];
 			}
-            if (empty($data['name']) || empty($data['content'])) $this->adminMsg(lang('a-blo-4'));
+            if (empty($data['name']) || (empty($data['content']) && $data['content'] != '0')) $this->adminMsg(lang('a-blo-4'));
 			$data['site'] = $this->siteid;
             $this->block->update($data, 'id=' . $id);
             $this->adminMsg($this->getCacheCode('block') . lang('success'), url('admin/block'), 3, 1, 1);
