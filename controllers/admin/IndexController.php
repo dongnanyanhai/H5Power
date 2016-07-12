@@ -83,7 +83,11 @@ class IndexController extends Admin {
 			'SITE_FNX_FILETYPE'       => lang('a-fnx-29'),
 			'SITE_FNX_CATID2'         => lang('a-fnx-40'),
 			'SITE_FNX_WXAPPID'        => lang('a-fnx-50'),
-			'SITE_FNX_WXAPPSSCRET'    => lang('a-fnx-51'),
+			'SITE_FNX_WXAPPSECRET'    => lang('a-fnx-51'),
+
+			'SITE_FNX_WXPAYID'        => lang('a-fnx-75'),
+			'SITE_FNX_WXPAYSECRET'    => lang('a-fnx-76'),
+			'SITE_FNX_WXPAYCERTPATH'  => lang('a-fnx-77'),
         );
 	    //加载应用程序配置文件.
 	    $config         = self::load_config('config');

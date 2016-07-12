@@ -138,8 +138,8 @@ abstract class App {
 			$namespace = self::$namespace;
 			$controller = self::$controller . 'Controller';
 			$action = self::$action . 'Action';
-			self::load_file(SYS_ROOT . 'Base.php');
-			self::load_file(SYS_ROOT . 'Controller.php');
+			// self::load_file(SYS_ROOT . 'Base.php');
+			// self::load_file(SYS_ROOT . 'Controller.php');
 			Controller::check_Get('s');
 			Controller::check_Get('c');
 			Controller::check_Get('a');
@@ -206,6 +206,8 @@ abstract class App {
 	 * 核心类引导数组
 	 */
 	public static $core_class_array = array(
+		'Fn_base' => 'Base.php',
+		'Controller' => 'Controller.php',
 		'Model' => 'Model.php',
 		'Log' => 'Log.php',
 		'View' => 'View.php',

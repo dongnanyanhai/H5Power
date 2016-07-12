@@ -288,7 +288,7 @@ class ApiController extends Common {
                 $appid = $cfg['SITE_FNX_WXAPPID'];
             }
             if ($appsecret == ""){
-                $appsecret = $cfg['SITE_FNX_WXAPPSSCRET'];
+                $appsecret = $cfg['SITE_FNX_WXAPPSECRET'];
             }
 
             $jssdk = new JSSDK($appid, $appsecret);

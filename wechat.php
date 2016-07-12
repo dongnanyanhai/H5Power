@@ -19,7 +19,7 @@ require EXTENSION_DIR . 'function.php';
 // 帮助手册：https://github.com/overtrue/wechat/wiki
 
 $appId          = $config['SITE_FNX_WXAPPID'];
-$secret         = $config['SITE_FNX_WXAPPSSCRET'];
+$secret         = $config['SITE_FNX_WXAPPSECRET'];
 $token          = $config['SITE_FNX_WXTOKEN'];
 $encodingAESKey = $config['SITE_FNX_WXAES_KEY'];
 
@@ -28,12 +28,12 @@ $server = new Overtrue\Wechat\Server($appId, $token, $encodingAESKey);
 // 监听所有类型
 $server->on('message', function($message) {
     // 获取用户openId: $openId = $message->FromUserName;
-    return Message::make('text')->content('您好！');
+    return Overtrue\Wechat\Message::make('text')->content('您好！');
 });
 
 // 监听指定类型
 $server->on('message', 'image', function($message) {
-    return Message::make('text')->content('我们已经收到您发送的图片！');
+    return Overtrue\Wechat\Message::make('text')->content('我们已经收到您发送的图片！');
 });
 
 $result = $server->serve();

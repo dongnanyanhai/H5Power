@@ -60,8 +60,10 @@ return array(
 	'SITE_TAG_URLRULE'        => '',  //TAG列表URL规则
 	'SITE_TAG_URL'            => '',  //TAG的URL规则
 	'SITE_FNX_WXAPPID'        => 'wx94a3e27fe7ef0baf',  //微信JS-SDK AppId
-	'SITE_FNX_WXAPPSSCRET'    => 'ca9551d488125ac866f86a88ba0f1706',  //微信JS-SDK AppSecret
+	'SITE_FNX_WXAPPSECRET'    => 'ca9551d488125ac866f86a88ba0f1706',  //微信JS-SDK AppSecret
 	'SITE_FNX_WXTOKEN'        => 'ahaitest',  //
 	'SITE_FNX_WXAES_KEY'      => 'ijnokmlqwwww',  //
-
+	'SITE_FNX_WXPAYID'        => '',
+	'SITE_FNX_WXPAYSECRET'    => '',
+	'SITE_FNX_WXPAYCERTPATH'  => '',
 );

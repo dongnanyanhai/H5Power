@@ -285,7 +285,7 @@
 			<table width="100%" class="table_form">
 					<tr>
 						<th>{lang('a-fnx-53')}： </th>
-						<td><a href="http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html" target="_blank">{lang('a-fnx-54')}</a></td>
+						<td><a href="https://mp.weixin.qq.com/wiki" target="_blank">{lang('a-fnx-54')}</a></td>
 					</tr>
 					<tbody id="sina">
 					<tr>
@@ -298,7 +298,7 @@
 					<tr>
 						<th>AppSecret： </th>
 						<td>
-							<input class="input-text" type="text" name="data[SITE_FNX_WXAPPSSCRET]" value="{$data['SITE_FNX_WXAPPSSCRET']}" size="50"/><div class="onShow">{$string['SITE_FNX_WXAPPSSCRET']}</div>
+							<input class="input-text" type="text" name="data[SITE_FNX_WXAPPSECRET]" value="{$data['SITE_FNX_WXAPPSECRET']}" size="50"/><div class="onShow">{$string['SITE_FNX_WXAPPSECRET']}</div>
 						</td>
 					</tr>
 					<tr>
@@ -312,6 +312,27 @@
 						<th>AES KEY： </th>
 						<td>
 							<input class="input-text" type="text" name="data[SITE_FNX_WXAES_KEY]" value="{$data['SITE_FNX_WXAES_KEY']}" size="50"/><div class="onShow">{$string['SITE_FNX_WXAES_KEY']}</div>
+						</td>
+					</tr>
+
+					<tr>
+						<th>PayID： </th>
+						<td>
+							<input class="input-text" type="text" name="data[SITE_FNX_WXPAYID]" value="{$data['SITE_FNX_WXPAYID']}" size="50"/><div class="onShow">{$string['SITE_FNX_WXPAYID']}</div>
+						</td>
+					</tr>
+
+					<tr>
+						<th>PaySecret： </th>
+						<td>
+							<input class="input-text" type="text" name="data[SITE_FNX_WXPAYSECRET]" value="{$data['SITE_FNX_WXPAYSECRET']}" size="50"/><div class="onShow">{$string['SITE_FNX_WXPAYSECRET']}</div>
+						</td>
+					</tr>
+
+					<tr>
+						<th>PayCertPath： </th>
+						<td>
+							<input class="input-text" type="text" name="data[SITE_FNX_WXPAYCERTPATH]" value="{$data['SITE_FNX_WXPAYCERTPATH']}" size="50"/><div class="onShow">{$string['SITE_FNX_WXPAYCERTPATH']}</div>
 						</td>
 					</tr>
 					</tbody>

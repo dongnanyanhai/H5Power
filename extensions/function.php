@@ -1376,7 +1376,7 @@ function wxjs(){
 	$config = App::get_config();
 
 	$appId          = $config['SITE_FNX_WXAPPID'];
-	$secret         = $config['SITE_FNX_WXAPPSSCRET'];
+	$secret         = $config['SITE_FNX_WXAPPSECRET'];
 
 	$js = new Overtrue\Wechat\Js($appId, $secret);
 
@@ -1401,7 +1401,7 @@ function wxjs2($appid="",$appsecret=""){
 			$appid = $cfg['SITE_FNX_WXAPPID'];
 		}
 		if ($appsecret == ""){
-			$appsecret = $cfg['SITE_FNX_WXAPPSSCRET'];
+			$appsecret = $cfg['SITE_FNX_WXAPPSECRET'];
 		}
 		$jssdk = new JSSDK($appid, $appsecret);
 		$signPackage = $jssdk->GetSignPackage();
