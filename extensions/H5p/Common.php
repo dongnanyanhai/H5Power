@@ -4,33 +4,37 @@ namespace H5p;
 
 /**
 * 自定义二维码参数
+* 还未测试 红包发放
 */
-class Common
+class Common extends \Fn_base
 {
-    private $app_id;
-    private $app_secret;
+    protected $app_id;
+    protected $app_secret;
 
-    private $pay_id; //商号id
-    private $pay_secret; // 商号密匙
-
-    private $pay_cert_path;
+    protected $pay_id; //商号id
+    protected $pay_secret; // 商号密匙
+    protected $pay_cert_path;
     
     protected $staff;
 
     protected $siteid;
-    protected $site_url;
     protected $sys_config;
 
+    public $site_url;
     public static $errinfo;
 
     
     function __construct()
     {
 
-        $this->sys_config = \App::get_config();
-        $this->site_url = \Controller::get_base_url();
+        $this->sys_config = require APP_ROOT . 'config/config.ini.php';
+        // var_dump($this->sys_config);
 
-        $this->siteid       = \App::get_site_id();
+        $base_url = \Controller::get_base_url();
+        $server_name = \Controller::get_server_name();
+        $this->site_url = $server_name . ($base_url ? $base_url : '' );
+
+        $this->siteid       = \App::get_site_id()?\App::get_site_id():1;
 
         $this->app_id = $this->sys_config['SITE_FNX_WXAPPID'];
 
@@ -54,7 +58,7 @@ class Common
         
 
         // 用以发送微信公众号信息的类实例
-        $this->staff = new Overtrue\Wechat\Staff($this->app_id, $this->app_secret);
+        $this->staff = new \Overtrue\Wechat\Staff($this->app_id, $this->app_secret);
 
     }
 
@@ -76,7 +80,11 @@ class Common
         return $data;
     }
 
-    protected function get_content_data($id){
+    public function get_errinfo(){
+        return self::$errinfo;
+    }
+
+    public function get_content_data($id){
 
         $id = (int)$id;
 
@@ -88,13 +96,14 @@ class Common
         $content = \Controller::model('content_' . $this->siteid);
 
         $data = $content->find($id);
+        
 
         if($data){
 
             // 存在对应id的数据
 
             // 获取站点模型缓存
-            $model = get_model_data('content');
+            $model = get_model_data('content',$this->siteid);
 
             if ($data['status'] == 0) { 
                 //判断数据是否存在或文档状态是否通过
@@ -121,43 +130,61 @@ class Common
     }
 
     // 根据$id获取表单数据
-    protected function get_form_data($id,$modelid){
-        
-        $id = (int)$id;
+    public function get_form_data($modelid,$conditions = '',$id=0){
 
-        $modelid = (int)$modelid;
-
-        if(empty($modelid) || empty($id)){
-            self::$errinfo = '未提供准确的ID或Modelid';
+        if(empty($modelid)){
+            self::$errinfo = '未提供准确的Modelid';
             return false;
         }
 
-        $model = get_model_data('form');
+        $modelid = (int)$modelid;
 
-
+        $model = get_model_data('form',$this->siteid);
         $form_model = $model[$modelid];
-
         $form = \Controller::model($form_model['tablename']);
 
-        $data = $form->find($id);
+        if(!empty($conditions)){
+            // 根据条件查询
+            $data = $form->getAll($conditions);
 
-        if($data){
+            if($data){
 
-            if (isset($form_model['fields']) && $form_model['fields']){
+                if (isset($form_model['fields']) && $form_model['fields']){
 
-                $data = $this->getFieldData($form_model, $data);
+                    $data = $this->getFieldData($form_model, $data);
+                }
+                return $data;
+            }else{
+                self::$errinfo = '未查询到数据';
+                return false;
             }
 
-            return $data;
+        }else if(!empty($id)){
+            // 获取指定id
+            $id = (int)$id;
+            $data = $form->find($id);
+
+            if($data){
+
+                if (isset($form_model['fields']) && $form_model['fields']){
+
+                    $data = $this->getFieldData($form_model, $data);
+                }
+
+                return $data;
+            }else{
+                self::$errinfo = '不存在指定id数据';
+                return false;
+            }
         }
-        // 
-        self::$errinfo = '数据不存在！';
+        
+        self::$errinfo = '未提供查询条件或id';
         return false;
 
     }
 
     // 添加表单数据
-    protected function set_form_data($data,$modelid){
+    public function set_form_data($data,$modelid){
 
         $modelid = (int)$modelid;
 
@@ -166,7 +193,7 @@ class Common
             return false;
         }
 
-        $model = get_model_data('form');
+        $model = get_model_data('form',$this->siteid);
 
         $form_model = $model[$modelid];
 
@@ -204,13 +231,13 @@ class Common
     // public function doit($id){}
 
     // 设置用户标签
-    private function set_user_tag($tags,$openid){
+    public function set_user_tag($tags,$openid){
 
         $openids = array();
 
         $openids[] = $openid;
 
-        $tag = new Overtrue\Wechat\Tag($this->app_id, $this->app_secret);
+        $tag = new \Overtrue\Wechat\Tag($this->app_id, $this->app_secret);
 
         // 获取当前所有标签
         $tags = $tag->lists();
@@ -262,7 +289,7 @@ class Common
     }
 
     // 发送文本信息
-    private function send_text($text,$openid){
+    public function send_text($text,$openid){
 
         $text = htmlspecialchars_decode($text);
 
@@ -276,7 +303,7 @@ class Common
     }
 
     // 发送超级链接
-    private function send_link($title,$url,$openid){
+    public function send_link($title,$url,$openid){
 
         if(empty($title)){
             self::$errinfo = '标题为空';
@@ -299,13 +326,13 @@ class Common
     }
 
     // 发送图片
-    private function send_image($image,$openid){
+    public function send_image($image,$openid){
 
-        $media = new Overtrue\Wechat\Media($this->app_id, $this->app_secret);
+        $media = new \Overtrue\Wechat\Media($this->app_id, $this->app_secret);
 
         $media_image = $media->image(APP_ROOT . $image); // 上传并返回媒体ID
 
-        $message = Overtrue\Wechat\Message::make('image')->media($media_image['media_id']);
+        $message = \Overtrue\Wechat\Message::make('image')->media($media_image['media_id']);
 
         if($message){
             return $this->staff->send($message)->to($openid);
@@ -316,7 +343,7 @@ class Common
     }
 
     // 发送图文信息
-    private function send_news($news,$openid){
+    public function send_news($news,$openid){
         // $news 为一个二维数组，结构如下：
         /*
         $news = array(
@@ -343,12 +370,14 @@ class Common
 
         foreach ($news as $k => $v) {
             if(isset($v['title'],$v['url']) && !empty($v['title']) && !empty($v['url'])){
-                $v['image'] = $v['image'] ? $this->site_url.$v['image'];
-                $temp_msg[] = Overtrue\Wechat\Message::make('news_item')->title($v['title'])->url($v['url'])->picUrl($v['image']);
+
+                $v['image'] = $v['image'] ? $this->site_url.$v['image'] :'';
+
+                $temp_msg[] = \Overtrue\Wechat\Message::make('news_item')->title($v['title'])->url($v['url'])->picUrl($v['image']);
             }
         }
 
-        $message = Overtrue\Wechat\Message::make('news')->items($temp_msg);
+        $message = \Overtrue\Wechat\Message::make('news')->items($temp_msg);
 
         if($message){
             return $this->staff->send($message)->to($openid);
@@ -358,8 +387,8 @@ class Common
         }
     }
 
-    // 发送微信红包
-    private function send_redpack($setting,$openid){
+    // 发送微信红包_未测试
+    public function send_redpack($setting,$openid){
 
         if(empty($openid)){
             self::$errinfo = 'openid为空';
@@ -377,7 +406,7 @@ class Common
         // 商号ID：1291002001
         // 密匙：40ce2f9599551f23d3735dd27e7d43db
 
-        $business = new Overtrue\Wechat\Payment\Business(
+        $business = new \Overtrue\Wechat\Payment\Business(
             $this->app_id, 
             $this->app_secret,
             $this->pay_id,
@@ -406,7 +435,7 @@ class Common
         /**
         * 第 3 步：创建LuckMoney实例
         */
-        $luckMoneyServer = new Overtrue\Wechat\LuckMoney($business);
+        $luckMoneyServer = new \Overtrue\Wechat\LuckMoney($business);
 
         /**
         * 第 4 步：要发送的红包相关数据（本代码以发送现金红包为例）
@@ -445,7 +474,7 @@ class Common
         * 第 5 步：发送红包
         * 第二个参数表示发送的红包类型，有现金红包（'CASH_LUCK_MONEY'）和裂变红包（'GROUP_LUCK_MONEY'）可选，红包工具类中已定义相关常量。
         */
-        $lm_type = $lm_data['total_num'] > 1 ? Overtrue\Wechat\LuckMoney::GROUP_LUCK_MONEY :Overtrue\Wechat\LuckMoney::TYPE_CASH_LUCK_MONEY;
+        $lm_type = $lm_data['total_num'] > 1 ? \Overtrue\Wechat\LuckMoney::GROUP_LUCK_MONEY :\Overtrue\Wechat\LuckMoney::TYPE_CASH_LUCK_MONEY;
 
         $result = $luckMoneyServer->send($lm_data, $lm_type);
 

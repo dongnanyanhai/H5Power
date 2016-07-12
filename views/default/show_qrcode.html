@@ -1,0 +1,41 @@
+<?php
+
+$QRCode = new H5p\QRCode();
+
+$result = $QRCode->create($id.":2:0");
+$url = $result->url;
+
+// $ticket = $result->ticket; // 或者 $result['ticket']
+// $qrcode->download($ticket, __DIR__ . '/code.jpg');
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+           <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body data-id="{$id}">
+        <style type="text/css">
+            body{
+                background-color: #ccc;
+            }
+            .main{
+                width: 600px;
+                margin: auto;
+                margin-top: 30px;
+            }
+            p{
+                text-align: center;
+            }
+        </style>
+        <div class="main">
+            <img src="http://qr.topscan.com/api.php?w=600&text={$url}">
+        </div>
+        <p>
+            请点击右键保存二维码！
+        </p>
+        <p>
+            微信二维码链接地址(可使用此地址生成二维码)：{$url}
+        </p>
+    </body>
+</html>
