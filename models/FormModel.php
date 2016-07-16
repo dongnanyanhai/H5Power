@@ -22,10 +22,10 @@ class FormModel extends Model {
 			unset($data['id']);
             $this->update($data,  'id=' . $id);
         } else { //添加
-			$id = $this->get_form_id();	//生成唯一id
-			$data['id'] = $id;
-			if (empty($id)) return false;
-			$this->insert($data);
+			// $id = $this->get_form_id();	//生成唯一id
+			// $data['id'] = $id;
+			// if (empty($id)) return false;
+			$id = $this->insert($data);
 		}
 		return $id;
     }

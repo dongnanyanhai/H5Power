@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS `{pre}content` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `{pre}form`;
-CREATE TABLE IF NOT EXISTS `{pre}form` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `{pre}form`;
+-- CREATE TABLE IF NOT EXISTS `{pre}form` (
+--   `id` int(10) NOT NULL AUTO_INCREMENT,
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `{pre}content_1_extend`;
 CREATE TABLE IF NOT EXISTS `{pre}content_1_extend` (
@@ -507,18 +507,18 @@ CREATE TABLE `{pre}user` (
 
 INSERT INTO `{pre}user` (`username`, `password`, `roleid`, `salt`, `realname`) VALUES ('{username}', '{password}', 1, '{salt}', '网站创始人');
 
-DROP TABLE IF EXISTS `{pre}content_1_article`;
-CREATE TABLE `{pre}content_1_news` (
-  `id` int(10) NOT NULL,
-  `catid` smallint(5) NOT NULL,
-  `content` mediumtext NOT NULL,
-  PRIMARY KEY `id` (`id`),
-  KEY `catid` (`catid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `{pre}content_1_article`;
+-- CREATE TABLE `{pre}content_1_article` (
+--   `id` int(10) NOT NULL,
+--   `catid` smallint(5) NOT NULL,
+--   `content` mediumtext NOT NULL,
+--   PRIMARY KEY `id` (`id`),
+--   KEY `catid` (`catid`)
+-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 -- INSERT INTO `{pre}model` (`modelid`,`site`, `typeid`, `modelname`, `tablename`, `categorytpl`, `listtpl`, `showtpl`) VALUES
--- (1, 1, 1, '文章', 'content_1_news', 'category_news.html', 'list_news.html', 'show_news.html');
+-- (1, 1, 1, '文章', 'content_1_article', 'category_news.html', 'list_news.html', 'show_news.html');
 
 -- INSERT INTO `{pre}model_field` (`fieldid`, `modelid`, `field`, `name`, `type`, `length`, `indexkey`, `isshow`, `tips`, `pattern`, `errortips`, `formtype`, `setting`, `listorder`, `disabled`) VALUES
 -- (1, 1, 'content', '内容', '', '0', '', 1, '', '', '', 'editor', 'array (\n  ''width'' => ''80'',\n  ''height'' => ''500'',\n  ''type'' => ''1'',\n)', 0, 0);
