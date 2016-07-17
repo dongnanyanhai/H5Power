@@ -18,7 +18,7 @@ class session extends Fn_base {
         @register_shutdown_function(array($this, 'close'));
 	    $path = self::get_session_path();
 		if (empty($path) || !@file_exists($path) || !is_writable($path)) {
-		    self::set_save_path(APP_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'session_data' . DIRECTORY_SEPARATOR);
+		    self::set_save_path(SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'session_data' . DIRECTORY_SEPARATOR);
 		}
 		session_start();
 	}

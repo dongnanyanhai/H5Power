@@ -27,7 +27,7 @@ class Common extends \Fn_base
     function __construct()
     {
 
-        $this->sys_config = require APP_ROOT . 'config/config.ini.php';
+        $this->sys_config = require SITE_ROOT . 'config/config.ini.php';
         // var_dump($this->sys_config);
 
         $base_url = \Controller::get_base_url();
@@ -330,7 +330,7 @@ class Common extends \Fn_base
 
         $media = new \Overtrue\Wechat\Media($this->app_id, $this->app_secret);
 
-        $media_image = $media->image(APP_ROOT . $image); // 上传并返回媒体ID
+        $media_image = $media->image(SITE_ROOT . $image); // 上传并返回媒体ID
 
         $message = \Overtrue\Wechat\Message::make('image')->media($media_image['media_id']);
 

@@ -29,7 +29,7 @@ body{margin:0px; text-align:center; padding:0px; background-color:#F8F8F8; font-
 <ul>
 <li class="menu"><?php echo lang('a-msg-0')?></li>
 <li class="content">
-<?php echo str_replace(APP_ROOT, '', $message); ?>
+<?php echo str_replace(SITE_ROOT, '', $message); ?>
 <?php if ($back) {?><p><a href="javascript:history.back();"><?php echo lang('a-msg-2')?></a></p><?php } ?>
 </li>
 <li class="line"></li>

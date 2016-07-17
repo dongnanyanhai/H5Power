@@ -21,14 +21,32 @@ class View extends Fn_base {
 	public $iscatid2;
 	
 	public function __construct() {
-		$viewpath = basename(VIEW_DIR) . '/';
+		
 		$this->theme = APP::get_namespace_id() == 'admin' ? false : true;
-		$this->view_dir = VIEW_DIR;
-		$this->viewpath = $viewpath;
-		$this->compile_dir = APP_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR;
-		$this->_options['viewpath'] = $viewpath;
+		if(!$this->theme){
+			// 没有模版表示属于后台
+			if(is_dir(VIEW_DIR.'admin')){
+				// 站点有独立的后台模版
+				// $temp_view_dir = VIEW_DIR;
+				$this->set_view_dir(VIEW_DIR);
+			}else{
+				// 采用公共站点后台模版
+				$this->set_view_dir(APP_ROOT . 'views' . DS);
+			}
+		}
+		// $this->view_dir = $temp_view_dir;
+		// $this->viewpath = basename($this->view_dir) . '/';0
+		
+		$this->compile_dir = SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR;
+		$this->_options['viewpath'] = $temp_viewpath;
 		// 新增
 		$this->cfg = App::get_config();
+	}
+	// 设置视图根目录
+	public function set_view_dir($dir){
+		 $this->view_dir = $dir;
+		 $this->viewpath = basename($this->view_dir) . '/';
+		 return true;
 	}
 	
 	/**

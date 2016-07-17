@@ -47,7 +47,7 @@ class mysql extends Fn_base {
 			$action_id		= App::get_action_id();
 			$namespace_id	= App::get_namespace_id();
 			$controller_id	= App::get_controller_id();
-			$sql_log_file	= APP_ROOT . 'logs' . DIRECTORY_SEPARATOR . 'SQL_' . date('Y_m_d', $_SERVER['REQUEST_TIME']) . '.log';
+			$sql_log_file	= SITE_ROOT . 'logs' . DIRECTORY_SEPARATOR . 'SQL_' . date('Y_m_d', $_SERVER['REQUEST_TIME']) . '.log';
 			$namespace_code	= $namespace_id ? '[' . $namespace_id . ']' : '';
 			if ($result == true) {
 				if (SYS_LOG === true) Log::write($namespace_code . '[' . $controller_id . '][' . $action_id . ']:' . $sql, 'Normal', $sql_log_file);

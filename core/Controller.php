@@ -72,7 +72,7 @@ abstract class Controller extends Fn_base {
 				'val'  => $val,
 				'user' => $_SERVER['HTTP_USER_AGENT'],
 			);
-			$dir  = APP_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'attack' . DIRECTORY_SEPARATOR;
+			$dir  = SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'attack' . DIRECTORY_SEPARATOR;
 			$file = $dir . date('Ymd') . '.log';
 			if (!is_dir($dir)) mkdir($dir, 0777);
 			$body = file_exists($file) ? file_get_contents($file) : null;

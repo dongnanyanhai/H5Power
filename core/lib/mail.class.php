@@ -156,5 +156,5 @@ class mail extends Fn_base {
 }
 
 function runlog($mode = 'SMTP',$b = '',$c = '',$d='') {
-	@file_put_contents(APP_ROOT . 'cache/mail_error.log', date('Y-m-d H:i:s') . ' ' . $b, FILE_APPEND);
+	@file_put_contents(SITE_ROOT . 'cache/mail_error.log', date('Y-m-d H:i:s') . ' ' . $b, FILE_APPEND);
 }

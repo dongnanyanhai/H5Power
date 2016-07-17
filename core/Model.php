@@ -29,7 +29,7 @@ abstract class Model extends Fn_base {
 		$this->db 			= $slave_params && is_array($slave_params) ? mysql_slave::getInstance($params, $slave_params) : mysql::getInstance($params);	
 		$this->dbname       = $params['dbname'];
 		$this->prefix 		= ($params['prefix']) ? trim($params['prefix']) : '';
-		$this->cache_dir 	= APP_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR;
+		$this->cache_dir 	= SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR;
 		return true;		
 	}
 		

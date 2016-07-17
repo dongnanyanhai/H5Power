@@ -176,8 +176,8 @@ function plugin($dir) {
 		return $plugin['disable'] ? false : true;
     } else {
         //输出代码插件
-        $runphp = APP_ROOT . 'plugins/' . $plugin['dir'] . '/run.php';
-        $runhtm = APP_ROOT . 'plugins/' . $plugin['dir'] . '/run.html';
+        $runphp = SITE_ROOT . 'plugins/' . $plugin['dir'] . '/run.php';
+        $runhtm = SITE_ROOT . 'plugins/' . $plugin['dir'] . '/run.html';
         if (!file_exists($runphp)) return false;
         extract($plugin['setting']);
         require $runphp;
@@ -1303,7 +1303,7 @@ function count_dir_size($dir) {
 function count_member_size($id, $path = null) {
     if (empty($id)) return 0;
 	set_time_limit(0);
-    $dir    = APP_ROOT . 'uploadfiles/member/' . $id . '/';
+    $dir    = SITE_ROOT . 'uploadfiles/member/' . $id . '/';
 	if ($path) $dir .= $path . '/';
     if (!is_dir($dir)) return 0;
 	$count  = 0;

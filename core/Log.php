@@ -9,9 +9,9 @@ class Log extends Fn_base {
 	 */
 	public static function write($message, $level = 'Error', $log_file_name = null) {
 		if (!$message) return false;
-		if (is_null($log_file_name)) $log_file_name = APP_ROOT . 'logs/' . date('Y_m_d', $_SERVER['REQUEST_TIME']) . '.log';
+		if (is_null($log_file_name)) $log_file_name = SITE_ROOT . 'logs/' . date('Y_m_d', $_SERVER['REQUEST_TIME']) . '.log';
 		if (is_file($log_file_name) && filesize($log_file_name) >= 2097152) {			
-			rename($log_file_name, APP_ROOT . 'logs/' . $_SERVER['REQUEST_TIME'] . '-' . basename($log_file_name));
+			rename($log_file_name, SITE_ROOT . 'logs/' . $_SERVER['REQUEST_TIME'] . '-' . basename($log_file_name));
 		}
 		error_log(date('[Y-m-d H:i:s]', $_SERVER['REQUEST_TIME']) . " {$level}: {$message}\r\n", 3, $log_file_name);
 	}
@@ -20,7 +20,7 @@ class Log extends Fn_base {
 	 * 显示日志内容
 	 */ 
 	public static function show($log_file_name = null) {
-		$log_file_name =  is_null($log_file_name) ? APP_ROOT . 'logs/' . date('Y_m_d', $_SERVER['REQUEST_TIME']) . '.log' : APP_ROOT . 'logs/' . $log_file_name . '.log';
+		$log_file_name =  is_null($log_file_name) ? SITE_ROOT . 'logs/' . date('Y_m_d', $_SERVER['REQUEST_TIME']) . '.log' : SITE_ROOT . 'logs/' . $log_file_name . '.log';
 		$log_content = file_get_contents($log_file_name);
 		$list_str_array = explode("\r\n", $log_content);
 		unset($log_content);
