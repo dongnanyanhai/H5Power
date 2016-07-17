@@ -92,6 +92,7 @@
 			<td colspan="11" align="left">
 			<input {if !admin_auth($userinfo['roleid'], 'form-edit')}disabled{/if} type="submit" class="button" value="{lang('a-order')}" name="submit_order" onClick="$('#list_form').val('order')" />&nbsp;
 			<input {if !admin_auth($userinfo['roleid'], 'form-del')}disabled{/if} type="submit" class="button" value="{lang('a-del')}" name="submit_del" onClick="$('#list_form').val('del');return confirm_del()" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], 'form-del')}disabled{/if} type="submit" class="button" value="{lang('a-delall')}" name="submit_del" onClick="$('#list_form').val('delall');return confirm_del()" />&nbsp;
 			<input {if !admin_auth($userinfo['roleid'], 'form-edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-36')}" name="submit_status_1" onClick="$('#list_form').val('status_1')" />&nbsp;
 			<input {if !admin_auth($userinfo['roleid'], 'form-edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-37')}" name="submit_status_0" onClick="$('#list_form').val('status_0')" />&nbsp;
 			<input {if !admin_auth($userinfo['roleid'], 'form-edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-39')}" name="submit_status_3" onClick="$('#list_form').val('status_3')" />&nbsp;

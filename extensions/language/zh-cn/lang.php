@@ -205,6 +205,7 @@ return array(
 	'admin'     => '后台管理中心',
 	'code'      => '验证码不正确',
 	'a-del'     => '删除',
+	'a-delall'  => '全部删除',
 	'a-edit'    => '修改',
 	'a-add'     => '添加',
 	'a-name'    => '名称',

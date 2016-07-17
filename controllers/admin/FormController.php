@@ -58,6 +58,10 @@ class FormController extends Admin {
 	                $this->delAction($_id, 1);
 	            }
 	        }
+	    } elseif ($this->post('form') == 'delall') {
+
+	        $this->delallAction();
+	        
 	    } elseif ($this->post('submit_status_0') && $this->post('form') == 'status_0') {
 	        foreach ($_POST as $var => $value) {
 	            if (strpos($var, 'del_') !== false) {
@@ -328,6 +332,15 @@ class FormController extends Admin {
 		$this->delFile($id);
 	    $this->form->delete('id=' . (int)$id);
 	    $all or $this->adminMsg(lang('success'), url('admin/form/list', array('modelid' => $this->modelid, 'cid' => $this->cid)), 3, 1, 1);
+	}
+	
+	/**
+	 * 删除全部
+	 */
+	public function delallAction() {
+        if (!auth::check($this->roleid, 'form-del', 'admin')) $this->adminMsg(lang('a-com-0', array('1' => 'form', '2' => 'del')));
+	    $this->form->delete('id > 0');
+	    $this->adminMsg(lang('success'), url('admin/form/list', array('modelid' => $this->modelid, 'cid' => $this->cid)), 3, 1, 1);
 	}
 	
 	/**
