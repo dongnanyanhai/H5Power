@@ -77,7 +77,7 @@ class InfoController extends Member {
 	public function uploadavatarAction() {
 		if (!isset($GLOBALS['HTTP_RAW_POST_DATA'])) exit('0');
 		//创建图片存储文件夹
-		$dir = SITE_ROOT . 'uploadfiles/member/' . $this->memberinfo['id'] . '/';
+		$dir = UPLOADFILES_DIR . 'member/' . $this->memberinfo['id'] . '/';
 		if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
@@ -118,7 +118,7 @@ class InfoController extends Member {
 		@unlink($filename);
         @rmdir($temp);
 		//更新用户头像字段
-		$this->member->update(array('avatar'=> 'uploadfiles/member/' . $this->memberinfo['id'] . '/' . '90x90.jpg'), 'id=' . $this->memberinfo['id']);
+		$this->member->update(array('avatar'=> UPLOADFILES_DIR . 'member/' . $this->memberinfo['id'] . '/' . '90x90.jpg'), 'id=' . $this->memberinfo['id']);
 		exit('1');
 	}
 	

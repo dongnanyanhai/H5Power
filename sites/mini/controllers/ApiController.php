@@ -297,9 +297,9 @@ class ApiController extends Common {
 
         // 根据Media_id 获取微信服务器上的图片
         if($dir !==""){
-            $save_dir = 'uploadfiles/'.$dir.'/';
+            $save_dir = UPLOADFILES_DIR . $dir.'/';
         }else{
-            $save_dir = 'uploadfiles/wx/';
+            $save_dir = UPLOADFILES_DIR . 'wx/';
         }
         
         $filename = time();

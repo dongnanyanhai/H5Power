@@ -7,7 +7,7 @@ class AttachmentController extends Common {
     public function __construct() {
 		parent::__construct();
 		if ($this->action != 'ajaxswfupload' && !$this->session->is_set('user_id') && !cookie::is_set('member_id')) $this->attMsg(lang('att-13'));
-		$this->dir = 'uploadfiles/';
+		$this->dir = UPLOADFILES_DIR;
 	}
 	
 	/**
@@ -203,7 +203,7 @@ class AttachmentController extends Common {
      * @return Array		返回数组
      */
     private function upload($fields, $type, $size, $img=null, $mark=true, $admin=0, $stype=null, $ofile=null, $document=null) {
-	    $path	= 'uploadfiles/';
+	    $path	= str_replace(DIRECTORY_SEPARATOR,'/',UPLOADFILES_DIR);
 		$upload = $this->instance('file_upload');
 		if (empty($admin) && $this->memberinfo) {
 			$uid = $this->memberinfo['id']; //会员附件归类
@@ -301,7 +301,7 @@ class AttachmentController extends Common {
      */
 	public function kindeditor_managerAction() {
 		$root_url  = SITE_PATH . 'uploadfiles/';
-		$root_path = SITE_ROOT . 'uploadfiles/';
+		$root_path = UPLOADFILES_DIR;
 		//用户目录设定
 		$admin     = $this->getAdmin();
 		if (empty($admin) && $this->memberinfo) {
@@ -457,7 +457,7 @@ class AttachmentController extends Common {
      * Ueditor浏览 
      */
 	public function ueditor_managerAction() {
-		$path   = 'uploadfiles/';
+		$path   = UPLOADFILES_DIR;
 		$admin  = $this->getAdmin();
 		//用户目录设定
 		if (empty($admin) && $this->memberinfo) {

@@ -6,7 +6,7 @@ class AttachmentController extends Admin {
     
     public function __construct() {
 		parent::__construct();
-		$this->dir = 'uploadfiles/';
+		$this->dir = UPLOADFILES_DIR;
 	}
     
     /**

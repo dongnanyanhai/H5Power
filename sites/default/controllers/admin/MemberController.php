@@ -491,7 +491,7 @@ class MemberController extends Admin {
 			}
 		}
 		//删除会员附件目录
-		$path = 'uploadfiles/member/' . $id . '/';
+		$path = UPLOADFILES_DIR . 'member/' . $id . '/';
 		if (file_exists($path)) $this->delDir($path);
 		$this->adminMsg(lang('success'), url('admin/member'), 3, 1, 1);
 	}

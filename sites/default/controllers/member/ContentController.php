@@ -342,7 +342,7 @@ class ContentController extends Member {
 	public function attachmentAction() {
 		$dir  = urldecode($this->get('dir'));
 	    $type = $this->get('type');
-		$mdir = 'uploadfiles/member/' . $this->memberinfo['id'] . '/'; //会员附件目录
+		$mdir = UPLOADFILES_DIR . 'member/' . $this->memberinfo['id'] . '/'; //会员附件目录
 		$mdir = $type == 1 ? $mdir . 'file/' : $mdir . 'image/';
 		if ($this->checkFileName($dir)) $this->memberMsg(lang('m-con-20'), url('member/content/attachment', array('type' => $type)));
 		$dir  = substr($dir, 0, 1) == '/' ? substr($dir, 1) : $dir;
@@ -392,7 +392,7 @@ class ContentController extends Member {
 	 */
 	public function delattachmentAction() {
 	    $type = $this->get('type');
-		$mdir = 'uploadfiles/member/' . $this->memberinfo['id'] . '/'; //会员附件目录
+		$mdir = UPLOADFILES_DIR . 'member/' . $this->memberinfo['id'] . '/'; //会员附件目录
 		if (!file_exists($mdir)) mkdir($mdir);
 		$mdir = $type == 1 ? $mdir . 'file/' : $mdir . 'image/';
 		if (!file_exists($mdir)) mkdir($mdir);

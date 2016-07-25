@@ -20,6 +20,7 @@ define('CONTROLLER_DIR', SITE_ROOT . 'controllers' . DIRECTORY_SEPARATOR); //con
 define('MODEL_DIR', SITE_ROOT . 'models' . DIRECTORY_SEPARATOR); //model目录的路径
 define('VIEW_DIR', SITE_ROOT . 'views' . DIRECTORY_SEPARATOR); //view目录的路径
 define('CONFIG_DIR', SITE_ROOT . 'config' . DIRECTORY_SEPARATOR); //config目录的路径
+define('UPLOADFILES_DIR', SITE_ROOT . 'uploadfiles' . DIRECTORY_SEPARATOR); //config目录的路径
 define('EXTENSION_PATH', 'extensions'); //extension目录文件夹
 define('EXTENSION_DIR', APP_ROOT . EXTENSION_PATH . DIRECTORY_SEPARATOR); //extension目录的路径
 define('PLUGIN_DIR', SITE_ROOT . 'plugins' . DIRECTORY_SEPARATOR); //插件目录文件夹

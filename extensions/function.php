@@ -811,7 +811,7 @@ function get_member_avatar($uid, $size = 90) {
 	    return UC_API . '/avatar.php?uid=' . $uid . '&size=' . $size;
 	}
 	$data  = $db->find($uid, 'avatar');
-    $dir   = 'uploadfiles/member/' . $uid . '/';
+    $dir   = UPLOADFILES_DIR . 'member/' . $uid . '/';
 	if ($data['avatar'] && strpos($data['avatar'], $dir) !== false) {
 	    if (file_exists($dir . '90x90.jpg')) {
 			return image($dir . $size . 'x' . $size . '.jpg');
@@ -1303,7 +1303,7 @@ function count_dir_size($dir) {
 function count_member_size($id, $path = null) {
     if (empty($id)) return 0;
 	set_time_limit(0);
-    $dir    = SITE_ROOT . 'uploadfiles/member/' . $id . '/';
+    $dir    = UPLOADFILES_DIR . 'member/' . $id . '/';
 	if ($path) $dir .= $path . '/';
     if (!is_dir($dir)) return 0;
 	$count  = 0;

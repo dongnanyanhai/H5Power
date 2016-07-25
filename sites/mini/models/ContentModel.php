@@ -231,7 +231,7 @@ class ContentModel extends Model {
 	private function download_images($imgs, $uid=0, $size=0) {
 		$imgs	= array_unique($imgs);	//去除重复图片
 		$regex  = $replace = array();
-		$path   = $uid ? 'uploadfiles/member/' . $uid . '/image/' . date('Ym') . '/' : 'uploadfiles/image/' . date('Ym') . '/';
+		$path   = $uid ? UPLOADFILES_DIR . 'member/' . $uid . '/image/' . date('Ym') . '/' : UPLOADFILES_DIR . 'image/' . date('Ym') . '/';
 		$this->mkdirs($path);
 		//水印
 		$config = App::get_config();
