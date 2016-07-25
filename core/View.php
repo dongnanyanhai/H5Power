@@ -23,20 +23,7 @@ class View extends Fn_base {
 	public function __construct() {
 		
 		$this->theme = APP::get_namespace_id() == 'admin' ? false : true;
-		if(!$this->theme){
-			// 没有模版表示属于后台
-			if(is_dir(VIEW_DIR.'admin')){
-				// 站点有独立的后台模版
-				// $temp_view_dir = VIEW_DIR;
-				$this->set_view_dir(VIEW_DIR);
-			}else{
-				// 采用公共站点后台模版
-				$this->set_view_dir(APP_ROOT . 'views' . DS);
-			}
-		}
-		// $this->view_dir = $temp_view_dir;
-		// $this->viewpath = basename($this->view_dir) . '/';0
-		
+		$this->set_view_dir(VIEW_DIR);
 		$this->compile_dir = SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR;
 		$this->_options['viewpath'] = $temp_viewpath;
 		// 新增
@@ -658,6 +645,11 @@ class View extends Fn_base {
 			extract($this->_options, EXTR_PREFIX_SAME, 'data');
 			$this->_options = array();
 		}
+
+		if(strpos($file_name,'admin') !==false && !is_dir(VIEW_DIR.'admin')){
+			$this->set_view_dir(APP_ROOT . 'views' . DS);
+		}
+
 		$file_name = $this->parse_file_name($file_name);
 		$view_file = $this->get_view_file($file_name);
 		$compile_file = $this->get_compile_file($file_name);

@@ -16,18 +16,6 @@ CREATE TABLE IF NOT EXISTS `{pre}content_1_verify` (
   KEY `userid` (`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `{pre}content`;
-CREATE TABLE IF NOT EXISTS `{pre}content` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- DROP TABLE IF EXISTS `{pre}form`;
--- CREATE TABLE IF NOT EXISTS `{pre}form` (
---   `id` int(10) NOT NULL AUTO_INCREMENT,
---   PRIMARY KEY (`id`)
--- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `{pre}content_1_extend`;
 CREATE TABLE IF NOT EXISTS `{pre}content_1_extend` (
   `id` int(10) NOT NULL,
@@ -449,6 +437,7 @@ CREATE TABLE IF NOT EXISTS `{pre}menu_data` (
   `child` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否存在子栏目，1，存在',
   `arrchildid` varchar(255) NOT NULL,
   `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否启用',
+  `isblank` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否启用',
   `name` varchar(255) DEFAULT NULL,
   `url` varchar(255) NOT NULL DEFAULT '',
   `query` text NOT NULL,
@@ -507,22 +496,6 @@ CREATE TABLE `{pre}user` (
 
 INSERT INTO `{pre}user` (`username`, `password`, `roleid`, `salt`, `realname`) VALUES ('{username}', '{password}', 1, '{salt}', '网站创始人');
 
--- DROP TABLE IF EXISTS `{pre}content_1_article`;
--- CREATE TABLE `{pre}content_1_article` (
---   `id` int(10) NOT NULL,
---   `catid` smallint(5) NOT NULL,
---   `content` mediumtext NOT NULL,
---   PRIMARY KEY `id` (`id`),
---   KEY `catid` (`catid`)
--- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
--- INSERT INTO `{pre}model` (`modelid`,`site`, `typeid`, `modelname`, `tablename`, `categorytpl`, `listtpl`, `showtpl`) VALUES
--- (1, 1, 1, '文章', 'content_1_article', 'category_news.html', 'list_news.html', 'show_news.html');
-
--- INSERT INTO `{pre}model_field` (`fieldid`, `modelid`, `field`, `name`, `type`, `length`, `indexkey`, `isshow`, `tips`, `pattern`, `errortips`, `formtype`, `setting`, `listorder`, `disabled`) VALUES
--- (1, 1, 'content', '内容', '', '0', '', 1, '', '', '', 'editor', 'array (\n  ''width'' => ''80'',\n  ''height'' => ''500'',\n  ''type'' => ''1'',\n)', 0, 0);
-
 -- INSERT INTO `{pre}model_field` VALUES(39, 6, 'xingming', '姓名', 'VARCHAR', '255', '', 1, '', 0, '', '', 'input', 'a:2:{s:4:"size";s:3:"150";s:7:"default";s:0:"";}', 0, 0);
 
 -- DROP TABLE IF EXISTS `{pre}member_geren`;
@@ -541,63 +514,63 @@ INSERT INTO `{pre}menu` (`menuid`, `site`, `name`, `url`, `select`, `option`, `i
 (4, 1, '会员管理', 'admin/member/index', '36', 'member-index,member-config,member-group,member-pms,member-extend', 0),
 (5, 1, '模块插件', 'admin/plugin/index', '59', 'plugin-index', 0);
 
-INSERT INTO `{pre}menu_data` (`id`, `site`, `menuid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `name`, `url`, `query`, `option`, `description`, `listorder`) VALUES
-(1, 1, 1, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '2', 1, '快捷菜单', '#', '#', '#', '快捷菜单', 0),
-(2, 1, 1, 1, '2', 0, '', 1, '后台首页', 'admin/index/main', '', 'index-index', '后台首页', 0),
-(3, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '4,5,6,7,8,9,10,11,12', 1, '系统设置', '#', '#', '#', '系统设置', 1),
-(4, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, '系统相关', 'admin/index/config', '&amp;type=1', 'index-config', '', 0),
-(5, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, '邮件设置', 'admin/index/config', '&amp;type=2', 'index-config', '', 0),
-(6, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, '网站地图', 'admin/index/config', '&amp;type=3', 'index-config', '', 0),
-(7, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, '搜索设置', 'admin/index/config', '&amp;type=4', 'index-config', '', 0),
-(8, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, 'TAG相关', 'admin/index/config', '&amp;type=5', 'index-config', '', 0),
-(9, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, '操作日志', 'admin/index/log', '', 'index-log', '', 0),
-(10, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, '攻击日志', 'admin/index/attack', '', 'index-attack', '', 0),
-(11, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, '禁止访问', 'admin/ip/index', '', 'ip-index', '', 0),
-(12, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, '后台菜单', 'admin/menu/index', '', 'menu-index', '', 0),
-(13, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '14,15', 1, '网站管理', '#', '#', '#', '', 2),
-(14, 1, 2, 13, '14,15', 0, '', 1, '网站配置', 'admin/site/config', '', 'site-config', '', 0),
-(15, 1, 2, 13, '14,15', 0, '', 1, '多网站管理', 'admin/site/index', '', 'site-index', '', 0),
-(16, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '17,18,19,20', 1, '管理员设置', '#', '#', '#', '', 5),
-(17, 1, 2, 16, '17,18,19,20', 0, '', 1, '添加管理员', 'admin/user/add', '', 'user-add', '', 0),
-(18, 1, 2, 16, '17,18,19,20', 0, '', 1, '管理员管理', 'admin/user/index', '', 'user-index', '', 0),
-(19, 1, 2, 16, '17,18,19,20', 0, '', 1, '角色权限管理', 'admin/auth/index', '', 'auth-index', '', 0),
-(20, 1, 2, 16, '17,18,19,20', 0, '', 1, '更新权限缓存', 'admin/auth/cache', '', 'auth-cache', '', 0),
-(21, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '22,23,24,25', 1, '栏目模型', '#', '#', '#', '', 0),
-(22, 1, 3, 21, '22,23,24,25', 0, '', 1, '栏目管理', 'admin/category/index', '', 'category-index', '', 0),
-(23, 1, 3, 21, '22,23,24,25', 0, '', 1, '附件管理', 'admin/attachment/index', '', 'attachment-index', '', 0),
-(24, 1, 3, 21, '22,23,24,25', 0, '', 1, '内容模型', 'admin/model/index', '', 'model-index', '', 0),
-(25, 1, 3, 21, '22,23,24,25', 0, '', 1, '表单模型', 'admin/model/index', '&amp;typeid=3', 'model-index', '', 0),
-(26, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 0, '22,23,24,25', 1, '内容管理', '#', '#', '#', '', 0),
-(27, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 0, '22,23,24,25', 1, '表单管理', '#', '#', '#', '', 0),
-(28, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '29,30,31,32,33,34', 1, '内容相关', '#', '#', '#', '', 0),
-(29, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, '导航栏管理', 'admin/navbar/index', '', 'navbar-index', '', 0),
-(30, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, '文字块管理', 'admin/block/index', '', 'block-index', '', 0),
-(31, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, '推荐位管理', 'admin/position/index', '', 'position-index', '', 0),
-(32, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, 'Tag标签管理', 'admin/tag/index', '', 'tag-index', '', 0),
-(33, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, '关联链接管理', 'admin/relatedlink/index', '', 'relatedlink-index', '', 0),
-(34, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, '联动菜单管理', 'admin/linkage/index', '', 'linkage-index', '', 0),
-(35, 1, 4, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '36,37,38,39,40', 1, '会员管理', '#', '#', '#', '', 0),
-(36, 1, 4, 35, '36,37,38,39,40', 0, '', 1, '会员列表', 'admin/member/index', '', 'member-index', '', 0),
-(37, 1, 4, 35, '36,37,38,39,40', 0, '', 1, '短 消 息', 'admin/member/pms', '', 'member-pms', '', 0),
-(38, 1, 4, 35, '36,37,38,39,40', 0, '', 1, '会 员 组', 'admin/member/group', '', 'member-group', '', 0),
-(39, 1, 4, 35, '36,37,38,39,40', 0, '', 1, '会员模型', 'admin/model/index', '&amp;typeid=2', 'model-index', '', 0),
-(40, 1, 4, 35, '36,37,38,39,40', 0, '', 1, '会员扩展', 'admin/model/index', '&amp;typeid=4', 'model-index', '', 0),
-(41, 1, 4, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 0, '36,37,38,39,40', 1, '会员扩展', '#', '#', '#', '', 0),
-(42, 1, 4, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '43,44,45,46,47', 1, '会员配置', '#', '#', '#', '', 0),
-(43, 1, 4, 42, '43,44,45,46,47', 0, '', 1, '基本配置', 'admin/member/config', '&amp;type=user', 'member-confg', '', 0),
-(44, 1, 4, 42, '43,44,45,46,47', 0, '', 1, '注册配置', 'admin/member/config', '&amp;type=reg', 'member-confg', '', 0),
-(45, 1, 4, 42, '43,44,45,46,47', 0, '', 1, '一键登录', 'admin/member/config', '&amp;type=oauth', 'member-confg', '', 0),
-(46, 1, 4, 42, '43,44,45,46,47', 0, '', 1, '邮件模板', 'admin/member/config', '&amp;type=email', 'member-confg', '', 0),
-(47, 1, 4, 42, '43,44,45,46,47', 0, '', 0, 'UCenter', 'admin/member/config', '&amp;type=ucenter', 'member-confg', '', 0),
-(48, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '49,50,51', 1, '模板管理', '#', '#', '#', '', 3),
-(49, 1, 2, 48, '49,50,51', 0, '', 1, '网站模板', 'admin/theme/index', '', 'theme-index', '', 0),
-(50, 1, 2, 48, '49,50,51', 0, '', 1, '标签向导', 'admin/theme/demo', '', 'theme-demo', '', 0),
-(51, 1, 2, 48, '49,50,51', 0, '', 1, '更新缓存', 'admin/theme/cache', '', 'theme-cache', '', 0),
-(52, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '53,54,55,56,57', 1, '生成静态', '#', '#', '#', '', 4),
-(53, 1, 2, 52, '53,54,55,56,57', 0, '', 1, '生成选项', 'admin/html/index', '', 'html-index', '', 0),
-(54, 1, 2, 52, '53,54,55,56,57', 0, '', 1, '清除静态文件', 'admin/html/clear', '', 'html-clear', '', 0),
-(55, 1, 2, 52, '53,54,55,56,57', 0, '', 1, '更新全站缓存', 'admin/index/cache', '', 'index-cache', '', 0),
-(56, 1, 2, 52, '53,54,55,56,57', 0, '', 1, '更新SiteMap', 'admin/index/updatemap', '', 'index-updatemap', '', 0),
-(57, 1, 2, 52, '53,54,55,56,57', 0, '', 1, '更新内容地址', 'admin/content/updateurl/', '', 'content-updateurl', '', 0),
-(58, 1, 5, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '59', 1, '插件列表', '#', '#', '#', '', 0),
-(59, 1, 5, 58, '59', 0, '', 1, '插件管理', 'admin/plugin/index', '', 'plugin-index', '', 0);
+INSERT INTO `{pre}menu_data` (`id`, `site`, `menuid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `isblank`, `name`, `url`, `query`, `option`, `description`, `listorder`) VALUES
+(1, 1, 1, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '2', 1, 0, '快捷菜单', '#', '#', '#', '快捷菜单', 0),
+(2, 1, 1, 1, '2', 0, '', 1, 0, '后台首页', 'admin/index/main', '', 'index-index', '后台首页', 0),
+(3, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '4,5,6,7,8,9,10,11,12', 1, 0, '系统设置', '#', '#', '#', '系统设置', 1),
+(4, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, 0, '系统相关', 'admin/index/config', '&amp;type=1', 'index-config', '', 0),
+(5, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, 0, '邮件设置', 'admin/index/config', '&amp;type=2', 'index-config', '', 0),
+(6, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, 0, '网站地图', 'admin/index/config', '&amp;type=3', 'index-config', '', 0),
+(7, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, 0, '搜索设置', 'admin/index/config', '&amp;type=4', 'index-config', '', 0),
+(8, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 0, 0, 'TAG相关', 'admin/index/config', '&amp;type=5', 'index-config', '', 0),
+(9, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, 0, '操作日志', 'admin/index/log', '', 'index-log', '', 0),
+(10, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, 0, '攻击日志', 'admin/index/attack', '', 'index-attack', '', 0),
+(11, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, 0, '禁止访问', 'admin/ip/index', '', 'ip-index', '', 0),
+(12, 1, 2, 3, '4,5,6,7,8,9,10,11,12', 0, '', 1, 0, '后台菜单', 'admin/menu/index', '', 'menu-index', '', 0),
+(13, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '14,15', 1, 0, '网站管理', '#', '#', '#', '', 2),
+(14, 1, 2, 13, '14,15', 0, '', 1, 0, '网站配置', 'admin/site/config', '', 'site-config', '', 0),
+(15, 1, 2, 13, '14,15', 0, '', 1, 0, '多网站管理', 'admin/site/index', '', 'site-index', '', 0),
+(16, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '17,18,19,20', 1, 0, '管理员设置', '#', '#', '#', '', 5),
+(17, 1, 2, 16, '17,18,19,20', 0, '', 1, 0, '添加管理员', 'admin/user/add', '', 'user-add', '', 0),
+(18, 1, 2, 16, '17,18,19,20', 0, '', 1, 0, '管理员管理', 'admin/user/index', '', 'user-index', '', 0),
+(19, 1, 2, 16, '17,18,19,20', 0, '', 1, 0, '角色权限管理', 'admin/auth/index', '', 'auth-index', '', 0),
+(20, 1, 2, 16, '17,18,19,20', 0, '', 1, 0, '更新权限缓存', 'admin/auth/cache', '', 'auth-cache', '', 0),
+(21, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '22,23,24,25', 1, 0, '栏目模型', '#', '#', '#', '', 0),
+(22, 1, 3, 21, '22,23,24,25', 0, '', 1, 0, '栏目管理', 'admin/category/index', '', 'category-index', '', 0),
+(23, 1, 3, 21, '22,23,24,25', 0, '', 1, 0, '附件管理', 'admin/attachment/index', '', 'attachment-index', '', 0),
+(24, 1, 3, 21, '22,23,24,25', 0, '', 1, 0, '内容模型', 'admin/model/index', '', 'model-index', '', 0),
+(25, 1, 3, 21, '22,23,24,25', 0, '', 1, 0, '表单模型', 'admin/model/index', '&amp;typeid=3', 'model-index', '', 0),
+(26, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 0, '22,23,24,25', 1, 0, '内容管理', '#', '#', '#', '', 0),
+(27, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 0, '22,23,24,25', 1, 0, '表单管理', '#', '#', '#', '', 0),
+(28, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '29,30,31,32,33,34', 1, 0, '内容相关', '#', '#', '#', '', 0),
+(29, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, 0, '导航栏管理', 'admin/navbar/index', '', 'navbar-index', '', 0),
+(30, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, 0, '文字块管理', 'admin/block/index', '', 'block-index', '', 0),
+(31, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, 0, '推荐位管理', 'admin/position/index', '', 'position-index', '', 0),
+(32, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, 0, 'Tag标签管理', 'admin/tag/index', '', 'tag-index', '', 0),
+(33, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, 0, '关联链接管理', 'admin/relatedlink/index', '', 'relatedlink-index', '', 0),
+(34, 1, 3, 28, '29,30,31,32,33,34', 0, '', 1, 0, '联动菜单管理', 'admin/linkage/index', '', 'linkage-index', '', 0),
+(35, 1, 4, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '36,37,38,39,40', 1, 0, '会员管理', '#', '#', '#', '', 0),
+(36, 1, 4, 35, '36,37,38,39,40', 0, '', 1, 0, '会员列表', 'admin/member/index', '', 'member-index', '', 0),
+(37, 1, 4, 35, '36,37,38,39,40', 0, '', 1, 0, '短 消 息', 'admin/member/pms', '', 'member-pms', '', 0),
+(38, 1, 4, 35, '36,37,38,39,40', 0, '', 1, 0, '会 员 组', 'admin/member/group', '', 'member-group', '', 0),
+(39, 1, 4, 35, '36,37,38,39,40', 0, '', 1, 0, '会员模型', 'admin/model/index', '&amp;typeid=2', 'model-index', '', 0),
+(40, 1, 4, 35, '36,37,38,39,40', 0, '', 1, 0, '会员扩展', 'admin/model/index', '&amp;typeid=4', 'model-index', '', 0),
+(41, 1, 4, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 0, '36,37,38,39,40', 1, 0, '会员扩展', '#', '#', '#', '', 0),
+(42, 1, 4, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '43,44,45,46,47', 1, 0, '会员配置', '#', '#', '#', '', 0),
+(43, 1, 4, 42, '43,44,45,46,47', 0, '', 1, 0, '基本配置', 'admin/member/config', '&amp;type=user', 'member-confg', '', 0),
+(44, 1, 4, 42, '43,44,45,46,47', 0, '', 1, 0, '注册配置', 'admin/member/config', '&amp;type=reg', 'member-confg', '', 0),
+(45, 1, 4, 42, '43,44,45,46,47', 0, '', 1, 0, '一键登录', 'admin/member/config', '&amp;type=oauth', 'member-confg', '', 0),
+(46, 1, 4, 42, '43,44,45,46,47', 0, '', 1, 0, '邮件模板', 'admin/member/config', '&amp;type=email', 'member-confg', '', 0),
+(47, 1, 4, 42, '43,44,45,46,47', 0, '', 0, 0, 'UCenter', 'admin/member/config', '&amp;type=ucenter', 'member-confg', '', 0),
+(48, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '49,50,51', 1, 0, '模板管理', '#', '#', '#', '', 3),
+(49, 1, 2, 48, '49,50,51', 0, '', 1, 0, '网站模板', 'admin/theme/index', '', 'theme-index', '', 0),
+(50, 1, 2, 48, '49,50,51', 0, '', 1, 0, '标签向导', 'admin/theme/demo', '', 'theme-demo', '', 0),
+(51, 1, 2, 48, '49,50,51', 0, '', 1, 0, '更新缓存', 'admin/theme/cache', '', 'theme-cache', '', 0),
+(52, 1, 2, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '53,54,55,56,57', 1, 0, '生成静态', '#', '#', '#', '', 4),
+(53, 1, 2, 52, '53,54,55,56,57', 0, '', 1, 0, '生成选项', 'admin/html/index', '', 'html-index', '', 0),
+(54, 1, 2, 52, '53,54,55,56,57', 0, '', 1, 0, '清除静态文件', 'admin/html/clear', '', 'html-clear', '', 0),
+(55, 1, 2, 52, '53,54,55,56,57', 0, '', 1, 0, '更新全站缓存', 'admin/index/cache', '', 'index-cache', '', 0),
+(56, 1, 2, 52, '53,54,55,56,57', 0, '', 1, 0, '更新SiteMap', 'admin/index/updatemap', '', 'index-updatemap', '', 0),
+(57, 1, 2, 52, '53,54,55,56,57', 0, '', 1, 0, '更新内容地址', 'admin/content/updateurl/', '', 'content-updateurl', '', 0),
+(58, 1, 5, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '59', 1, 0, '插件列表', '#', '#', '#', '', 0),
+(59, 1, 5, 58, '59', 0, '', 1, 0, '插件管理', 'admin/plugin/index', '', 'plugin-index', '', 0);

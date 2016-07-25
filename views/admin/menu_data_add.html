@@ -80,7 +80,13 @@
 			<td>
 				<input type="radio" {if !isset($data['ismenu']) || $data['ismenu']==1}checked{/if} value="1" name="data[ismenu]" /> {lang('a-yes')}&nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="radio" {if isset($data['ismenu']) && $data['ismenu']==0}checked{/if} value="0" name="data[ismenu]" /> {lang('a-no')}
-				<div class="onShow">{lang('a-cat-39')}</div>
+			</td>
+		</tr>
+		<tr>
+			<th>{lang('a-fnx-25')}：</th>
+			<td>
+				<input type="radio" {if isset($data['isblank']) && $data['isblank']==1}checked{/if} value="1" name="data[isblank]" /> {lang('a-yes')}&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="radio" {if !isset($data['isblank']) || $data['isblank']==0}checked{/if} value="0" name="data[isblank]" /> {lang('a-no')}
 			</td>
 		</tr>
 		<tr>

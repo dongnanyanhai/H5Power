@@ -52,9 +52,10 @@ class Common extends Controller {
         define('CMS_VERSION',	$system_cms['version']);
         define('CMS_UPDATE',	$system_cms['update']);
         define('SITE_THEME',	self::get_theme_url());
-		define('ADMIN_THEME',	SITE_PATH . basename(VIEW_DIR) . '/admin/');
-		define('EXT_PATH',		SITE_PATH . EXTENSION_PATH . '/');
-		define('LANG_PATH',		SITE_PATH . EXTENSION_PATH . '/language/' . SYS_LANGUAGE . '/');
+        if(IN_ROOTDIR){define('ROOT_SITE_PATH', SITE_PATH);}else{define('ROOT_SITE_PATH', '/');}
+		define('ADMIN_THEME',	ROOT_SITE_PATH . basename(VIEW_DIR) . '/admin/');
+		define('EXT_PATH',		ROOT_SITE_PATH . EXTENSION_PATH . '/');
+		define('LANG_PATH',		ROOT_SITE_PATH . EXTENSION_PATH . '/language/' . SYS_LANGUAGE . '/');
 		//禁止访问
 		$ips = $this->cache->get('ip');
 		$uip = client::get_user_ip();

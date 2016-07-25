@@ -86,7 +86,13 @@
     <h3 class="f14"><span class="switchs cu on"></span>{$name}</h3>
     <ul>
     {loop $n $id=>$v}
-      <li id="_MP{$v['id']}" class="sub_menu"><a {if isset($v['url']) && $v['url']}href="javascript:_MP({$v['id']},'{if strpos($v['url'],'index.php') || strpos($v['url'],'http') !== false}{$v['url']}{else}{url($v['url'])}{/if}{if $v['query']}{$v['query']}{/if}', '{php echo isset($v['clz']) ? $v['clz'] : 0;}');"{/if} hidefocus="true" style="outline:none;">{if isset($v['sys'])}{$v['name']}{else}{$v['name']}{/if}</a></li>
+      <li id="_MP{$v['id']}" class="sub_menu">
+      	{if $v['isblank']}
+      	<a target="_blank" {if isset($v['url']) && $v['url']}href="{if strpos($v['url'],'index.php') || strpos($v['url'],'http') !== false}{$v['url']}{else}{url($v['url'])}{/if}{if $v['query']}{$v['query']}{/if}"{/if} hidefocus="true" style="outline:none;">{if isset($v['sys'])}{$v['name']}{else}{$v['name']}{/if}</a>
+      	{else}
+      	<a {if isset($v['url']) && $v['url']}href="javascript:_MP({$v['id']},'{if strpos($v['url'],'index.php') || strpos($v['url'],'http') !== false}{$v['url']}{else}{url($v['url'])}{/if}{if $v['query']}{$v['query']}{/if}','{php echo isset($v['clz']) ? $v['clz'] : 0;}');"{/if} hidefocus="true" style="outline:none;">{if isset($v['sys'])}{$v['name']}{else}{$v['name']}{/if}</a>
+      	{/if}
+      	</li>
     {/loop}
     </ul>    
     {/loop}

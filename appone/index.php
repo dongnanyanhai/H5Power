@@ -9,17 +9,10 @@ header('Content-Type: text/html; charset=utf-8');
  * 定义项目所在路径(APP_ROOT)
  */
 define('IN_FINECMS', true);
-define('IN_ROOTDIR', true);
+define('IN_ROOTDIR', false);
 define('DS', DIRECTORY_SEPARATOR);
-define('APP_ROOT',   dirname(__FILE__) . DS);
-
-$sitesmap = require APP_ROOT.'sitesmap.php';
-
-if(!empty($sitesmap[$_SERVER['HTTP_HOST']])){
-    define('SITE_ROOT', $sitesmap[$_SERVER['HTTP_HOST']] . DS);
-}else{
-    define('SITE_ROOT', 'sites' . DS . 'default' . DS);
-}
+define('APP_ROOT',   dirname(dirname(__FILE__)) . DS);
+define('SITE_ROOT',   dirname(__FILE__) . DS);
 
 $config = require SITE_ROOT . 'config/config.ini.php';
 require APP_ROOT . './core/App.php';

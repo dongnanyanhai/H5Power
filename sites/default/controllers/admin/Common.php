@@ -76,7 +76,10 @@ class Admin extends Common {
 				$menu['list'][$content_menu]['内容管理']['999' . $id] = array('id'=>'999' . $id,'name' => $t['modelname'], 'url' => $url, 'clz' => 1);
 			}
 			krsort($menu['list'][$content_menu]['内容管理']);
+		} else {
+			unset($menu['list'][$content_menu]['内容管理']);
 		}
+		
 		$model = $this->get_model('form');	//表单模型
 		if ($model && $form_menu) {
 			$f = null;
