@@ -40,8 +40,8 @@ function ajaxdir() {
 				<div class="col-tab">
 					<ul class="tabBut cu-li">
 						<li onClick="SwapTab('setting','on','',5,1);" class="on" id="tab_setting_1">{lang('a-cat-25')}</li>
-						<li onClick="SwapTab('setting','on','',5,2);" id="tab_setting_2" class="">{lang('a-cat-26')}</li>
-						<li onClick="SwapTab('setting','on','',5,3);" id="tab_setting_3" class="">{lang('a-cat-27')}</li>
+						<li onClick="SwapTab('setting','on','',5,2);" id="tab_setting_2" class="">{lang('a-cat-27')}</li>
+						<li onClick="SwapTab('setting','on','',5,3);" id="tab_setting_3" class="">{lang('a-cat-26')}</li>
 						<li onClick="SwapTab('setting','on','',5,4);" id="tab_setting_4" class="">{lang('a-cat-28')}</li>
 						<li onClick="SwapTab('setting','on','',5,5);" id="tab_setting_5" class="">{lang('a-cat-29')}</li>
 					</ul>
@@ -145,6 +145,40 @@ function ajaxdir() {
 					<table width="100%" class="table_form ">
 					<tbody>
 					<tr>
+						<th width="200">{lang('a-fnx-78')}：</th>
+						<td><input type="text" maxlength="60" size="60" value="{$data['meta_title']}" id="meta_title" name="data[meta_title]" class="input-text">
+						<div class="onShow">{lang('a-fnx-82')}</div>
+						</td>
+						
+					</tr>
+					<tr>
+						<th>{lang('a-fnx-80')}：</th>
+						<td>
+						<input type="text" maxlength="60" size="60" value="{$data['meta_url']}" id="meta_url" name="data[meta_url]" class="input-text">
+						<div class="onShow">{lang('a-fnx-83')}</div>
+						</td>
+					</tr>
+					<tr>
+						<th>{lang('a-fnx-79')}：</th>
+						<td><input type="text" class="input-text" size="50" value="{$data['meta_image']}" name="data[meta_image]" id="meta_image" />
+						<input type="button" style="width:66px;cursor:pointer;" class="button" onClick="preview('meta_image')" value="{lang('a-image')}" />
+						<input type="button" style="width:66px;cursor:pointer;" class="button" onClick="uploadImage('meta_image')" value="{lang('a-upload')}" />
+						<div class="onShow">{lang('a-fnx-84')}</div>
+						</td>
+					</tr>				
+
+					<tr>
+						<th>{lang('a-fnx-81')}：</th>
+						<td><textarea style="width:90%;height:100px" id="meta_description" name="data[meta_description]">{$data['meta_description']}</textarea></td>
+					</tr>
+					</tbody>
+					</table>
+					</div>
+
+					<div class="contentList pad-10 hidden" id="div_setting_3" style="display: none;">
+					<table width="100%" class="table_form ">
+					<tbody>
+					<tr>
 						<th width="200">{lang('a-cat-42')}：</th>
 						<td>
 						<input type="text" class="input-text" size="30" value="{$data['pagesize']}" name="data[pagesize]">
@@ -168,25 +202,6 @@ function ajaxdir() {
 						<td id="show_template">
 						<input type="text" class="input-text" size="30" value="{$data['showtpl']}" name="data[showtpl]" id="showtpl">
 						</td>
-					</tr>
-					</tbody>
-					</table>
-					</div>
-
-					<div class="contentList pad-10 hidden" id="div_setting_3" style="display: none;">
-					<table width="100%" class="table_form ">
-					<tbody>
-					<tr>
-						<th width="200">{lang('a-cat-47')}：</th>
-						<td><input type="text" maxlength="60" size="60" value="{$data['meta_title']}" id="meta_title" name="data[meta_title]" class="input-text"></td>
-					</tr>
-					<tr>
-						<th>{lang('a-cat-48')}：</th>
-						<td><textarea style="width:90%;height:40px" id="meta_keywords" name="data[meta_keywords]">{$data['meta_keywords']}</textarea></td>
-					</tr>
-					<tr>
-						<th>{lang('a-cat-49')}：</th>
-						<td><textarea style="width:90%;height:50px" id="meta_description" name="data[meta_description]">{$data['meta_description']}</textarea></td>
 					</tr>
 					</tbody>
 					</table>
