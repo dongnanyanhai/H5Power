@@ -1,3 +1,35 @@
+DROP TABLE IF EXISTS `{pre}content`;
+CREATE TABLE IF NOT EXISTS `{pre}content` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `{pre}content_1`;
+CREATE TABLE `{pre}content_1` (
+  `id` int(10) unsigned NOT NULL,
+  `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `catid2` varchar(255) NOT NULL,
+  `modelid` smallint(5) NOT NULL,
+  `title` varchar(80) NOT NULL DEFAULT '',
+  `thumb` varchar(255) NOT NULL DEFAULT '',
+  `keywords` char(40) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `url` char(100) NOT NULL,
+  `listorder` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(2) unsigned NOT NULL DEFAULT '1',
+  `hits` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `sysadd` tinyint(1) NOT NULL COMMENT '是否后台添加',
+  `userid` smallint(8) NOT NULL,
+  `username` char(20) NOT NULL,
+  `inputtime` bigint(10) unsigned NOT NULL DEFAULT '0',
+  `updatetime` bigint(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY `id` (`id`),
+  KEY `admin` (`modelid`,`status`,`listorder`,`updatetime`),
+  KEY `catid` (`catid`,`status`,`updatetime`),
+  KEY `member` (`userid`,`modelid`,`status`,`sysadd`,`updatetime`),
+  KEY `status` (`status`,`updatetime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `{pre}content_1_verify`;
 CREATE TABLE IF NOT EXISTS `{pre}content_1_verify` (
   `id` int(10) NOT NULL,
@@ -134,32 +166,6 @@ CREATE TABLE `{pre}category_block` (
   `fieldname` varchar(50) NOT NULL,
   `content` mediumtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `{pre}content_1`;
-CREATE TABLE `{pre}content_1` (
-  `id` int(10) unsigned NOT NULL,
-  `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `catid2` varchar(255) NOT NULL,
-  `modelid` smallint(5) NOT NULL,
-  `title` varchar(80) NOT NULL DEFAULT '',
-  `thumb` varchar(255) NOT NULL DEFAULT '',
-  `keywords` char(40) NOT NULL DEFAULT '',
-  `description` text NOT NULL,
-  `url` char(100) NOT NULL,
-  `listorder` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(2) unsigned NOT NULL DEFAULT '1',
-  `hits` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `sysadd` tinyint(1) NOT NULL COMMENT '是否后台添加',
-  `userid` smallint(8) NOT NULL,
-  `username` char(20) NOT NULL,
-  `inputtime` bigint(10) unsigned NOT NULL DEFAULT '0',
-  `updatetime` bigint(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY `id` (`id`),
-  KEY `admin` (`modelid`,`status`,`listorder`,`updatetime`),
-  KEY `catid` (`catid`,`status`,`updatetime`),
-  KEY `member` (`userid`,`modelid`,`status`,`sysadd`,`updatetime`),
-  KEY `status` (`status`,`updatetime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `{pre}favorite`;
