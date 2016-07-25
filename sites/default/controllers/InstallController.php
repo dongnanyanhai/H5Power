@@ -17,7 +17,6 @@ class InstallController extends Controller {
         define('SITE_PATH',   self::get_base_url());
         define('CMS_NAME',    $cms['name']);
         define('CMS_VERSION', $cms['version']);
-		define('SITE_THEME',  self::get_theme_url());
 		define('ADMIN_THEME', SITE_PATH . basename(VIEW_DIR) . '/admin/');
 		if (file_exists(SITE_ROOT . './cache/install.lock') && $_GET['a']!='reinstall') {
 			$this->view->assign('msg', '安装程序已经被锁定，<br/>如果需要解除锁定继续安装<br/>请删除 ./cache/install.lock 文件');
@@ -27,9 +26,11 @@ class InstallController extends Controller {
         if(is_dir(VIEW_DIR.'install')){
 			// 站点有独立的安装模版
 			$this->view->set_view_dir(VIEW_DIR);
+			define('SITE_THEME',  self::get_theme_url());
 		}else{
 			// 采用公共站点安装模版
 			$this->view->set_view_dir(APP_ROOT . 'views' . DS);
+			define('SITE_THEME',  '/views/default/');
 		}
 		App::auto_load('function');
 	}
