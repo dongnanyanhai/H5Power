@@ -322,11 +322,9 @@ class CategoryController extends Admin {
 	    		// 增加
 	    		$data = $this->post('data');
 				$this->checkFields($model['fields'], $data, 1);
-				$data['ip']			= client::get_user_ip();
 				$data['cid']		= $catid;
-				$data['userid']		= 0;
-				$data['username']	= $this->userinfo['username'];
-				$data['inputtime']	= $data['updatetime'] = time();
+				$data['status']     = 1;
+				$data['updatetime'] = time();
 				$data['dealunqiue'] = 2; // 2表示遇到有唯一字段数据时，更新已存在数据
 				if ($data['id'] = $form->set(0, $data)) {
 					// 把id保存到catsid中
