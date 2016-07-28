@@ -86,17 +86,12 @@ function setC() {
 			{if admin_auth($userinfo['roleid'], 'category-edit')}<a href="{url('admin/category/edit',array('catid'=>$t['catid']))}">{lang('a-edit')}</a> | {/if}
 			<!-- 菜单模型 -->
 			{if $t['typeid'] != 3}
-
 			{if admin_auth($userinfo['roleid'], 'category-add')}
 				<a {if $t['typeid']!=3}href="{url('admin/category/catmodel',array('catid'=>$t['catid']))}"{else}
 				href="javascript:;"{/if}>{lang('a-fnx-87')}</a> | 
 			{/if}
 			{/if}
 			<!-- End of 菜单模型 -->
-			<!-- 字段 -->
-			{if $t['typeid'] != 3}
-			{if admin_auth($userinfo['roleid'], 'category-add')}<a {if $t['typeid']!=3}href="{url('admin/category/categoryblock',array('catid'=>$t['catid']))}"{else}href="javascript:;"{/if}>{lang('a-fnx-18')}</a> | {/if}{/if}
-			<!-- End of 字段 -->
 			{if admin_auth($userinfo['roleid'], 'category-del')}<a href="javascript:del({$t['catid']});">{lang('a-del')}</a>  |  {/if}
 			<!-- 阿海新增加  文章管理-->
 			{if $t['typeid']==1 && !$t['child'] && !admin_post_auth($userinfo['roleid'], $cats[$t['catid']]['setting'])}&nbsp;<a href="{url('admin/content', array('catid'=>$t['catid'], 'modelid'=>$t['modelid'],'page'=>'1'))}">{lang('a-fnx-14')}</a>  |  {/if}

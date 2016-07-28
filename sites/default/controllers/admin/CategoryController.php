@@ -3,16 +3,11 @@
 class CategoryController extends Admin {
     
     private $tree;
-    private $category_block;
-    private $category_block_type;
     
     public function __construct() {
 		parent::__construct();
 		$this->tree	= $this->instance('tree');
 		$this->tree->config(array('id' => 'catid', 'parent_id' => 'parentid', 'name' => 'catname'));
-		$this->category_block = $this->model('category_block');
-		$this->category_block_type  = array(1=>lang('a-blo-0'), 2=>lang('a-blo-1'), 3=>lang('a-blo-2'),4=>lang('a-fnx-17'),5=>lang('a-fnx-27'));
-		$this->view->assign('type', $this->category_block_type);
 	}
 	
 	/**
@@ -229,7 +224,6 @@ class CategoryController extends Admin {
 	    $category  = $category_dir = $count = array();
 	    // 菜单模型
 	    $catmodel  = $this->get_model('category');
-	    $cb_data   = $this->category_block->where('site=' . $this->siteid)->order(array('id DESC'))->select();
 
 	    foreach ($data as $t) {
 	        $catid = $t['catid'];
@@ -298,23 +292,6 @@ class CategoryController extends Admin {
 			    	$category[$t['catid']]['more'] = $setting_data;
 			    }
 		    };
-
-	        foreach ($cb_data as $kk => $cb) {
-	        	if($cb['catid'] == $t['catid']){
-				    if ($cb['type']==4){
-				    	$block_link =  string2array($cb['content']);
-				    	if (is_array($block_link)){
-				    		foreach ($block_link as $key => $value) {
-				    			$block_link[$key] = htmlspecialchars_decode($value);
-				    		}
-				    		$category[$t['catid']][$cb['fieldname']] = $block_link;
-				    	}
-				    }else{
-				    	$category[$t['catid']][$cb['fieldname']] = $cb['content'];
-				    }
-				    $category[$t['catid']]['ext'][$kk] = $cb['fieldname'];
-	        	}
-	        }
 
 	    }
 	    //保存到缓存文件
@@ -394,120 +371,5 @@ class CategoryController extends Admin {
 			'fields' => $this->getFields($model['fields'], $setting_data),
 		));
 		$this->view->display('admin/catmodel_add');
-	}
-
-	// 阿海新增，栏目自定义字段管理，代码主要来自系统默认block功能
-	public function categoryblockAction() {
-		$catid = $this->get('catid');
-		if ($this->post('submit_del')) {
-	        foreach ($_POST as $var=>$value) {
-	            if (strpos($var, 'del_')!==false) {
-	                $id = (int)str_replace('del_', '', $var);
-	                $this->cbdelAction($id, 1);
-	            }
-	        }
-			$this->adminMsg($this->getCacheCode('block') . lang('success'), url('admin/category/categoryblock/',array('catid'=>$this->get('catid'))), 3, 1, 1);
-	    }
-	    $page     = (int)$this->get('page');
-		$page     = (!$page) ? 1 : $page;
-	    $pagelist = $this->instance('pagelist');
-		$pagelist->loadconfig();
-	    $total    = $this->category_block->count('block', null, 'site=' . $this->siteid);
-	    $pagesize = isset($this->site['SITE_ADMIN_PAGESIZE']) && $this->site['SITE_ADMIN_PAGESIZE'] ? $this->site['SITE_ADMIN_PAGESIZE'] : 8;
-	    $data     = $this->category_block->where('site=' . $this->siteid)->where('catid=' . $this->get('catid'))->page_limit($page, $pagesize)->order(array('id DESC'))->select();
-	    $pagelist = $pagelist->total($total)->url(url('admin/category/categoryblock', array('catid'=>$this->get('catid'),'page'=>'{page}')))->num($pagesize)->page($page)->output();
-	    $this->view->assign(array(
-	        'list'     => $data,
-	        'pagelist' => $pagelist,
-	    ));
-	    $this->view->display('admin/category_block_list');
-    }
-    
-    public function cbaddAction() {
-    	
-        if ($this->post('submit')) {
-            $data = $this->post('data');
-            if (empty($data['type'])) $this->adminMsg(lang('a-blo-3'));
-            // 阿海新增，Block-链接类型
-			if ($data['type'] == 4){
-				$data['content'] = array2string($data['content_' . $data['type']]);
-			}else{
-				$data['content'] = $data['content_' . $data['type']];
-			}
-			// 检查字段名称和内容是否为空
-            if (empty($data['name']) || empty($data['content']) || empty($data['fieldname'])) $this->adminMsg(lang('a-blo-4'));
-            // 检查字段名称是否和栏目字段重复
-            $deffield = array("catid", "site", "typeid", "modelid", "parentid", "arrparentid", "child", "arrchildid", "catname", "image", "content", "meta_title", "meta_keywords", "meta_description", "catdir", "url", "urlpath", "items", "listorder", "ismenu", "categorytpl", "listtpl", "showtpl", "setting", "pagesize","ext");
-            if (in_array($data['fieldname'], $deffield)) $this->adminMsg(lang('a-fnx-58'));
-            // 检查字段名称是否和已有字段重复
-            $cb_data   = $this->category_block->where('site=' . $this->siteid)->where('catid=' . $this->get('catid'))->select();
-            if($cb_data){
-            	foreach ($cb_data as $val) {
-            		if ($data['fieldname'] == $val['fieldname']) $this->adminMsg(lang('a-fnx-59'));
-            		if ($data['name'] == $val['name']) $this->adminMsg(lang('a-fnx-59'));
-            	}
-            }
-
-			$data['site'] = $this->siteid;
-			$data['catid'] = $this->get('catid');
-            $this->category_block->insert($data);
-            $this->adminMsg($this->getCacheCode('block') . lang('success'), url('admin/category/categoryblock',array('catid'=>$this->get('catid'))), 3, 1, 1);
-        }
-        $this->view->display('admin/category_block_add');
-    }
-    
-    public function cbeditAction() {
-        $id   = (int)$this->get('id');
-        $data = $this->category_block->find($id);
-        if ($data['type'] == 4){
-        	$data['content'] = string2array($data['content']);
-        }
-        if (empty($data)) $this->adminMsg(lang('a-blo-5'));
-        if ($this->post('submit')) {
-            unset($data);
-            $data = $this->post('data');
-            if (empty($data['type'])) $this->adminMsg(lang('a-blo-3'));
-            // 阿海新增，Block-链接类型
-			if ($data['type'] == 4){
-				$data['content'] = array2string($data['content_' . $data['type']]);
-			}else{
-				$data['content'] = $data['content_' . $data['type']];
-			}
-            if (empty($data['name']) || empty($data['content'])) $this->adminMsg(lang('a-blo-4'));
-			$data['site'] = $this->siteid;
-			$data['catid'] = $this->get('catid');
-            $this->category_block->update($data, 'id=' . $id);
-            $this->adminMsg($this->getCacheCode('block') . lang('success'), url('admin/category/categoryblock',array('catid'=>$this->get('catid'))), 3, 1, 1);
-        }
-        $this->view->assign('data', $data);
-        $this->view->display('admin/category_block_add');
-    }
-    
-    public function cbdelAction($id=0, $all=0) {
-        if (!auth::check($this->roleid, 'block-del', 'admin')) $this->adminMsg(lang('a-com-0', array('1'=>'block', '2'=>'del')));
-	    $id  = $id  ? $id  : (int)$this->get('id');
-	    $all = $all ? $all : $this->get('all');
-	    $this->category_block->delete('site=' . $this->siteid . ' AND id=' . $id);
-	    $all or $this->adminMsg($this->getCacheCode('block') . lang('success'), url('admin/category/categoryblock',array('catid'=>$this->get('catid'))), 3, 1, 1);
-	}
-	/**
-	 * 加载调用代码
-	 */
-	public function cbajaxviewAction() {
-	    $id   = (int)$this->get('id');
-	    $data = $this->category_block->find($id);
-	    if (empty($data)) exit(lang('a-blo-5'));
-	    //var_dump($data);
-	    if ($data['type'] == 4){
-		    $msg  = "<textarea id='block_" . $id . "' style='font-size:12px;width:100%;height:80px;overflow:hidden;'>";
-		    $msg .= "<!--" . $data['name'] . "-->\n{php \$anchor = \$cats[".$data['catid']."]['".$data['fieldname']."'];}\n<!--" . $data['name'] . "-->";
-		    $msg .= "\n<!-- 调用方式{\$anchor['title']} --></textarea>";
-	    }else{
-		    $msg  = "<textarea id='block_" . $id . "' style='font-size:12px;width:100%;height:50px;overflow:hidden;'>";
-		    $msg .= "<!--" . $data['name'] . "-->\n{\$cats[".$data['catid']."]['".$data['fieldname']."']}\n<!--" . $data['name'] . "-->";
-		    $msg .= "</textarea>";
-	    }
-
-	    echo $msg;
 	}
 }

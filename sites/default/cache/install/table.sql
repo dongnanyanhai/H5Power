@@ -158,18 +158,6 @@ CREATE TABLE `{pre}category` (
   KEY `modelid` (`modelid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `{pre}category_block`;
-CREATE TABLE `{pre}category_block` (
-  `id` smallint(5) NOT NULL AUTO_INCREMENT,
-  `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `site` tinyint(3) NOT NULL COMMENT '站点id',
-  `type` tinyint(1) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `fieldname` varchar(50) NOT NULL,
-  `content` mediumtext NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `{pre}favorite`;
 CREATE TABLE `{pre}favorite` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
