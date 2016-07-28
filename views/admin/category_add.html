@@ -58,6 +58,18 @@ function ajaxdir() {
 						<div class="onShow">{lang('a-cat-30')}</div>
 						</td>
 					</tr>
+					<!-- 阿海新增 - 菜单模型 start-->
+					<tr class="">
+						<th>{lang('a-fnx-86')}：</th>
+						<td>
+						<select id="catmid" name="data[catmid]" {if $catid}disabled{/if}/>
+						<option value=""> -- </option>
+						{loop $catmodel $t}
+						<option value="{$t['modelid']}" {if $t['modelid']==$data['catmid']}selected{/if}>{$t['modelname']}</option>
+						{/loop}
+						</select></td>
+					</tr>
+					<!-- 阿海新增 - 菜单模型 end-->
 					<tr class="type_1" style="display:none;">
 						<th><font color="red">*</font> {lang('a-cat-17')}：</th>
 						<td>

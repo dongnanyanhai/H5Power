@@ -13,6 +13,7 @@ class ModelController extends Admin {
 			2 => 'member',  //会员表模型
 			3 => 'form',    //表单表模型
 			4 => 'extend',	//会员扩展模型
+			5 => 'category',//菜单栏目模型
 		);
 		$this->_model = $this->model('model');
 	    $this->typeid = $this->get('typeid') ? $this->get('typeid') : 1;
@@ -24,7 +25,8 @@ class ModelController extends Admin {
 			    1 => lang('a-men-27'),
 				2 => lang('a-men-40'),
 				3 => lang('a-men-60'),
-				4 => lang('a-mod-167')
+				4 => lang('a-mod-167'),
+				5 => lang('a-fnx-86')
 			),
 		));
 	}
@@ -237,6 +239,9 @@ class ModelController extends Admin {
 			} elseif ($this->typeid == 4) {	//会员扩展
 				$table		= $this->model($model_data['tablename']);	//实例化会员扩展对象
 				$fields		= $table->get_fields();						//表单字段
+			} elseif ($this->typeid == 5) {	//菜单模型
+				$table		= $this->model($model_data['tablename']);	//实例化表单对象
+				$fields		= $table->get_fields();						//菜单字段
 			}
 	        //判断新加字段是否存在
 	        if (in_array($fieldname, $fields)) $this->adminMsg(lang('a-mod-6'));

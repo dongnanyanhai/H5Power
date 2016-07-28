@@ -43,7 +43,7 @@
 					<th><font color="red">*</font> {lang('a-mod-19')}： </th>
 					<td><input class="input-text" type="text" name="tablename" value="{$data['tablename']}" size="30" {if $data['modelid']}disabled{/if} required /><div class="onShow">{lang('a-mod-20')}</div></td>
 				</tr>
-				{if $typeid != 2 && $typeid != 4}
+				{if $typeid != 2 && $typeid != 4 && $typeid != 5}
 					{if $typeid == 1}
 						<tr>
 							<th>{lang('a-mod-21')}：</th>

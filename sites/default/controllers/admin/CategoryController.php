@@ -92,11 +92,13 @@ class CategoryController extends Admin {
 			}
 	    }
 	    $model  = $this->get_model();
+	    $catmodel  = $this->get_model('category');
 	    $catid  = (int)$this->get('catid');
 		$json_m = json_encode($model);
 	    $this->view->assign(array(
 			'add'				=> 1,
 	        'model'				=> $model,
+	        'catmodel'				=> $catmodel,
 			'rolemodel'			=> $this->user->get_role_list(),
 	        'json_model'		=> $json_m ? $json_m : '""',
 			'membergroup'		=> $this->cache->get('membergroup'),
@@ -118,7 +120,6 @@ class CategoryController extends Admin {
 	        if ($this->post('typeid') == 1 && $this->category->check_catdir($catid, $data['catdir'])) $this->adminMsg(lang('a-cat-6'));
 	        $data['typeid']  = $this->post('typeid');
 			$data['setting'] = $this->post('setting');
-			//var_dump($data);
 	        $result = $this->category->set($catid, $data);
 	        if (is_numeric($result)) {
 				$data['catid'] = $result;
@@ -133,10 +134,12 @@ class CategoryController extends Admin {
 		if (!isset($this->cats[$catid])) $this->adminMsg(lang('m-con-9', array('1' => $catid)));
         $data    = $this->category->find($catid);
 	    $model   = $this->get_model();
+	    $catmodel  = $this->get_model('category');
 		$json_m  = json_encode($model);
 	    $this->view->assign(array(
 	        'data'				=> $data,
 	        'model'				=> $model,
+	        'catmodel'			=> $catmodel,
 	        'catid'				=> $catid,
 			'setting'			=> string2array($data['setting']),
 			'rolemodel'			=> $this->user->get_role_list(),
@@ -224,7 +227,10 @@ class CategoryController extends Admin {
 	    $data      = $this->category->getData($site_id); //数据库查询最新数据
 		$siteid    = $this->category->getSiteId($site_id);
 	    $category  = $category_dir = $count = array();
+	    // 菜单模型
+	    $catmodel  = $this->get_model('category');
 	    $cb_data   = $this->category_block->where('site=' . $this->siteid)->order(array('id DESC'))->select();
+
 	    foreach ($data as $t) {
 	        $catid = $t['catid'];
 	        $category[$catid] = $t;
@@ -280,6 +286,19 @@ class CategoryController extends Admin {
 	        		$category[$t['catid']]['url'] = $t['urlpath'];
 	        	}
 	        }
+
+	        // 阿海新增，获取每一个栏目的菜单模型设置数据
+		    
+		    // 栏目对应的菜单模型
+		    if(!empty($t['catmid']) && !empty($t['catsid'])){
+		    	$model_setting = $catmodel[$t['catmid']];
+			    $form = $this->model($model_setting['tablename']);
+			    $setting_data = $form->find($t['catsid']);
+			    if($setting_data){
+			    	$category[$t['catid']]['more'] = $setting_data;
+			    }
+		    };
+
 	        foreach ($cb_data as $kk => $cb) {
 	        	if($cb['catid'] == $t['catid']){
 				    if ($cb['type']==4){
@@ -296,6 +315,7 @@ class CategoryController extends Admin {
 				    $category[$t['catid']]['ext'][$kk] = $cb['fieldname'];
 	        	}
 	        }
+
 	    }
 	    //保存到缓存文件
 		if ($site_id == $siteid) {
@@ -305,6 +325,75 @@ class CategoryController extends Admin {
 		}
 	    $this->cache->set('category_dir_' . $site_id, $category_dir);
 	    $show or $this->adminMsg(lang('a-update'), url('admin/category/index'), 3, 1, 1);
+	}
+	// 阿海新增，栏目模型设置
+	public function catmodelAction(){
+		$catid   = (int)$this->get('catid');
+        if (empty($catid)) $this->adminMsg(lang('a-cat-7'));
+		if (!isset($this->cats[$catid])) $this->adminMsg(lang('m-con-9', array('1' => $catid)));
+        $catdata    = $this->category->find($catid);
+	    $catmodel  = $this->get_model('category');
+	    // 栏目对应的菜单模型
+	    $catmid = $catdata['catmid'];
+	    $catsid = $catdata['catsid'];
+	    if(empty($catmid)) $this->adminMsg(lang('a-fnx-88'));
+	    $model = $catmodel[$catmid];
+	    $form = $this->model($model['tablename']);
+
+	    if ($this->isPostForm()) {
+	    	if(!$catsid){
+	    		// 增加
+	    		$data = $this->post('data');
+				$this->checkFields($model['fields'], $data, 1);
+				$data['ip']			= client::get_user_ip();
+				$data['cid']		= $catid;
+				$data['userid']		= 0;
+				$data['username']	= $this->userinfo['username'];
+				$data['inputtime']	= $data['updatetime'] = time();
+				$data['dealunqiue'] = 2; // 2表示遇到有唯一字段数据时，更新已存在数据
+				if ($data['id'] = $form->set(0, $data)) {
+					// 把id保存到catsid中
+					$catdata['catsid'] = $data['id'];
+					$catdata['setting'] = string2array($catdata['setting']);
+					$result = $this->category->set($catid, $catdata);
+					if (is_numeric($result)) {
+						// 更新栏目缓存
+			            $this->adminMsg($this->getCacheCode('category') . lang('success'), url('admin/category/index'), 3, 1, 1);
+			        } else {
+			            $this->adminMsg(lang('a-cat-8'));
+			        }
+				} else {
+				    $this->adminMsg(lang('failure'));
+				}
+	    	}else{
+	    		// 修改
+			    $data = $this->post('data');
+				$this->checkFields($this->model['fields'], $data, 1);
+				$data['cid']        = $catid;
+				$data['updatetime'] = time();
+				if ($data['id']		= $form->set($catsid, $data)) {
+				    // 更新栏目缓存
+			        $this->adminMsg($this->getCacheCode('category') . lang('success'), url('admin/category/index'), 3, 1, 1);
+				} else {
+				    $this->adminMsg(lang('failure'));
+				}
+	    	}
+		    
+		}
+
+		$setting_data = null;
+
+	    if($catsid){
+	    	// 已经有对应的catsid值
+	    	$setting_data = $form->find($catsid);
+	    }
+	    // 获取对应数据然后展示
+		$this->view->assign(array(
+			'model'  => $model,
+			'data'   => $setting_data,
+			'fields' => $this->getFields($model['fields'], $setting_data),
+		));
+		$this->view->display('admin/catmodel_add');
 	}
 
 	// 阿海新增，栏目自定义字段管理，代码主要来自系统默认block功能

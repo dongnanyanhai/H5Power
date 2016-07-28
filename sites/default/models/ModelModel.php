@@ -40,7 +40,10 @@ class ModelModel extends Model {
 				$this->query("INSERT INTO `" . $this->prefix . "model_field` (fieldid,modelid,field,name,formtype,isshow) VALUES (NULL, $modelid,'content','" . lang('a-con-128') . "','editor',1)");
 			} elseif ($data['typeid'] == 3) {	//表单模型
 				$sql = "CREATE TABLE IF NOT EXISTS `" . $this->prefix . "{table}` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`cid` mediumint(8) NOT NULL,`userid` mediumint(8) NOT NULL,`username` char(20) NOT NULL,`listorder` tinyint(3) unsigned NOT NULL DEFAULT '0',`status` tinyint(2) unsigned NOT NULL DEFAULT '1',`inputtime` int(10) unsigned NOT NULL DEFAULT '0', `updatetime` int(10) unsigned NOT NULL DEFAULT '0',`ip` char(20) NULL,PRIMARY KEY (`id`),KEY `listorder` (`listorder`),KEY `status` (`status`),KEY `updatetime` (`updatetime`),KEY `inputtime` (`inputtime`),KEY `userid` (`userid`),KEY `cid` (`cid`)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+			} elseif ($data['typeid'] == 5) {	//菜单模型
+				$sql = "CREATE TABLE IF NOT EXISTS `" . $this->prefix . "{table}` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`cid` mediumint(8) NOT NULL,`userid` mediumint(8) NOT NULL,`username` char(20) NOT NULL,`listorder` tinyint(3) unsigned NOT NULL DEFAULT '0',`status` tinyint(2) unsigned NOT NULL DEFAULT '1',`inputtime` int(10) unsigned NOT NULL DEFAULT '0', `updatetime` int(10) unsigned NOT NULL DEFAULT '0',`ip` char(20) NULL,PRIMARY KEY (`id`),KEY `listorder` (`listorder`),KEY `status` (`status`),KEY `updatetime` (`updatetime`),KEY `inputtime` (`inputtime`),KEY `userid` (`userid`),KEY `cid` (`cid`)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 			}
+
 			$this->query(str_replace('{table}', $data['tablename'], $sql)); //创建模型表
 			$this->create_model($data['tablename'], $data['typeid']); //创建Model文件
 			//创建多站点
@@ -93,7 +96,7 @@ class ModelModel extends Model {
 	//创建模型
 	public function create_model($table, $typeid) {
 		$table	= ucfirst($table);
-		$e		= $typeid == 3 ? "FormModel" : "Model";
+		$e		= $typeid == 3 || $typeid == 5 ? "FormModel" : "Model";
 		$c		= "<?php" . PHP_EOL . PHP_EOL .
 		"class " . $table . "Model extends " . $e . " {" . PHP_EOL . PHP_EOL .
 		"    public function get_primary_key() {" . PHP_EOL .
