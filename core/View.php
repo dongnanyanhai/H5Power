@@ -646,7 +646,7 @@ class View extends Fn_base {
 			$this->_options = array();
 		}
 
-		if(strpos($file_name,'admin') !==false && !is_dir(VIEW_DIR.'admin')){
+		if(strpos($file_name,'admin') !==false && !is_dir(VIEW_DIR.'admin') && App::get_plugin_id() == null){
 			$this->set_view_dir(APP_ROOT . 'views' . DS);
 		}
 

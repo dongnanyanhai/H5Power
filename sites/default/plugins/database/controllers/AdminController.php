@@ -12,7 +12,7 @@ class AdminController extends Plugin {
 			array('import',  '数据恢复'),
 			array('execute', '执行SQL'),
 		);
-		$this->assign('menu', $menu);
+		$this->view->assign('menu', $menu);
     }
 	
     /*
@@ -29,10 +29,10 @@ class AdminController extends Plugin {
 			}
 		    $this->adminMsg('操作成功', purl('admin'), 3, 1, 1);
 		}
-		$this->assign(array(
+		$this->view->assign(array(
 		    'data' => $this->getTables(),
 		));
-	    $this->display('admin_list');
+	    $this->view->display('admin_list');
     }
 	
 	/*
@@ -56,8 +56,8 @@ class AdminController extends Plugin {
 			$startfrom = $this->get('startfrom');
 		    $this->export_database($size, $action, $fileid, $random, $tableid, $startfrom);
 		} else {
-		    $this->assign('data', $this->getTables());
-	        $this->display('admin_export');
+		    $this->view->assign('data', $this->getTables());
+	        $this->view->display('admin_export');
 		}
     }
 	
@@ -102,10 +102,10 @@ class AdminController extends Plugin {
 				}
 			}
 		}
-		$this->assign(array(
+		$this->view->assign(array(
 		    'data' => $list,
 		));
-	    $this->display('admin_import');
+	    $this->view->display('admin_import');
     }
 	
 	/*
@@ -122,10 +122,10 @@ class AdminController extends Plugin {
 			    $this->adminMsg('操作成功，影响' . $result .'条记录', '', 3, 1, 1);
 			}
 		    $data = $this->content->execute($sql);
-		    $this->assign('data', $data);
-		    $this->assign('sql',  $sql);
+		    $this->view->assign('data', $data);
+		    $this->view->assign('sql',  $sql);
 		}
-		$this->display('admin_sql');
+		$this->view->display('admin_sql');
     }
 	
 	/*
