@@ -399,7 +399,7 @@ class FormController extends Admin {
 		}
 		// Excel打开utf-8文件时出现乱码，必须转换字符串编码——改为采用BOM头部解决
 		// 下面语句解决excel打开乱码的问题：
-		// $content = mb_convert_encoding($content,"gb2312","UTF-8");  
+		$content = mb_convert_encoding($content,"gb2312","UTF-8");
 
 		$filename = SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . $this->table .'_data.csv';
 		@unlink($filename);
