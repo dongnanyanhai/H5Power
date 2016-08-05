@@ -51,8 +51,14 @@ class Common extends Controller {
         define('CMS_NAME',		$system_cms['name']);
         define('CMS_VERSION',	$system_cms['version']);
         define('CMS_UPDATE',	$system_cms['update']);
-        define('SITE_THEME',	self::get_theme_url());
-        if(IN_ROOTDIR){define('ROOT_SITE_PATH', SITE_PATH);}else{define('ROOT_SITE_PATH', '/');}
+        
+        if(IN_ROOTDIR){
+        	define('ROOT_SITE_PATH', SITE_PATH);
+        	define('SITE_THEME',str_replace(array('\\', '//'), '/', SITE_ROOT. self::get_theme_url()));
+        }else{
+        	define('ROOT_SITE_PATH', '/');
+        	define('SITE_THEME',self::get_theme_url());
+        }
 		define('ADMIN_THEME',	ROOT_SITE_PATH . basename(VIEW_DIR) . '/admin/');
 		define('EXT_PATH',		ROOT_SITE_PATH . EXTENSION_PATH . '/');
 		define('LANG_PATH',		ROOT_SITE_PATH . EXTENSION_PATH . '/language/' . SYS_LANGUAGE . '/');

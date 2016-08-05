@@ -184,7 +184,7 @@ class Common extends \Fn_base
     }
 
     // 添加表单数据
-    public function set_form_data($data,$modelid){
+    public function set_form_data($modelid,$data){
 
         $modelid = (int)$modelid;
 

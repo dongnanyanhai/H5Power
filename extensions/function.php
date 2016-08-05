@@ -605,7 +605,7 @@ function listSeo($cat, $page = 1, $kw = NULL) {
 		$meta_title = $page > 1 ? lang('fun-1', array('1' => $page)) . '-' . $meta_title : $meta_title;
 	} else {
 	    $meta_title = empty($cat['meta_title']) ? getParentName($cat['catid'], '-', 0) : $cat['meta_title'];
-		$meta_title = $meta_title ? $meta_title . '-' . $config['SITE_NAME'] : $config['SITE_NAME'];
+		$meta_title = $meta_title ? $meta_title : $config['SITE_NAME'];
 		$meta_title	= isset($cat['stitle']) && $cat['stitle'] ? $cat['stitle'] . '-' . $meta_title : ($page > 1 ? lang('fun-1', array('1' => $page)) . '-' . $meta_title : $meta_title);
 		$meta_keywords    = empty($cat['meta_keywords']) ? getParentName($cat['catid'], ',', 0) . ',' . $config['SITE_KEYWORDS'] : $cat['meta_keywords'];
 		$meta_description = empty($cat['meta_description']) ? $config['SITE_DESCRIPTION'] : $cat['meta_description'];
