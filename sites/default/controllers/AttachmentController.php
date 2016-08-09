@@ -244,7 +244,13 @@ class AttachmentController extends Common {
         $result = $upload->upload($path, $fname);
 		//上传成功处理图片
         if (!$result && $dir == 'image') $this->watermark($path . $fname);
-        return array('result' => $result, 'path' => $path . $fname, 'file' => $file , 'ext' => $dir == 'image' ? 1 : $ext);
+        // if(!IN_ROOTDIR){
+        // 	$realpath = str_replace(APP_ROOT, '/', $path . $fname);
+        // }else{
+        // 	$realpath = $path . $fname;
+        // }
+        $realpath = str_replace(APP_ROOT, '/', $path . $fname);
+        return array('result' => $result, 'path' => $realpath, 'file' => $file , 'ext' => $dir == 'image' ? 1 : $ext);
     }
 	
 	/**

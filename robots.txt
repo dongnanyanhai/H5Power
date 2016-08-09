@@ -3,14 +3,9 @@
 #
 User-agent: * 
 Disallow: /admin/
-Disallow: /cache/
-Disallow: /config/
-Disallow: /controllers/
 Disallow: /core/
 Disallow: /extensions/
-Disallow: /models/
-Disallow: /plugins/
-Disallow: /uploadfiles/
+Disallow: /sites/
 Disallow: /views/
 Disallow: /index.php?s=member*
 Disallow: /index.php?s=f*

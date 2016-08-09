@@ -80,6 +80,21 @@ class Common extends \Fn_base
         return $data;
     }
 
+    protected function setFieldData($model, $data) {
+        if (!isset($model['fields']['data']) || empty($model['fields']['data']) || empty($data)) return $data;
+        foreach ($model['fields']['data'] as $t) {
+            if (!isset($data[$t['field']])) continue;
+            if ($t['formtype'] == 'editor') {
+                //把编辑器中的HTML实体转换为字符
+                $data[$t['field']] = htmlspecialchars($data[$t['field']]);
+            } elseif (in_array($t['formtype'], array('checkbox', 'files', 'fields'))) {
+                //转换数组格式
+                $data[$t['field']] = array2string($data[$t['field']]);
+            }
+        }
+        return $data;
+    }
+
     public function get_errinfo(){
         return self::$errinfo;
     }
@@ -127,6 +142,46 @@ class Common extends \Fn_base
         }
 
         return false;
+    }
+
+        // 添加表单数据
+    public function set_content_data($modelid,$data){
+
+        $modelid = (int)$modelid;
+
+        if(empty($modelid) || empty($data) || !is_array($data)){
+            self::$errinfo = '参数错误';
+            return false;
+        }
+
+        $model = get_model_data('content',$this->siteid);
+
+        $content_model = $model[$modelid];
+
+        $content = \Controller::model('content_' . $this->siteid);
+
+        $temp_data['modelid']    = (int)$modelid;
+        $temp_data['inputtime']  = $temp_data['updatetime'] = time();
+
+        $data = array_merge($temp_data,$data);
+        $data = $this->setFieldData($content_model,$data);
+
+        // 字段数据
+        if(isset($data['id']) && ((int)$data['id'] != 0)){
+            // 更新内容
+            $id = $content->set($data['id'],$content_model['tablename'], $data);
+        }else{
+            // 新增内容
+            $id = $content->set(0,$content_model['tablename'], $data);
+        }
+        
+        if($id){
+            return $id;
+        }else{
+            self::$errinfo = '数据库插入数据失败';
+            return false;
+        }
+
     }
 
     // 根据$id获取表单数据
@@ -208,6 +263,8 @@ class Common extends \Fn_base
         $temp_data['dealunqiue'] = $form_model['setting']['dealunqiue'];
 
         $data = array_merge($temp_data,$data);
+
+        $data = $this->setFieldData($form_model,$data);
 
         // 字段数据
         if(isset($data['id']) && ((int)$data['id'] != 0)){
