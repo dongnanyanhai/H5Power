@@ -11,7 +11,7 @@ class SearchModel extends Model {
     }
 	
 	/*
-	 * ËÑË÷½á¹û
+	 * æœç´¢ç»“æœ
 	 */
 	public function getData($id, $cache, $param, $start, $limit, $kw_fields, $kw_or) {
 	    $kw			= urldecode($param['kw']);
@@ -39,18 +39,18 @@ class SearchModel extends Model {
 	}
 	
 	/*
-	 * ×é½¨sql
+	 * ç»„å»ºsql
 	 */
 	private function getSQL($param, $kw, $kw_fields, $kw_or) {
 		$site_id		= App::get_site_id();
 		$tablename		= 'content_' . $site_id;
-		$this->set_table_name($tablename); //ÉèÖÃµ±Ç°Ä£ĞÍÎªÄÚÈİÄ£ĞÍ
+		$this->set_table_name($tablename); //è®¾ç½®å½“å‰æ¨¡å‹ä¸ºå†…å®¹æ¨¡å‹
 		$_fields        = $this->get_table_fields();
 		if (is_array($param) && $param) {
 		    $where_or   = $param_fields = $_data_fields = $table_fields = $data_fields = array();
-			$category   = get_category_data(); //À¸Ä¿Êı¾İ
+			$category   = get_category_data(); //æ ç›®æ•°æ®
 			foreach($param as $key=>$val) {
-				//²ÎÊı¹éÀà
+				//å‚æ•°å½’ç±»
 				if(substr($key, 0, 2) == 'OR') {
 				    unset($param[$key]);
 					$key 		= substr($key, 2);
@@ -59,7 +59,7 @@ class SearchModel extends Model {
 				}
 			}
 			if (isset($param['modelid']) && $param['modelid']) {
-				$cache	= get_model_data();	//ÄÚÈİÄ£ĞÍÊı¾İ
+				$cache	= get_model_data();	//å†…å®¹æ¨¡å‹æ•°æ®
 				$table	= $cache[$param['modelid']]['tablename'];
 				if ($table) {
 				    $this->set_table_name($table);
@@ -94,10 +94,10 @@ class SearchModel extends Model {
 				foreach ($kw_fields as $f) {
 				    $andor = empty($kw_count) ? '' : ($kw_or ? ' OR' : ' AND');
 					if (in_array($f, $_fields)) {
-					    //Ö÷±í
+					    //ä¸»è¡¨
 						$kw_where .= $andor . ' `' . $this->prefix . $tablename . '`.`' . $f . '` LIKE \'%' . $kw . '%\'';
 					} elseif (isset($table) && isset($_data_fields) && in_array($f, $_data_fields)) {
-					    //¸½±í
+					    //é™„è¡¨
 					    $kw_where .= $andor . ' `' . $this->prefix . $table . '`.`' . $f . '` LIKE \'%' . $kw . '%\'';
 						$more      = true;
 					}
@@ -117,14 +117,14 @@ class SearchModel extends Model {
 		if ($table_fields) {
 		    foreach ($table_fields as $field) {
 			    if (isset($param[$field]) && $param[$field]) {
-				    $value = $param[$field];
+				    $value = addslashes($param[$field]);
 					$andor = is_array($where_or) && in_array($field, $where_or) ? 'OR' : 'AND';
 				    if (is_numeric($value)) {
 					    $where .= ' ' . $andor . ' `' . $this->prefix . $tablename . '`.`' . $field . '`=' . $value;
 					} elseif (substr($value, 0, 1) == '%' && substr($value, -1, 1) == '%') {
 					    $where .= ' ' . $andor . ' `' . $this->prefix . $tablename . '`.`' . $field . '` LIKE \'' . $value . '\'';
 					} else {
-					    $where .= ' ' . $andor . ' `' . $this->prefix . $tablename . '`.`' . $field . '`=\'' . $param[$field] . '\'';
+					    $where .= ' ' . $andor . ' `' . $this->prefix . $tablename . '`.`' . $field . '`=\'' . $value . '\'';
 					}
 				}
 			}
@@ -132,14 +132,14 @@ class SearchModel extends Model {
 		if ($data_fields && $table && $more) {
 		    foreach ($data_fields as $field) {
 			    if (isset($param[$field]) && $param[$field]) {
-					$value = $param[$field];
+					$value = addslashes($param[$field]);
 					$andor = is_array($where_or) && in_array($field, $where_or) ? 'OR' : 'AND';
 				    if (is_numeric($value)) {
 					    $where .= ' ' . $andor . ' `' . $this->prefix . $table . '`.`' . $field . '`=' . $value;
 					} elseif (substr($value, 0, 1) == '%' && substr($value, -1, 1) == '%') {
 					    $where .= ' ' . $andor . ' `' . $this->prefix . $table . '`.`' . $field . '` LIKE \'' . $value . '\'';
 					} else {
-					    $where .= ' ' . $andor . ' `' . $this->prefix . $table . '`.`' . $field . '`=\'' . $param[$field] . '\'';
+					    $where .= ' ' . $andor . ' `' . $this->prefix . $table . '`.`' . $field . '`=\'' . $value . '\'';
 					}
 				}
 			}
@@ -150,7 +150,7 @@ class SearchModel extends Model {
 	}
 	
 	/*
-	 * ËÑË÷Êı¾İ±£´æ
+	 * æœç´¢æ•°æ®ä¿å­˜
 	 */
 	private function addData($params, $kw, $sql, $modelid, $catid) {
 	    if (empty($sql) || empty($params)) return false;
@@ -176,7 +176,7 @@ class SearchModel extends Model {
 	}
 	
 	/*
-	 * ËÑË÷Êı¾İ¸üĞÂ
+	 * æœç´¢æ•°æ®æ›´æ–°
 	 */
 	private function updateData($data, $params, $sql, $modelid, $catid) {
 	    if (empty($data))   return false;
