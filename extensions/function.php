@@ -1443,3 +1443,33 @@ function format_field_data($data){
 	}
 	return $redata;
 }
+
+// 生成给定概率的随机对象 - php版
+// $a = array('一等奖：宝马X6', '二等奖：苹果三件套', '三等奖：威戈背包', '继续努力！');
+// $b = array(1,0,1,0);
+// $re = goodluck($a,$b);
+
+function goodluck($obj,$luck){
+    $sum = 0;
+    $factor = 0;
+    
+    // 计算sum
+    foreach ($luck as $k => $v) {
+        $sum = $sum + (int)$v;
+    }
+
+    // 获取一个随机数
+    if($sum == 0){$min = $max = 0;}
+    else if($sum == 1){$min = $max = 1;}
+    else{$min = 1;$max =$sum;}
+
+    $random = mt_rand($min,$max);
+
+    foreach ($luck as $k => $v) {
+        $factor = $factor + (int)$v;
+        // 如果获取的这个随机数
+        if($random <= $factor){
+            return $obj[$k];
+        }
+    }
+}

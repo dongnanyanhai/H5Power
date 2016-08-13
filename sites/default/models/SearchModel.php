@@ -117,7 +117,11 @@ class SearchModel extends Model {
 		if ($table_fields) {
 		    foreach ($table_fields as $field) {
 			    if (isset($param[$field]) && $param[$field]) {
-				    $value = addslashes($param[$field]);
+			    	if(!get_magic_quotes_gpc()){
+			    		$value = addslashes($param[$field]);
+			    	}else{
+			    		$value = $param[$field];
+			    	}				    
 					$andor = is_array($where_or) && in_array($field, $where_or) ? 'OR' : 'AND';
 				    if (is_numeric($value)) {
 					    $where .= ' ' . $andor . ' `' . $this->prefix . $tablename . '`.`' . $field . '`=' . $value;
@@ -132,7 +136,11 @@ class SearchModel extends Model {
 		if ($data_fields && $table && $more) {
 		    foreach ($data_fields as $field) {
 			    if (isset($param[$field]) && $param[$field]) {
-					$value = addslashes($param[$field]);
+					if(!get_magic_quotes_gpc()){
+			    		$value = addslashes($param[$field]);
+			    	}else{
+			    		$value = $param[$field];
+			    	}
 					$andor = is_array($where_or) && in_array($field, $where_or) ? 'OR' : 'AND';
 				    if (is_numeric($value)) {
 					    $where .= ' ' . $andor . ' `' . $this->prefix . $table . '`.`' . $field . '`=' . $value;
