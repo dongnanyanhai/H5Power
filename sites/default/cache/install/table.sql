@@ -420,7 +420,7 @@ CREATE TABLE IF NOT EXISTS `{pre}menu` (
   `name` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL DEFAULT '',
   `select` varchar(255) NOT NULL DEFAULT '',
-  `option` text NOT NULL DEFAULT '',
+  `option` text NOT NULL,
   `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否启用',
   PRIMARY KEY (`menuid`)
 )ENGINE=MyISAM  DEFAULT CHARSET=utf8;
@@ -439,7 +439,7 @@ CREATE TABLE IF NOT EXISTS `{pre}menu_data` (
   `name` varchar(255) DEFAULT NULL,
   `url` varchar(255) NOT NULL DEFAULT '',
   `query` text NOT NULL,
-  `option` text NOT NULL DEFAULT '',
+  `option` text NOT NULL,
   `description` text NOT NULL,
   `listorder` mediumint(8) DEFAULT '0',
   PRIMARY KEY (`id`),
