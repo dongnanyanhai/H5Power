@@ -86,7 +86,12 @@ class SearchModel extends Model {
 		}
 		$where  = '`' . $this->prefix . $tablename . '`.`status`=1';
 		if ($kw) {
-		    $kw = mysql_real_escape_string($kw);
+		    // $kw = mysql_real_escape_string($kw);
+		    if(!get_magic_quotes_gpc()){
+				$kw = addslashes($kw);
+			}else{
+				$kw = $kw;
+			}
 		    if ($kw_fields) {
 			    $kw_fields = explode(',', $kw_fields);
 				$kw_where  = '';
