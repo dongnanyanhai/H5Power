@@ -23,7 +23,7 @@ return array(
 	'SITE_THUMB_TYPE'         => '0',  //图片显示模式
 	'SITE_THUMB_WIDTH'        => '200',  //内容缩略图默认宽度
 	'SITE_THUMB_HEIGHT'       => '200',  //内容缩略图默认高度
-	'SITE_TIME_FORMAT'        => 'Y-m-d H:i',  //网站时间显示格式，参数与PHP的date函数一致，默认Y-m-d H:i:s
+	'SITE_TIME_FORMAT'        => 'Y-m-d H:i:s',  //网站时间显示格式，参数与PHP的date函数一致，默认Y-m-d H:i:s
 	'SITE_MOBILE'             => false,  //移动设备访问网站开关，打开之后需要设计移动端模板（默认mobile或者mobile_站点id）
 
 );
