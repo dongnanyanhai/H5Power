@@ -254,6 +254,10 @@ class Common extends Controller {
 				$setting      = string2array($t['setting']);
 				$string       = $setting['content'];
 				$regex_array  = $replace_array = array();
+				$regex_array[]	= '{br}';
+				$replace_array[] = '<br>';
+				$regex_array[]	= '{hr}';
+				$replace_array[] = '<hr style="margin-top: 5px;margin-bottom: 5px;border: none;">';
 				if ($t['data']) {
                     foreach ($t['data'] as $field) {
                         $zhiduan  = $fields['data'][$field];
@@ -283,6 +287,12 @@ class Common extends Controller {
 				foreach ($contentdata as $i => $cdata) {
 				    $data_fields .= '<li id="li_' . $t['field'] . '_' . $i . '_fields">';
 				    $regex_array  = $replace_array = $o_replace_array = array();
+				    $regex_array[]	= '{br}';
+					$replace_array[] = '<br>';
+					$o_replace_array[] = '<br>';
+					$regex_array[]	= '{hr}';
+					$replace_array[] = '<hr style="margin-top: 5px;margin-bottom: 5px;border: none;">';
+					$o_replace_array[] = '<hr style="margin-top: 5px;margin-bottom: 5px;border: none;">';
 					foreach ($fields['data'] as $field => $value) {
 						if (in_array($value['field'], $t['data'])) {
 							$str  = $o_str  = '';
@@ -294,7 +304,11 @@ class Common extends Controller {
 							if (function_exists($func)) eval("\$str = " . $func . "(" . $field . ", " . $content . ", " . $field_config . ");");
 							if (empty($merge_string) && function_exists($func)) eval("\$o_str = " . $func . "(" . $field . ", null, " . $field_config . ");");
 							$regex_array[]		= '{' . $field . '}';
-							$replace_array[]	= str_replace('data[' . $field . ']', 'data[' . $t['field'] . '][' . $i . '][' . $field . ']', $str);
+
+							$str = str_replace('data[' . $field . ']', 'data[' . $t['field'] . '][' . $i . '][' . $field . ']', $str);
+							$str = str_replace('fc_' . $field , 'fc_' . $field . '_' . $i, $str);
+							$replace_array[] = $str;
+
 							$o_replace_array[]	= str_replace('data[' . $field . ']', 'data[' . $t['field'] . '][{finecms_block_id}][' . $field . ']', $o_str);
 						}
 					}
@@ -312,8 +326,14 @@ class Common extends Controller {
 				function add_block_' . $t['field'] . '() {
 				    var json  = ' . json_encode(array('echo' => $merge_string)) . ';
 					var c = json["echo"];
-					var id = parseInt(Math.random()*1000);
+					// var id = parseInt(Math.random()*1000);
+					var id = new Date().getTime();
 					c = c.replace(/{finecms_block_id}/ig, id);
+
+					c = c.replace(/(id="fc_.+?)"/ig, "$1_" + id + \'"\');
+					c = c.replace(/(onClick="preview\(\'fc_.+?)\'/ig, "$1_" + id + "\'");
+					c = c.replace(/(onclick="uploadImage\(\'fc_.+?)\'/ig, "$1_" + id + "\'");
+
 					$("#' . $t['field'] . '-sort-items").append(c);
 				}
 				$("#' . $t['field'] . '-sort-items").sortable();

@@ -235,8 +235,9 @@ class AttachmentController extends Common {
 			$file  = $fname = basename($ofile);
 		} else {
 			$path .= date('Ym') . '/';
-			$data  = file_list::get_file_list($path);
-			$name  = count($data) + 1;
+			// $data  = file_list::get_file_list($path);
+			// $name  = count($data) + 1;
+			$name  = base_convert(uniqid(), 16, 10);
 			$name  = is_file($path.$name.'.'.$ext) ? $name.str_replace('0.', '_',(double)microtime()) : $name;
 			$file  = $upload->filename();
 			$fname = $name . '.' . $ext;
