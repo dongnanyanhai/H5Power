@@ -333,6 +333,9 @@ class Common extends Controller {
 					c = c.replace(/(id="fc_.+?)"/ig, "$1_" + id + \'"\');
 					c = c.replace(/(onClick="preview\(\'fc_.+?)\'/ig, "$1_" + id + "\'");
 					c = c.replace(/(onclick="uploadImage\(\'fc_.+?)\'/ig, "$1_" + id + "\'");
+					
+					c = c.replace(/(onClick="file_info\(\'fc_.+?)\'/ig, "$1_" + id + "\'");
+					c = c.replace(/(onclick="uploadFile\(\'fc_.+?)\'/ig, "$1_" + id + "\'");
 
 					$("#' . $t['field'] . '-sort-items").append(c);
 				}
