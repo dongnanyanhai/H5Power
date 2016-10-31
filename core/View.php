@@ -39,7 +39,7 @@ class View extends Fn_base {
 	/**
 	 * 获取视图文件的路径
 	 */
-	protected function get_view_file($file_name) {	
+	protected function get_view_file($file_name) {
 		return $this->view_dir . $file_name . '.html';
 	}
 	
@@ -646,8 +646,14 @@ class View extends Fn_base {
 			$this->_options = array();
 		}
 
-		if(strpos($file_name,'admin') !==false && !is_dir(VIEW_DIR.'admin') && App::get_plugin_id() == null){
+		$plugin_id = App::get_plugin_id();
+
+		if(strpos($file_name,'admin') !==false && !is_dir(VIEW_DIR.'admin') &&  $plugin_id == null){
 			$this->set_view_dir(APP_ROOT . 'views' . DS);
+		}
+
+		if($plugin_id){
+			$this->set_view_dir(PLUGIN_DIR . $plugin_id . DS .'views' . DS);
 		}
 
 		$file_name = $this->parse_file_name($file_name);

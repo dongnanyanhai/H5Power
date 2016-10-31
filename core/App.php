@@ -14,16 +14,16 @@ error_reporting(E_ALL ^ E_NOTICE);
  * 配置
  */
 
-define('SYS_ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR); //核心文件所在路径
+define('SYS_ROOT', dirname(__FILE__) . DS); //核心文件所在路径
 define('SYS_START_TIME', microtime(true)); //设置程序开始执行时间
-define('CONTROLLER_DIR', SITE_ROOT . 'controllers' . DIRECTORY_SEPARATOR); //controller目录的路径
-define('MODEL_DIR', SITE_ROOT . 'models' . DIRECTORY_SEPARATOR); //model目录的路径
-define('VIEW_DIR', SITE_ROOT . 'views' . DIRECTORY_SEPARATOR); //view目录的路径
-define('CONFIG_DIR', SITE_ROOT . 'config' . DIRECTORY_SEPARATOR); //config目录的路径
-define('UPLOADFILES_DIR', SITE_ROOT . 'uploadfiles' . DIRECTORY_SEPARATOR); //config目录的路径
+define('CONTROLLER_DIR', SITE_ROOT . 'controllers' . DS); //controller目录的路径
+define('MODEL_DIR', SITE_ROOT . 'models' . DS); //model目录的路径
+define('VIEW_DIR', SITE_ROOT . 'views' . DS); //view目录的路径
+define('CONFIG_DIR', SITE_ROOT . 'config' . DS); //config目录的路径
+define('UPLOADFILES_DIR', SITE_ROOT . 'uploadfiles' . DS); //config目录的路径
 define('EXTENSION_PATH', 'extensions'); //extension目录文件夹
-define('EXTENSION_DIR', APP_ROOT . EXTENSION_PATH . DIRECTORY_SEPARATOR); //extension目录的路径
-define('PLUGIN_DIR', SITE_ROOT . 'plugins' . DIRECTORY_SEPARATOR); //插件目录文件夹
+define('EXTENSION_DIR', APP_ROOT . EXTENSION_PATH . DS); //extension目录的路径
+define('PLUGIN_DIR', SITE_ROOT . 'plugins' . DS); //插件目录文件夹
 define('DEFAULT_CONTROLLER', 'Index'); //设置系统默认的controller名称,默认为:Index
 define('DEFAULT_ACTION', 'index'); //设置系统默认的action名称,默认为index
 define('SYS_LOG', $config['SYS_LOG']); //设置是否开启运行日志
@@ -147,22 +147,36 @@ abstract class App {
 			self::load_file(CONTROLLER_DIR . 'Common.php');
 			if ($namespace && is_dir(CONTROLLER_DIR . $namespace)) {
 
-				$controller_file = CONTROLLER_DIR . $namespace . DIRECTORY_SEPARATOR . $controller . '.php';
+				$controller_file = CONTROLLER_DIR . $namespace . DS . $controller . '.php';
 				if (!is_file($controller_file)) {
 					self::display_404_error(1);
 				}
 
-				if (is_file(CONTROLLER_DIR . $namespace . DIRECTORY_SEPARATOR . 'Common.php')) {
-					self::load_file(CONTROLLER_DIR . $namespace . DIRECTORY_SEPARATOR . 'Common.php');
+				if (is_file(CONTROLLER_DIR . $namespace . DS . 'Common.php')) {
+					self::load_file(CONTROLLER_DIR . $namespace . DS . 'Common.php');
 				}
 
 				self::load_file($controller_file);
 			} elseif ($namespace && is_dir(PLUGIN_DIR . $namespace)) {
-				$common_file = PLUGIN_DIR . $namespace . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'Common.php';
-				$controller_file = PLUGIN_DIR . $namespace . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . $controller . '.php';
+				$common_file = PLUGIN_DIR . $namespace . DS . 'controllers' . DS . 'Common.php';
+
+				if(strpos($controller, '_')){
+					$temp_controller_arr = explode('_', $controller);
+					$temp_dir = strtolower($temp_controller_arr[0]);
+					$temp_controller = ucfirst($temp_controller_arr[1]);
+					$controller_file = PLUGIN_DIR . $namespace . DS . 'controllers' . DS . $temp_dir . DS . $temp_controller . '.php';
+					$sub_common_file = PLUGIN_DIR . $namespace . DS . 'controllers' . DS . $temp_dir . DS . 'Common.php';
+				}else{
+					$controller_file = PLUGIN_DIR . $namespace . DS . 'controllers' . DS . $controller . '.php';
+				}
+			
 				if (is_file($common_file) && is_file($controller_file)) {
 					self::$plugin = strtolower($namespace);
 					self::load_file($common_file);
+					if(is_file($sub_common_file)){
+						self::load_file($sub_common_file);
+						$controller = $temp_controller;
+					}
 					self::load_file($controller_file);
 				} else {
 					self::display_404_error(2);
@@ -243,8 +257,8 @@ abstract class App {
 		} else if (substr($class_name, -5) == 'Model') {
 			if (is_file(MODEL_DIR . $class_name . '.php')) {
 				self::load_file(MODEL_DIR . $class_name . '.php');
-			} elseif ((is_file(PLUGIN_DIR . self::$namespace . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . $class_name . '.php'))) {
-				self::load_file(PLUGIN_DIR . self::$namespace . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . $class_name . '.php');
+			} elseif ((is_file(PLUGIN_DIR . self::$namespace . DS . 'models' . DS . $class_name . '.php'))) {
+				self::load_file(PLUGIN_DIR . self::$namespace . DS . 'models' . DS . $class_name . '.php');
 			} else {
 				Controller::halt('The Model file: ' . $class_name . ' is not exists!');
 			}
@@ -254,7 +268,7 @@ abstract class App {
 			} else {
 				// 判断是否为命名空间
 				$temp_class = str_replace('\\', '/', $class_name);
-				$file = EXTENSION_DIR . DIRECTORY_SEPARATOR . $temp_class . '.php';
+				$file = EXTENSION_DIR . DS . $temp_class . '.php';
 				if (is_file($file)) {
 					self::load_file($file);
 				} else {
@@ -324,7 +338,7 @@ abstract class App {
 		$path = (substr($path, -1) == '/') ? $url : $url . '/'; //URL以反斜杠("/")结尾
 		$siteid = isset($_GET['siteid']) ? (int) $_GET['siteid'] : (isset($site[$name]) ? $site[$name] : 1);
 		foreach ($site as $url => $sid) {
-			$f = CONFIG_DIR . 'site' . DIRECTORY_SEPARATOR . $sid . '.ini.php';
+			$f = CONFIG_DIR . 'site' . DS . $sid . '.ini.php';
 			if (file_exists($f) && is_file($f)) {
 				$info[$sid] = require $f;
 				$info[$sid]['URL'] = 'http://' . $url . $path;
@@ -345,8 +359,8 @@ abstract class App {
 		}
 		define('TIME_FORMAT', isset($config['SITE_TIME_FORMAT']) && $config['SITE_TIME_FORMAT'] ? $config['SITE_TIME_FORMAT'] : 'Y-m-d H:i:s'); //输出时间格式化
 		define('SYS_LANGUAGE', isset($config['SITE_LANGUAGE']) && $config['SITE_LANGUAGE'] ? $config['SITE_LANGUAGE'] : 'zh-cn'); //网站语言设置
-		define('LANGUAGE_DIR', EXTENSION_DIR . 'language' . DIRECTORY_SEPARATOR . SYS_LANGUAGE . DIRECTORY_SEPARATOR); //网站语言文件
-		define('SYS_THEME_DIR', $config['SITE_THEME'] . DIRECTORY_SEPARATOR); //模板风格
+		define('LANGUAGE_DIR', EXTENSION_DIR . 'language' . DS . SYS_LANGUAGE . DS); //网站语言文件
+		define('SYS_THEME_DIR', $config['SITE_THEME'] . DS); //模板风格
 		define('SYS_TIME_ZONE', 'Etc/GMT' . ($config['SITE_TIMEZONE'] > 0 ? '-' : '+') . (abs($config['SITE_TIMEZONE']))); //时区
 		date_default_timezone_set(SYS_TIME_ZONE);
 		if (!file_exists(LANGUAGE_DIR)) {
@@ -452,7 +466,7 @@ abstract class App {
 		}
 
 		$model_name = ucfirst(strtolower($table_name)) . 'Model';
-		$model_file = PLUGIN_DIR . $plugin . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . $model_name . '.php';
+		$model_file = PLUGIN_DIR . $plugin . DS . 'models' . DS . $model_name . '.php';
 		if (!is_file($model_file)) {
 			Controller::halt('The pluginModel(#' . $plugin . ') file:' . $model_name . '.php is not exists!');
 		}
