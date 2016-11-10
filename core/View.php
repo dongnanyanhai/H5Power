@@ -23,8 +23,12 @@ class View extends Fn_base {
 	public function __construct() {
 		
 		$this->theme = APP::get_namespace_id() == 'admin' ? false : true;
+		if(APP::get_plugin_id()){
+			$this->theme = strpos(strtolower(APP::$controller), 'admin') !== false ? false : true;
+		}
+
 		$this->set_view_dir(VIEW_DIR);
-		$this->compile_dir = SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR;
+		$this->compile_dir = SITE_ROOT . 'cache' . DS . 'views' . DS;
 		$this->_options['viewpath'] = $temp_viewpath;
 		// 新增
 		$this->cfg = App::get_config();

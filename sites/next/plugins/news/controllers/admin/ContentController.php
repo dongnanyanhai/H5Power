@@ -120,7 +120,7 @@ class ContentController extends Admin {
 		//查询数据
 	    $data			= $this->content->from(null, 'id,title,updatetime,catid,modelid,username,userid,url,listorder')->where($where)->page_limit($page, $pagesize)->order(array('listorder DESC', 'updatetime DESC'))->select();
 	    $count			= array(); //统计各个状态的数据量
-		$pagelist		= $pagelist->total($total)->url(url('admin/content/index', $urlparam))->num($pagesize)->page($page)->output();
+		$pagelist		= $pagelist->total($total)->url(url($this->namespace . '/admin_content/index', $urlparam))->num($pagesize)->page($page)->output();
 		if ($recycle) {	//回收站
 			$count[0]	= $total;
 			$total		= (int)$this->content->_count(null, 'modelid=' . $modelid . ' AND status=1');
@@ -242,7 +242,7 @@ class ContentController extends Admin {
 		//查询数据
 	    $data			= $this->verify->from(null, 'id,title,updatetime,catid,modelid,username,userid')->where($where)->page_limit($page, $pagesize)->order('updatetime DESC')->select();
 	    $count			= array();	//统计各个状态的数据量
-		$pagelist		= $pagelist->total($total)->url(url('admin/content/verify', $urlparam))->num($pagesize)->page($page)->output();
+		$pagelist		= $pagelist->total($total)->url(url($this->namespace . '/admin_content/verify', $urlparam))->num($pagesize)->page($page)->output();
 		$count[0]		= (int)$this->content->_count(null, 'modelid=' . $modelid . ' AND status=0');	//回收站
 		if ($status == 2) {
 			$count[2]	= $total;
@@ -303,7 +303,7 @@ class ContentController extends Admin {
 	        $result				= $this->content->member($id, $model[$modelid]['tablename'], $data);
 	        if (!is_numeric($result)) $this->adminMsg($result);
 	        if ($this->site['SITE_MAP_AUTO'] == true) $this->sitemap();
-	        $this->adminMsg(lang('success'), ($this->post('backurl') ? $this->post('backurl') : url('admin/content/verify')), 3, 1, 1);
+	        $this->adminMsg(lang('success'), ($this->post('backurl') ? $this->post('backurl') : url($this->namespace . '/admin_content/verify')), 3, 1, 1);
 	    }
 	    $this->view->assign(array(
 	        'data'			=> $data,
@@ -359,14 +359,14 @@ class ContentController extends Admin {
 			$data['position']	= @implode(',', $data['position']);
 	        $data['inputtime']	= time();
 			$this->postEvent($data, 'before', 'admin');	//发布前事件
-	        $result				= $this->content->set(0, $model[$modelid]['tablename'], $data);
+	        $result	= $this->content->set(0, $model[$modelid]['tablename'], $data);
 	        if (!is_numeric($result)) $this->adminMsg($result);
 	        $data['id']			= $result;
 			$this->postEvent($data, 'later', 'admin');	//发布后事件
 	        if ($this->site['SITE_MAP_AUTO'] == true) $this->sitemap();
 			$this->toHtml($data);
 			$this->setPosition($data['position'], $result, $data);
-			$msg = '<a href="' . url('admin/content/add', array('catid' => $data['catid'], 'modelid' => $modelid)) . '" style="font-size:14px;">' . lang('a-con-7') . '</a>&nbsp;&nbsp;<a href="' . url('admin/content/index', array('modelid' => $modelid)) . '" style="font-size:14px;">' . lang('a-con-8') . '</a>';
+			$msg = '<a href="' . url($this->namespace . '/admin_content/add', array('catid' => $data['catid'], 'modelid' => $modelid)) . '" style="font-size:14px;">' . lang('a-con-7') . '</a>&nbsp;&nbsp;<a href="' . url($this->namespace . '/admin_content/index', array('modelid' => $modelid)) . '" style="font-size:14px;">' . lang('a-con-8') . '</a>';
 	        $this->adminMsg(lang('a-con-9') . '<div style="padding-top:10px;">' . $msg . '</div>', '', 3, 0, 1);
 	    }
 		$position			= $this->model('position');
@@ -424,7 +424,7 @@ class ContentController extends Admin {
 	        if ($this->site['SITE_MAP_AUTO'] == true) $this->sitemap();
 			$this->toHtml($data);
 			$this->setPosition($data['position'], $result, $data, $posi);
-	        $this->adminMsg(lang('success'), ($this->post('backurl') ? $this->post('backurl') : url('admin/content/index', array('modelid' => $modelid))), 3, 1, 1);
+	        $this->adminMsg(lang('success'), ($this->post('backurl') ? $this->post('backurl') : url($this->namespace . '/admin_content/index', array('modelid' => $modelid))), 3, 1, 1);
 	    }
 	    //附表内容
 	    $table       = $this->model($model[$modelid]['tablename']);
@@ -456,7 +456,7 @@ class ContentController extends Admin {
 	    $id    = $id ? $id : (int)$this->get('id');
 	    $all   = $all ? $all : $this->get('all');
 	    $catid = $catid ? $catid : (int)$this->get('catid');
-		$back  = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : url('admin/content/', array('modelid' => $this->cats[$catid]['modelid']));
+		$back  = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : url($this->namespace . '/admin_content/', array('modelid' => $this->cats[$catid]['modelid']));
 		$model = $this->get_model();
 		//模型投稿权限验证
 		if ($this->adminPost($model[$this->cats[$catid]['modelid']]['setting']['auth'])) $this->adminMsg(lang('a-cat-100', array('1' => $this->userinfo['rolename'])));
@@ -536,7 +536,7 @@ class ContentController extends Admin {
 				';
 				exit;
 			}
-			$url = url('admin/content/updateurl', array('submit' => 1, 'catids' => $cats, 'nums' => $this->post('nums')));
+			$url = url($this->namespace . '/admin_content/updateurl', array('submit' => 1, 'catids' => $cats, 'nums' => $this->post('nums')));
 			echo '
 			<style type="text/css">div, a { color: #777777;}</style>
 			<div style="font-size:12px;padding-top:0px;">
@@ -590,7 +590,7 @@ class ContentController extends Admin {
 					';
 					exit;
 				}
-				$url = url('admin/content/updateurl', array('submit' => 1, 'nums' => $nums, 'page' => 1, 'catid' => $_catid, 'catids' => $catids));
+				$url = url($this->namespace . '/admin_content/updateurl', array('submit' => 1, 'nums' => $nums, 'page' => 1, 'catid' => $_catid, 'catids' => $catids));
 				echo '
 				<style type="text/css">div, a { color: #777777;}</style>
 			    <div style="font-size:12px;padding-top:0px;">
@@ -603,7 +603,7 @@ class ContentController extends Admin {
 			    foreach ($list as $t) {
                     $this->content->update(array('url' => $this->getUrl($t)), 'id=' . $t['id']);
 				}
-				$url = url('admin/content/updateurl', array('submit' => 1, 'nums' => $nums, 'page' => $page+1, 'catid' => $catid, 'catids' => $catids));
+				$url = url($this->namespace . '/admin_content/updateurl', array('submit' => 1, 'nums' => $nums, 'page' => $page+1, 'catid' => $catid, 'catids' => $catids));
 				echo '
 				<style type="text/css">div, a { color: #777777;}</style>
 			    <div style="font-size:12px;padding-top:0px;">

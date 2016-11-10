@@ -159,14 +159,14 @@ class IndexController extends Admin {
 	    );
 		$sites = App::get_site();
 		$count = count($sites);
-		//多网站模型缓存
-		foreach ($sites as $sid => $t) {
-			$caches[] = array('22', 'model',	'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
-		}
-		//多网站栏目缓存
-		foreach ($sites as $sid => $t) {
-			$caches[] = array('23', 'category', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
-		}
+		// //多网站模型缓存
+		// foreach ($sites as $sid => $t) {
+		// 	$caches[] = array('22', 'model',	'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
+		// }
+		// //多网站栏目缓存
+		// foreach ($sites as $sid => $t) {
+		// 	$caches[] = array('23', 'category', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
+		// }
 		//多网站推荐位缓存
 		foreach ($sites as $sid => $t) {
 			$caches[] = array('24', 'position', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));

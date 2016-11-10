@@ -113,7 +113,7 @@ class ContentController extends Plugin {
 				}
 				$ids     = substr($ids, -1) == ',' ? substr($ids, 0, -1) : $ids;
 			    $total   = $res['total'];
-				$pageurl = $this->site['SITE_SEARCH_URLRULE'] ? str_replace('{id}', urlencode($kw), $this->site['SITE_SEARCH_URLRULE']) : url('content/search', array('kw' => urlencode($kw), 'page' => '{page}'));
+				$pageurl = $this->site['SITE_SEARCH_URLRULE'] ? str_replace('{id}', urlencode($kw), $this->site['SITE_SEARCH_URLRULE']) : url($this->namespace .'/content/search', array('kw' => urlencode($kw), 'page' => '{page}'));
 				$sql     = 'SELECT id,modelid,catid,url,thumb,title,keywords,description,username,updatetime,inputtime from ' . $this->content->prefix . 'content_' . $this->siteid . ' WHERE id IN (' . $ids . ') ORDER BY updatetime DESC LIMIT ' . $limit;
 			}
 		} else {
@@ -128,7 +128,7 @@ class ContentController extends Plugin {
 			$total   = $result['total'];
 			$catid   = $result['catid'];
 			$modelid = $result['modelid'];
-			$pageurl = $this->site['SITE_SEARCH_URLRULE'] ? str_replace('{id}', $result['id'], $this->site['SITE_SEARCH_URLRULE']) : url('content/search', array('id' => $result['id'], 'page' => '{page}'));
+			$pageurl = $this->site['SITE_SEARCH_URLRULE'] ? str_replace('{id}', $result['id'], $this->site['SITE_SEARCH_URLRULE']) : url($this->namespace .'/content/search', array('id' => $result['id'], 'page' => '{page}'));
 		}
 		if ($sql) {
 			$pagelist = $this->instance('pagelist');
@@ -158,7 +158,7 @@ class ContentController extends Plugin {
 	 * 游客投稿
 	 */
 	public function postAction() {
-		if ($this->post('select') && $this->isPostForm()) $this->redirect(url('content/post', array('catid' => (int)$this->post('catid'))));
+		if ($this->post('select') && $this->isPostForm()) $this->redirect(url($this->namespace .'/content/post', array('catid' => (int)$this->post('catid'))));
 		$catid = (int)$this->get('catid');
 		$tree  = $this->instance('tree');
 		$tree->config(array('id' => 'catid', 'parent_id' => 'parentid', 'name' => 'catname'));
@@ -199,7 +199,7 @@ class ContentController extends Plugin {
 				$this->checkFields($fields, $data, 3);
 				$result = $this->content->member(0, $model[$modelid]['tablename'], $data);
 				if (!is_numeric($result)) $this->msg($result, null, 1);
-				$this->msg(lang('a-cat-96'), url('content/post'), 1, 5);
+				$this->msg(lang('a-cat-96'), url($this->namespace .'/content/post'), 1, 5);
 			}
 			//自定义字段
 			$data_fields = $this->getFields($fields);

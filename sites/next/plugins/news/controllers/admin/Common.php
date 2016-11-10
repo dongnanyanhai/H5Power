@@ -1,6 +1,6 @@
 <?php
 
-class Admin extends Common {
+class Admin extends Plugin {
 	
 	protected $user;
 	protected $roleid;
@@ -390,7 +390,8 @@ class Admin extends Common {
 	 * 获取更新缓存JS代码
 	 */
 	protected function getCacheCode($c, $a = 'cache') {
-		return '<script type="text/javascript" src="' . url('admin/index/updatecache', array('cc' => $c, 'ca' => $a)) . '"></script>';
+		// return '<script type="text/javascript" src="' . url('admin/index/updatecache', array('cc' => $c, 'ca' => $a)) . '"></script>';
+		return '<script type="text/javascript" src="' . url($this->namespace .'/'.$c.'/cache', array('cc' => $c, 'ca' => $a)) . '"></script>';
 	}
 	
 }

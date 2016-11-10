@@ -290,7 +290,7 @@ abstract class Controller extends Fn_base {
 	public static function model($table_name) {
 		if (!$table_name) return false;
 		$model_name = ucfirst(strtolower($table_name)) . 'Model';
-		return App::singleton($model_name);
+		return App::singleton($model_name);		
 	}
 	
 	/**

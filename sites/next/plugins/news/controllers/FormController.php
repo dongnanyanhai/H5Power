@@ -1,6 +1,6 @@
 <?php
 
-class FormController extends Common {
+class FormController extends Plugin {
 
     private $model;
 	private $form;
@@ -122,7 +122,7 @@ class FormController extends Common {
 	    $this->view->assign(array(
 			'cid'              => $this->get('cid') ? (int)$this->get('cid')  : '',
 			'page'             => $this->get('page') ? (int)$this->get('page') : 1,
-			'urlrule'          => url('form/list', array('modelid'=>$this->modelid, 'cid'=>$cid, 'page'=>'[page]')),
+			'urlrule'          => url($this->namespace.'/form/list', array('modelid'=>$this->modelid, 'cid'=>$cid, 'page'=>'[page]')),
 			'pagesize'         => $this->model['setting']['form']['pagesize'],
 	        'meta_title'       => $this->model['setting']['form']['meta_title'],
 	        'meta_keywords'    => $this->model['setting']['form']['meta_keywords'], 

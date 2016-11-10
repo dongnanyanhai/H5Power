@@ -2,6 +2,11 @@
 
 class Content_1Model extends ContentModel {
 
+    public function __construct() {
+        $this->is_plugin_model = true;
+        parent::__construct();
+    }
+    
     public function get_primary_key() {
         return $this->primary_key = 'id';
     }

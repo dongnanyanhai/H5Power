@@ -16,18 +16,18 @@ class Common extends Controller {
 	protected $namespace;
 	protected $controller;
 	
-	protected $member;
-	protected $memberinfo;
-	protected $memberedit;
-	protected $membermodel;
-	protected $membergroup;
-	protected $memberconfig;
+	// protected $member;
+	// protected $memberinfo;
+	// protected $memberedit;
+	// protected $membermodel;
+	// protected $membergroup;
+	// protected $memberconfig;
 	
-	protected $cats;
+	// protected $cats;
 	protected $site;
-	protected $content;
-	protected $cats_dir;
-	protected $category;
+	// protected $content;
+	// protected $cats_dir;
+	// protected $category;
     
     public function __construct() {
         parent::__construct();
@@ -40,11 +40,11 @@ class Common extends Controller {
         $this->action		= App::get_action_id();
         $this->site			= App::get_config();
         $this->siteid		= App::get_site_id();
-		$this->category		= $this->model('category');
-		$this->cats			= $this->get_category();
-		$this->cats_dir		= $this->get_category_dir();
-		if (!is_file(MODEL_DIR . 'Content_' . $this->siteid . 'Model.php'))	App::display_error(lang('app-14', array(1 => $this->siteid)));
-		$this->content		= $this->model('content_' . $this->siteid);
+		// $this->category		= $this->model('category');
+		// $this->cats			= $this->get_category();
+		// $this->cats_dir		= $this->get_category_dir();
+		// if (!is_file(MODEL_DIR . 'Content_' . $this->siteid . 'Model.php'))	App::display_error(lang('app-14', array(1 => $this->siteid)));
+		// $this->content		= $this->model('content_' . $this->siteid);
 		//定义网站常量
         define('SITE_PATH',		self::get_base_url());
 		define('SITE_URL',		self::get_server_name() . self::get_base_url());
@@ -74,30 +74,30 @@ class Common extends Controller {
 			unset($ips, $ip);
 		}
 		//载入会员系统缓存
-		if (is_dir(CONTROLLER_DIR . 'member')) {
-			$this->member       = $this->model('member');
-			$this->membergroup  = $this->cache->get('membergroup');
-			$this->membermodel  = $this->cache->get('model_member');
-			$this->memberconfig	= $this->cache->get('member');
-			if ($this->memberconfig['uc_use'] == 1 && $this->namespace != 'admin') {
-				include EXTENSION_DIR . 'ucenter' . DIRECTORY_SEPARATOR . 'config.inc.php';
-				include EXTENSION_DIR . 'ucenter' . DIRECTORY_SEPARATOR . 'uc_client' . DIRECTORY_SEPARATOR . 'client.php';
-			}
-			$this->memberinfo	= $this->getMember();
-			$this->view->assign(array(
-				'memberinfo'	=> $this->memberinfo,
-				'membergroup'	=> $this->membergroup,
-				'membermodel'	=> $this->membermodel,
-				'memberconfig'	=> $this->memberconfig
-			));
-		}
+		// if (is_dir(CONTROLLER_DIR . 'member')) {
+		// 	$this->member       = $this->model('member');
+		// 	$this->membergroup  = $this->cache->get('membergroup');
+		// 	$this->membermodel  = $this->cache->get('model_member');
+		// 	$this->memberconfig	= $this->cache->get('member');
+		// 	if ($this->memberconfig['uc_use'] == 1 && $this->namespace != 'admin') {
+		// 		include EXTENSION_DIR . 'ucenter' . DIRECTORY_SEPARATOR . 'config.inc.php';
+		// 		include EXTENSION_DIR . 'ucenter' . DIRECTORY_SEPARATOR . 'uc_client' . DIRECTORY_SEPARATOR . 'client.php';
+		// 	}
+		// 	$this->memberinfo	= $this->getMember();
+		// 	$this->view->assign(array(
+		// 		'memberinfo'	=> $this->memberinfo,
+		// 		'membergroup'	=> $this->membergroup,
+		// 		'membermodel'	=> $this->membermodel,
+		// 		'memberconfig'	=> $this->memberconfig
+		// 	));
+		// }
 		define('IS_ADMIN', $this->session->get('user_id'));
 		$this->view->assign($this->site);
 		$this->view->assign(array(
 			's'			=> $this->namespace,
 			'c'			=> $this->controller,
 			'a'			=> $this->action,
-			'cats'		=> $this->cats,
+			// 'cats'		=> $this->cats,
 			'param'		=> $this->getParam(),
 			'sites'		=> App::get_site(),
 			'siteid'	=> $this->siteid,
@@ -154,7 +154,15 @@ class Common extends Controller {
 			'result' => $result
 		));
 		$tpl = 'admin/msg';
-		if ($this->namespace != 'admin') $tpl = '../' . $tpl;
+		if(APP::get_plugin_id()){
+			if(strpos(strtolower(APP::$controller), 'admin') === false){
+				$tpl = '../' . $tpl;
+			}else{
+				$tpl = '/' . $tpl;
+			}
+		}else{
+			if ($this->namespace != 'admin') $tpl = '../' . $tpl;
+		}
         $this->view->display($tpl);
         exit;
     }

@@ -5,7 +5,7 @@
  * 关于控制器的使用规则 http://bbs.finecms.net/forum.php?mod=viewthread&tid=45
  */
 
-class CustomController extends Common {
+class CustomController extends Plugin {
     
     public function __construct() {
 		parent::__construct();

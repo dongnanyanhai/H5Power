@@ -478,7 +478,11 @@ function form_show_url($modelid, $data) {
 function getUrl($data, $page = 0) {
     $cats = get_category_data();
 	$cat  = $cats[$data['catid']];
-	$url  = url('content/show', array('id' => $data['id']));
+	if(APP::get_plugin_id()){
+		$url  = url(APP::get_plugin_id() . '/content/show', array('id' => $data['id']));
+	}else{
+		$url  = url('content/show', array('id' => $data['id']));
+	}
 	unset($cats);
 	if (isset($cat['setting']['url']['use']) && $cat['setting']['url']['use'] == 1 && $cat['setting']['url']['show']) {
 		$data['y']      = date('Y', $data['inputtime']);
@@ -492,7 +496,14 @@ function getUrl($data, $page = 0) {
 		$url = preg_replace('#{([a-z_0-9]+)\((.*)\)}#Uie', "\\1(safe_replace('\\2'))", $url);
 		return SITE_PATH . $url;
 	}
-	if ($page) $url = url('content/show', array('id' => $data['id'], 'page' => $page));
+	
+	if ($page){
+		if(APP::get_plugin_id()){
+			$url = url(APP::get_plugin_id() . '/content/show', array('id' => $data['id'], 'page' => $page));
+		}else{
+			$url = url('content/show', array('id' => $data['id'], 'page' => $page));
+		}
+	} 
 	return $url;
 }
 
@@ -506,7 +517,12 @@ function getCaturl($data, $page = 0) {
 		unset($cats);
 	}
 	if ($data['typeid'] == 3) return $data['urlpath'];
-	$url = url('content/list', array('catid' => $data['catid']));
+	if(APP::get_plugin_id()){
+		$url = url(APP::get_plugin_id() . '/content/list', array('catid' => $data['catid']));
+	}else{
+		$url = url('content/list', array('catid' => $data['catid']));
+	}
+	
 	if (!is_array($data['setting'])) $data['setting'] = string2array($data['setting']);
 	if (isset($data['setting']['url']['use']) && $data['setting']['url']['use'] == 1 && $data['setting']['url']['list']) {
 		$data['id']   = $data['catid'];
@@ -518,7 +534,13 @@ function getCaturl($data, $page = 0) {
 		$url = preg_replace('#{([a-z_0-9]+)\((.*)\)}#Uie', "\\1(safe_replace('\\2'))", $url);
 		return SITE_PATH . $url;
 	}
-	if ($page) $url	= url('content/list', array('catid' => $data['catid'], 'page' => $page));
+	if ($page){
+		if(APP::get_plugin_id()){
+			$url = url(APP::get_plugin_id() . '/content/list', array('catid' => $data['catid'], 'page' => $page));
+		}else{
+			$url = url('content/list', array('catid' => $data['catid'], 'page' => $page));
+		}
+	}
 	return $url;
 }
 
@@ -1366,7 +1388,11 @@ function list_url($param, $name=NULL, $value=NULL) {
 	$url .= '-price-' . $param['price'];
 	if ($name=='page')$url .= '-page-' . $value;
 	*/
-	$url  = url('content/list', $param);//动态地址
+	if(APP::get_plugin_id()){
+		$url  = url(APP::get_plugin_id() . '/content/list', $param);
+	}else{
+		$url  = url('content/list', $param);
+	}
 	return $url;
 }
 
