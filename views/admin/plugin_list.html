@@ -46,6 +46,7 @@
 			<td align="left">
 			{if $t['pluginid']}
 			{if admin_auth($userinfo['roleid'], 'plugin-set')}<a href="{url('admin/plugin/set',array('pluginid'=>$t['pluginid']))}">{lang('a-plu-49')}</a>&nbsp;{/if}
+			{if admin_auth($userinfo['roleid'], 'plugin-export')}<a href="{url('admin/plugin/export',array('pluginid'=>$t['pluginid']))}">{lang('a-export')}</a>&nbsp;{/if}
 			{if admin_auth($userinfo['roleid'], 'plugin-disable')}<a href="{url('admin/plugin/disable',array('pluginid'=>$t['pluginid']))}">{if $t['disable']}<font color="#FF0000">{lang('a-open')}</font>{else}{lang('a-close')}{/if}</a>&nbsp;{/if}
 			{if admin_auth($userinfo['roleid'], 'plugin-del')}<a href="{url('admin/plugin/del',array('pluginid'=>$t['pluginid']))}">{lang('a-plu-1')}</a>&nbsp;{/if}
 			{if $t['typeid']==2 || $t['typeid']==0}<a href="javascript:;" onClick="getViewData({$t['pluginid']});">{lang('a-plu-47')}</a>&nbsp;{/if}

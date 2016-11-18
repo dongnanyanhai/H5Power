@@ -15,7 +15,7 @@ class ModelController extends Admin {
 			4 => 'extend',	//会员扩展模型
 			5 => 'category',//菜单栏目模型
 		);
-		$this->_model = $this->model('model');
+		$this->_model = $this->plugin_model($this->namespace,'model');
 	    $this->typeid = $this->get('typeid') ? $this->get('typeid') : 1;
 		if (!isset($this->modeltype[$this->typeid])) $this->adminMsg(lang('a-mod-0'));
 		$this->view->assign(array(
@@ -97,7 +97,7 @@ class ModelController extends Admin {
 			    $this->adminMsg(lang('failure'));
 			}
 	    }
-		$fdata = $this->get_model('form');	//表单模型数据缓存
+		$fdata = $this->get_model($this->namespace.'_model_form');	//表单模型数据缓存
 		$jdata = array();
 		if ($fdata) {
 		    foreach ($fdata as $t) {
@@ -147,7 +147,7 @@ class ModelController extends Admin {
 	        $this->redirect(url($this->namespace .'/admin_model/cache'));
 	    }
 	    $modelid = (int)$this->get('modelid');
-		$fdata   = $this->get_model('form');	//表单模型数据缓存
+		$fdata   = $this->get_model($this->namespace.'_model_form');	//表单模型数据缓存
 		$jdata   = $join = array();
 		$data    = $this->_model->find($modelid);
 		if ($fdata) {
@@ -178,7 +178,7 @@ class ModelController extends Admin {
 		$name = $this->typeid == 2 ? 'model_member' : 'model_' . $this->modeltype[$this->typeid] . '_' . $this->siteid;
 		$data = $this->cache->get($name);
 		unset($data[$mid]);
-		$this->cache->set($name, $data);
+		$this->cache->set($this->namespace.'_'.$name, $data);
 	    // $all or $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/index/', array('typeid' => $this->typeid)), 3, 1, 1);
 	    $this->redirect(url($this->namespace .'/admin_model/cache'));
 	}
@@ -190,8 +190,8 @@ class ModelController extends Admin {
 	    $modelid = (int)$this->get('modelid');
 	    $data    = $this->_model->find($modelid);
 	    if (!$data) $this->adminMsg(lang('a-mod-4'));
-	    $table   = $this->model($data['tablename']);
-	    $field   = $this->model('model_field');
+	    $table   = $this->plugin_model($this->namespace,$data['tablename']);
+	    $field   = $this->plugin_model($this->namespace,'model_field');
 	    if ($this->post('submit')) {
 	        foreach ($_POST as $var=>$value) {
 	            if (strpos($var, 'order_')!==false) {
@@ -215,7 +215,7 @@ class ModelController extends Admin {
 	 * 添加字段
 	 */
 	public function addfieldAction() {
-	    $field      = $this->model('model_field');
+	    $field      = $this->plugin_model($this->namespace,'model_field');
 	    $modelid    = (int)$this->get('modelid');
 	    $model_data = $this->_model->find($modelid);
 	    if (!$model_data) $this->adminMsg(lang('a-mod-4'));
@@ -229,22 +229,22 @@ class ModelController extends Admin {
 			//加载模型验证字段是否存在
 	        if ($this->typeid == 1) {	//内容模型
 				$t_fields	= $this->content->get_fields();				//主表字段
-				$table		= $this->model($model_data['tablename']);	//实例化附表对象
+				$table		= $this->plugin_model($this->namespace,$model_data['tablename']);	//实例化附表对象
 				$d_fields	= $table->get_fields();						//附表字段
 				$fields     = array_merge($t_fields, $d_fields);		//组合字段
 			} elseif ($this->typeid == 2) {	//会员模型
 				$t_fields	= $this->member->get_fields();				//主表字段
-				$table		= $this->model($model_data['tablename']);	//实例化附表对象
+				$table		= $this->plugin_model($this->namespace,$model_data['tablename']);	//实例化附表对象
 				$d_fields	= $table->get_fields();						//附表字段
 				$fields     = @array_merge($t_fields, $d_fields);		//组合字段
 			} elseif ($this->typeid == 3) {	//表单模型
-				$table		= $this->model($model_data['tablename']);	//实例化表单对象
+				$table		= $this->plugin_model($this->namespace,$model_data['tablename']);	//实例化表单对象
 				$fields		= $table->get_fields();						//表单字段
 			} elseif ($this->typeid == 4) {	//会员扩展
-				$table		= $this->model($model_data['tablename']);	//实例化会员扩展对象
+				$table		= $this->plugin_model($this->namespace,$model_data['tablename']);	//实例化会员扩展对象
 				$fields		= $table->get_fields();						//表单字段
 			} elseif ($this->typeid == 5) {	//菜单模型
-				$table		= $this->model($model_data['tablename']);	//实例化表单对象
+				$table		= $this->plugin_model($this->namespace,$model_data['tablename']);	//实例化表单对象
 				$fields		= $table->get_fields();						//菜单字段
 			}
 	        //判断新加字段是否存在
@@ -293,7 +293,7 @@ class ModelController extends Admin {
 	 * 修改字段
 	 */
 	public function editfieldAction() {
-	    $field   = $this->model('model_field');
+	    $field   = $this->plugin_model($this->namespace,'model_field');
 	    $fieldid = (int)$this->get('fieldid');
 	    $data    = $field->getOne('fieldid=' . $fieldid);
 	    if (empty($data)) $this->adminMsg(lang('a-mod-10'));
@@ -380,7 +380,7 @@ class ModelController extends Admin {
 	 */
 	public function disableAction() {
 	    $fieldid = (int)$this->get('fieldid');
-	    $field   = $this->model('model_field');
+	    $field   = $this->plugin_model($this->namespace,'model_field');
 	    $data    = $field->getOne('fieldid=' . $fieldid);
 	    if (empty($data)) $this->adminMsg(lang('a-mod-10'));
 	    $disable = $data['disabled'] == 1 ? 0 : 1;
@@ -394,7 +394,7 @@ class ModelController extends Admin {
 	 */
 	public function delfieldAction() {
 	    $fieldid = (int)$this->get('fieldid');
-	    $field   = $this->model('model_field');
+	    $field   = $this->plugin_model($this->namespace,'model_field');
 	    $data    = $field->getOne('fieldid=' . $fieldid);
 	    if (empty($data)) $this->adminMsg(lang('a-mod-10'));
 		if ($data['field'] == 'content') $this->adminMsg(lang('a-mod-11'));
@@ -424,7 +424,7 @@ class ModelController extends Admin {
 	 * 导出模型
 	 */
 	public function exportAction() {
-		$model   = $this->typeid != 2 ? $this->get_model($this->modeltype[$this->typeid]) : $this->cache->get('model_member');
+		$model   = $this->typeid != 2 ? $this->get_model($this->namespace.'_model_'.$this->modeltype[$this->typeid]) : $this->cache->get('model_member');
 		$modelid = (int)$this->get('modelid');
 	    if (!$model) $this->adminMsg(lang('a-mod-4'));
 		if (!isset($model[$modelid])) $this->adminMsg(lang('a-mod-4'));
@@ -469,7 +469,7 @@ class ModelController extends Admin {
 	        );
 	        $modelid	= $this->_model->set(0, $insert);
 			if (empty($modelid)) $this->adminMsg(lang('a-mod-15'));
-			$field		= $this->model('model_field');
+			$field		= $this->plugin_model($this->namespace,'model_field');
 			$content	= $data['fields']['data']['content'];
 			unset($data['fields']['data']['content']);
 			if (isset($data['fields']['data']) && $data['fields']['data']) {
@@ -518,8 +518,9 @@ class ModelController extends Admin {
 	 */
 	public function cacheAction($show = 0, $site_id = 0) {
 		$this->delDir($this->_model->cache_dir); //清空模型缓存数据
+		$o_typeid = (int)$this->get('typeid');
 		if (!file_exists($this->_model->cache_dir)) @mkdir($this->_model->cache_dir, 0777, true);
-	    $field		= $this->model('model_field');
+	    $field		= $this->plugin_model($this->namespace,'model_field');
 		$site_id	= $site_id ? $site_id : $this->siteid; //当前站点的id
 		$siteid		= $this->_model->get_site_id($site_id); //当前站点继承的id
 		foreach ($this->modeltype as $typeid => $c) {
@@ -564,14 +565,14 @@ class ModelController extends Admin {
 			}
 	        //保存到缓存文件中
 			if ($typeid == 2) {
-				$this->cache->set('model_member', $data); //会员模型直接保存
+				$this->cache->set($this->namespace.'_model_member', $data); //会员模型直接保存
 			} elseif ($typeid == 4) {
-				$this->cache->set('model_member_extend', $data); //会员扩展模型直接保存
+				$this->cache->set($this->namespace.'_model_member_extend', $data); //会员扩展模型直接保存
 			} else {
 				if ($site_id == $siteid) {	//独立站点
-					$this->cache->set('model_' . $c . '_' . $siteid,  $data);
+					$this->cache->set($this->namespace.'_model_' . $c . '_' . $siteid,  $data);
 				} else {	//继承站点
-					$this->cache->set('model_' . $c . '_' . $site_id, $now);
+					$this->cache->set($this->namespace.'_model_' . $c . '_' . $site_id, $now);
 				}
 			}
 			
@@ -586,7 +587,7 @@ class ModelController extends Admin {
 				}
 			}
 		}
-		$this->cache->set('model_join_' . $site_id, $join);
-	    $show or $this->adminMsg(lang('a-update'), '', 3, 1, 1);
+		$this->cache->set($this->namespace.'_model_join_' . $site_id, $join);
+	    $show or $this->adminMsg(lang('a-update'), url($this->namespace .'/admin_model/index',array('typeid'=>$o_typeid)), 3, 1, 1);
 	}
 }

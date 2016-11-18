@@ -170,15 +170,6 @@ var finecms_admin_document = "{$cats[$data['catid']]['setting']['document']}";
 		</tr>
 		{if $a!='editverify'}
 		<tr>
-			<th>{lang('a-con-48')}：</th>
-			<td>
-			{php $pos = @explode(',', $data['position']);}
-			{loop $position $t}
-			{$t['name']}&nbsp;<input type="checkbox" value="{$t['posid']}" name="data[position][]" {if in_array($t['posid'], $pos)}checked{/if}>&nbsp;&nbsp;&nbsp;
-			{/loop}
-			</td>
-		</tr>
-		<tr>
 			<th>{lang('a-con-49')}：</th>
 			<td>
 			<table width="80%" border="0" cellspacing="0" cellpadding="0">
@@ -230,7 +221,7 @@ function clz() {
 function ajaxtitle() {
 	$('#title_text').html('');
 	get_kw();
-	$.post(sitepath+'?s=admin&c=content&a=ajaxtitle&id='+Math.random(), { title:$('#title').val(), id:{php echo $data[id] ? $data[id] : 0;} }, function(data){ 
+	$.post(sitepath+'?s={$s}&c=admin_content&a=ajaxtitle&id='+Math.random(), { title:$('#title').val(), id:{php echo $data[id] ? $data[id] : 0;} }, function(data){ 
         if (data == '0') {
 			$("#title_text").addClass("onCorrect");
 			$("#title_text").removeClass("onError");
@@ -243,7 +234,7 @@ function ajaxtitle() {
 	});
 }
 function loadInfo() {
-	var url   = '{url("admin/content/ajaxloadinfo/")}&kw='+$("#keywords").val();
+	var url   = '{url($s."/admin_content/ajaxloadinfo/")}&kw='+$("#keywords").val();
 	var winid = 'loadinfo';
 	window.top.art.dialog(
 	    {id:winid, okVal:fc_lang[6], cancelVal:fc_lang[7], iframe:url, title:'{lang('a-con-50')}', width:'660', height:'280', lock:true}, 

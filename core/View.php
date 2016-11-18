@@ -662,7 +662,9 @@ class View extends Fn_base {
 
 		$file_name = $this->parse_file_name($file_name);
 		$view_file = $this->get_view_file($file_name);
-		$compile_file = $this->get_compile_file($file_name);
+		// var_dump($file_name);
+		// $compile_file = $this->get_compile_file($file_name);
+		$compile_file = $this->get_compile_file($view_file);
 		if ($this->is_compile($view_file, $compile_file)) {
 			$view_content = $this->load_view_file($view_file);
 			$this->create_compile_file($compile_file, $view_content);

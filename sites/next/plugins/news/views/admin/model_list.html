@@ -60,6 +60,14 @@ function cdisabled(id, c) {
 				<td align="left">{$t['modelname']}</td>
 				<td align="left">{php echo preg_replace('/\_([0-9]+)\_/', '_' . $siteid . '_', $t['tablename']);}</td>
 				<td align="left">
+				{if admin_auth($userinfo['roleid'], 'model-fields')}
+					{if $typeid==1}
+					<a href="{url($s.'/admin_content/',array('modelid'=>$t['modelid']))}">{lang('a-fnx-97')}</a> |
+					{/if}
+					{if $typeid==3}
+					<a href="{url($s.'/admin_form/list',array('modelid'=>$t['modelid']))}">{lang('a-fnx-97')}</a> | 
+					{/if}
+				{/if}
 				{if admin_auth($userinfo['roleid'], 'model-fields')}<a href="{url($s.'/admin_model/fields/',array('typeid'=>$typeid, 'modelid'=>$t['modelid']))}">{lang('a-aut-18')}</a> | {/if}
 				{if admin_auth($userinfo['roleid'], 'model-edit')}<a href="{url($s.'/admin_model/edit',array('typeid'=>$typeid,'modelid'=>$t['modelid']))}">{lang('a-edit')}</a> | {/if}
 				{if admin_auth($userinfo['roleid'], 'model-cdisabled')}<a href="javascript:cdisabled({$t['modelid']}, {$disable});">{if $disable}<font color=red>{lang('a-qi')}</font>{else}{lang('a-jin')}{/if}</a> | {/if}

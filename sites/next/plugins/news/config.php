@@ -2,11 +2,11 @@
 if (!defined('IN_FINECMS')) exit('No permission resources');
 
 return array(
-    'name'    => '在线购物',
-    'author'  => 'dayrui',
-    'version' => '1.4',
+    'name'    => '新闻',
+    'author'  => 'AHai',
+    'version' => '0.1',
     'typeid'  => 1,
-    'description' => "支持购物车，在线订单，余额支付等购物商城",
+    'description' => "内容管理插件化",
     'fields' => array(
        
     )

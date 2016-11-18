@@ -29,14 +29,14 @@ class ImportController extends Plugin {
 			$data[$n] = $this->post($n);
 		}
 	    //验证权限
-		$user = $this->model('user');
+		$user = $this->plugin_model($this->namespace,'user');
 		if (!$user->check_login($data['username'], $data['password'])) exit('您没有此权限');
 	    //参数判断
 		if (!isset($data['title']) || empty($data['title'])) 	 exit('标题不能为空');
 	    if (!isset($data['catid']) || empty($data['catid'])) 	 exit('栏目不能为空');
 	    if (!isset($data['content']) || empty($data['content'])) exit('内容不能为空');
 	    //内容模型
-	    $model	 = $this->get_model();
+	    $model	 = $this->get_model($this->namespace.'_model_content');
 	    $modelid = $this->cats[$data['catid']]['modelid'];
 	    $table	 = $model[$modelid]['tablename'];
 		if (empty($table)) exit('模型不存在');

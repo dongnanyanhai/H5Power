@@ -113,10 +113,10 @@ function get_category_data($site = 0) {
 function get_model_data($name = 'content', $site = 0) {
 	$cache 	= new cache_file();
 	$site	= empty($site) ? App::get_site_id() : $site;
-	$data	= $cache->get('model_' . $name . '_' . $site);
+	$data	= $cache->get($name . '_' . $site);
 	$sites	= App::get_site();
 	if ($sites[$site]['SITE_EXTEND_ID']) { //属于继承
-		$now = $cache->get('model_' . $name . '_' . $sites[$site]['SITE_EXTEND_ID']);
+		$now = $cache->get($name . '_' . $sites[$site]['SITE_EXTEND_ID']);
 		if (empty($now)) return $data;
 		foreach ($now as $mid => $t) {
 			if (isset($data[$mid])) {
@@ -815,6 +815,20 @@ function block($id) {
     	}
     }
     return htmlspecialchars_decode($row['content']);
+}
+
+/**
+ * 应用配置调用
+ * @param  $plugin
+ * @param  $id
+ * @return NULL|string
+ */
+function pblock($plugin,$id) {
+    $cache = new cache_file();
+    $data  = $cache->get($plugin.'_block');
+    $row   = $data[$id];
+    if (empty($row)) return null;
+    return htmlspecialchars_decode(string2array($row['content']));
 }
 
 /**

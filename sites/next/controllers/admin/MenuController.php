@@ -203,7 +203,8 @@ class MenuController extends Admin{
 
 				foreach ($submenu as $k => $v) {
 					$subid = $v['id'];
-					$data[$menuid][$v['name']] = $this->menu_data->where('menuid=' . $menuid)->where('parentid='.$subid)->where('ismenu=1')->order('listorder ASC, id ASC')->select();
+					$data[$menuid][$subid] = $this->menu_data->where('menuid=' . $menuid)->where('parentid='.$subid)->where('ismenu=1')->order('listorder ASC, id ASC')->select();
+					$data[$menuid][$subid]['name'] = $v['name'];
 				}
 
 			}
@@ -211,17 +212,6 @@ class MenuController extends Admin{
 
 		// 写入缓存文件
 		$this->cache->set('menu_list_' . $site_id, $data);
-		// $this->cache->set('menu_' . $site_id, $data);
 		$show or $this->adminMsg(lang('a-update'),'', 3, 1, 1);
-	}
-
-	public function ajaxviewAction() {
-		$menuid = (int)$this->get('menuid');
-		$data = $this->menu->find($menuid);
-		if (empty($data)) exit(lang('a-fnx-64'));
-		$msg  = "<textarea id='block_" . $id . "' style='font-size:12px;width:100%;height:80px;overflow:hidden;'>";
-		$msg .= "<!--" . $data['name'] . "-->\n{php \$menu = menu(" . $menuid . ");}\n<!--" . $data['name'] . "-->";
-		$msg .= "\n<!-- 调用方式{loop \$menu \$m}，与调用\$cats一样 --></textarea>";
-		echo $msg;
 	}
 }

@@ -151,11 +151,11 @@ class IndexController extends Admin {
 	        array('20',  'plugin',      'cache'),
 			array('21',  'auth',        'cache'),
 			array('103', 'ip',          'cache'),
-			array('30',  'tag',         'cache'),
+			// array('30',  'tag',         'cache'),
 	        array('26',  'block',       'cache'),
 	        array('27',  'theme',       'cache'),
-			array('29',  'member',      'cache'),
-	        array('25',  'relatedlink', 'cache')
+			// array('29',  'member',      'cache'),
+	        // array('25',  'relatedlink', 'cache')
 	    );
 		$sites = App::get_site();
 		$count = count($sites);
@@ -179,10 +179,10 @@ class IndexController extends Admin {
 		foreach ($sites as $sid => $t) {
 			$caches[] = array('242', 'menu', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
 		}
-		//多网站联动菜单缓存
-		foreach ($sites as $sid => $t) {
-			$caches[] = array('28', 'linkage',  'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
-		}
+		// //多网站联动菜单缓存
+		// foreach ($sites as $sid => $t) {
+		// 	$caches[] = array('28', 'linkage',  'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
+		// }
 	    if ($this->get('show')) {
 	        $id = $_GET['id'] ? intval($_GET['id']) : 0;
 	        $cache = $caches[$id];

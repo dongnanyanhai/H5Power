@@ -477,7 +477,9 @@ abstract class App {
 		}
 
 		require $model_file;
-		return self::$_objects[$key] = new $model_name();
+		self::$_objects[$key] = new $model_name();
+		self::$_objects[$key]->prefix = self::$_objects[$key]->prefix . $plugin . "_" ;
+		return self::$_objects[$key];
 	}
 
 	/**

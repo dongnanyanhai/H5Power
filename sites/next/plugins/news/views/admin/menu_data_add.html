@@ -19,10 +19,9 @@
 <body style="font-weight: normal;">
 <div class="subnav">
 	<div class="content-menu ib-a blue line-x">
-		<a href="{url('admin/menu/')}"><em>{lang('a-fnx-62')}</em></a><span>|</span>
-		<a href="{url('admin/menu/list/',array('menuid'=>$menuid))}"><em>{lang('a-pos-0')}</em></a><span>|</span>
-		<a href="{url('admin/menu/adddata/',array('menuid'=>$menuid))}" class="on"><em>{lang('a-add')}</em></a><span>|</span>
-		<a href="{url('admin/menu/cache')}"><em>{lang('a-cache')}</em></a>
+		<a href="{url($s.'/admin_menu/index/')}"><em>{lang('a-pos-0')}</em></a><span>|</span>
+		<a href="{url($s.'/admin_menu/adddata/')}" class="on"><em>{lang('a-add')}</em></a><span>|</span>
+		<a href="{url($s.'/admin_menu/cache')}"><em>{lang('a-cache')}</em></a>
 	</div>
 	<div class="bk10"></div>
 	<div class="table-list">
@@ -32,11 +31,7 @@
 		<table width="100%" class="table_form ">
 		<tbody>
 		<tr>
-			<th width="200">{lang('a-fnx-65')}：</th>
-			<td>{$menu['name']}</td>
-		</tr>
-		<tr>
-			<th><font color="red">*</font> {lang('a-cat-32')}：</th>
+			<th width="200"><font color="red">*</font> {lang('a-cat-32')}：</th>
 			<td>
 				<select id="parentid" name="data[parentid]">
 				<option value="0">{lang('a-cat-33')}</option>
@@ -63,15 +58,9 @@
             </td>
 		</tr>
 		<tr>
-			<th>{lang('a-fnx-68')}：</th>
-			<td>
-            <input type="text" class="input-text" size="50" id="namespace" value="{if $data['namespace']}{$data['namespace']}{else}{/if}" name="data[namespace]" />
-            </td>
-		</tr>
-		<tr>
 			<th>{lang('a-desc')}：</th>
 			<td>
-			<textarea name="data[description]" cols="91" rows="8">{$data['description']}</textarea>
+				<textarea name="data[description]" cols="91" rows="8">{$data['description']}</textarea>
 			<br><div class="onShow">{lang('a-blo-11')}</div>
 			</td>
 		</tr>

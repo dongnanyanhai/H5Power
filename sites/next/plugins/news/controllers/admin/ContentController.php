@@ -8,7 +8,7 @@ class ContentController extends Admin {
     public function __construct() {
 		parent::__construct();
 		$this->tree     = $this->instance('tree');
-		$this->verify	= $this->model('content_' . $this->siteid . '_verify');
+		$this->verify	= $this->plugin_model($this->namespace,'content_' . $this->siteid . '_verify');
 		$this->tree->config(array('id' => 'catid', 'parent_id' => 'parentid', 'name' => 'catname'));
 	}
 	
@@ -64,7 +64,7 @@ class ContentController extends Admin {
 		    $mcatid = (int)$this->post('movecatid');
 			if (empty($mcatid)) $this->adminMsg(lang('a-con-0'));
 			$mcat   = $this->cats[$mcatid];
-			$mtable = $this->model($mcat['tablename']);
+			$mtable = $this->plugin_model($this->namespace,$mcat['tablename']);
 			$success = 0;
 	        foreach ($_POST as $var => $value) {
 	            if (strpos($var, 'del_') !== false) {
@@ -88,7 +88,7 @@ class ContentController extends Admin {
 	    $stype    = isset($stype) ? $stype : (int)$this->get('stype');
 		$modelid  = (int)$this->get('modelid');
 		$recycle  = (int)$this->get('recycle');
-		$model    = $this->get_model();	//加载内容模型
+		$model    = $this->get_model($this->namespace.'_model_content');	//加载内容模型
 	    $pagelist = $this->instance('pagelist');	//加载分页类
 		$pagelist->loadconfig();
 		if (empty($modelid)) $this->adminMsg(lang('a-con-1'));
@@ -209,7 +209,7 @@ class ContentController extends Admin {
 	    $page     = (int)$this->get('page') ? (int)$this->get('page') : 1;
 	    $catid    = $catid ? $catid : (int)$this->get('catid');
 	    $stype    = isset($stype) ? $stype : (int)$this->get('stype');
-		$model    = $this->get_model(); //加载内容模型
+		$model    = $this->get_model($this->namespace.'_model_content'); //加载内容模型
 		$status   = (int)$this->get('status');
 		$status	  = !$status ? 2 : $status;
 		$modelid  = (int)$this->get('modelid');
@@ -278,7 +278,7 @@ class ContentController extends Admin {
 	    if (empty($data)) $this->adminMsg(lang('a-con-10'));
 		$data	  = string2array($data['content']);
 	    $catid    = $data['catid'];
-	    $model    = $this->get_model();
+	    $model    = $this->get_model($this->namespace.'_model_content');
 	    $modelid  = $data['modelid'];
 	    if (!isset($model[$modelid])) $this->adminMsg(lang('a-con-3'));
 		if ($this->verifyPost($this->cats[$catid]['setting'])) $this->adminMsg(lang('a-mod-219', array('1' => $this->cats[$catid]['catname'])));
@@ -333,7 +333,7 @@ class ContentController extends Admin {
 	 * 发布
 	 */
 	public function addAction() {
-	    $model		= $this->get_model();
+	    $model		= $this->get_model($this->namespace.'_model_content');
 	    $modelid	= (int)$this->get('modelid');
 	    if (!isset($model[$modelid])) $this->adminMsg(lang('a-con-3'));
 		//模型投稿权限验证
@@ -356,7 +356,6 @@ class ContentController extends Admin {
 	        $data['modelid']	= $modelid;
 	        $data['username']	= $this->userinfo['username'];
 	        $data['relation']	= formatStr($data['relation']);
-			$data['position']	= @implode(',', $data['position']);
 	        $data['inputtime']	= time();
 			$this->postEvent($data, 'before', 'admin');	//发布前事件
 	        $result	= $this->content->set(0, $model[$modelid]['tablename'], $data);
@@ -365,17 +364,14 @@ class ContentController extends Admin {
 			$this->postEvent($data, 'later', 'admin');	//发布后事件
 	        if ($this->site['SITE_MAP_AUTO'] == true) $this->sitemap();
 			$this->toHtml($data);
-			$this->setPosition($data['position'], $result, $data);
 			$msg = '<a href="' . url($this->namespace . '/admin_content/add', array('catid' => $data['catid'], 'modelid' => $modelid)) . '" style="font-size:14px;">' . lang('a-con-7') . '</a>&nbsp;&nbsp;<a href="' . url($this->namespace . '/admin_content/index', array('modelid' => $modelid)) . '" style="font-size:14px;">' . lang('a-con-8') . '</a>';
 	        $this->adminMsg(lang('a-con-9') . '<div style="padding-top:10px;">' . $msg . '</div>', '', 3, 0, 1);
 	    }
-		$position			= $this->model('position');
 	    $data_fields		= $this->getFields($fields, array());
 	    $this->view->assign(array(
 			'data'			=> array('catid' => $this->get('catid')),
 			'model'			=> $model[$modelid],
 			'modelid'		=> $modelid,
-			'position'		=> $position->where('site=' . $this->siteid)->select(),
 	        'category'		=> $this->tree->get_model_tree($this->cats, 0, $this->get('catid'), '|-', $modelid, null, null, $this->userinfo['roleid']),
 	        'data_fields'	=> $data_fields
 	    ));
@@ -390,7 +386,7 @@ class ContentController extends Admin {
 	    $data     = $this->content->get_data($id);
 	    if (empty($data)) $this->adminMsg(lang('a-con-10'));
 	    $catid    = $data['catid'];
-	    $model    = $this->get_model();
+	    $model    = $this->get_model($this->namespace.'_model_content');
 	    $modelid  = $data['modelid'];
 	    if (!isset($model[$modelid])) $this->adminMsg(lang('a-con-3'));
 		//模型投稿权限验证
@@ -398,7 +394,6 @@ class ContentController extends Admin {
 	    $fields   = $model[$modelid]['fields'];
 		$isUser   = $data['sysadd'] && $data['username'] == $this->userinfo['username'] ? 1 : 0;
 	    if ($this->post('submit')) {
-		    $posi  = $data['position'];
 			$_data = $data;
 	        unset($data);
 	        $data  = $this->post('data');
@@ -417,20 +412,17 @@ class ContentController extends Admin {
 			$data['id']			= $id;
 	        $data['modelid']    = (int)$modelid;
 	        $data['relation']   = formatStr($data['relation']);
-			$data['position']   = @implode(',', $data['position']);
 			$data['inputtime']  = $_data['inputtime'];
 	        $data['id']			= $result = $this->content->set($id, $model[$modelid]['tablename'], $data);
 	        if (!is_numeric($result)) $this->adminMsg($result);
 	        if ($this->site['SITE_MAP_AUTO'] == true) $this->sitemap();
 			$this->toHtml($data);
-			$this->setPosition($data['position'], $result, $data, $posi);
 	        $this->adminMsg(lang('success'), ($this->post('backurl') ? $this->post('backurl') : url($this->namespace . '/admin_content/index', array('modelid' => $modelid))), 3, 1, 1);
 	    }
 	    //附表内容
-	    $table       = $this->model($model[$modelid]['tablename']);
+	    $table       = $this->plugin_model($this->namespace,$model[$modelid]['tablename']);
 	    $table_data  = $table->find($id);
 	    if ($table_data) $data = array_merge($data, $table_data); //合并主表和附表
-		$position    = $this->model('position');
 	    $data_fields = $this->getFields($fields, $data);	//自定义字段
 		if ($data['status'] == 3) {	//该文档处于待审时
 			$this->view->assign('verify', $this->verify->find($id));
@@ -441,7 +433,6 @@ class ContentController extends Admin {
 			'modelid'      => $modelid,
 			'backurl'      => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
 	        'category'     => $this->tree->get_model_tree($this->cats, 0, $catid, '|-', $modelid, null, null, $this->userinfo['roleid']),
-			'position'     => $position->where('site=' . $this->siteid)->select(),
 	        'data_fields'  => $data_fields,
 	        'relation_ids' => ',' . $data['relation']
 	    ));
@@ -457,7 +448,7 @@ class ContentController extends Admin {
 	    $all   = $all ? $all : $this->get('all');
 	    $catid = $catid ? $catid : (int)$this->get('catid');
 		$back  = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : url($this->namespace . '/admin_content/', array('modelid' => $this->cats[$catid]['modelid']));
-		$model = $this->get_model();
+		$model = $this->get_model($this->namespace.'_model_content');
 		//模型投稿权限验证
 		if ($this->adminPost($model[$this->cats[$catid]['modelid']]['setting']['auth'])) $this->adminMsg(lang('a-cat-100', array('1' => $this->userinfo['rolename'])));
 	    $this->content->del($id, $catid);
@@ -630,65 +621,4 @@ class ContentController extends Admin {
 		}
 	}
 	
-	/**
-	 * 增加/删除推荐位
-	 */
-	private function setPosition($insert_ids, $cid, $data, $position = null) {
-	    if (empty($cid)) return false;
-		$pos   = $this->model('position_data');
-	    $arrid = @explode(',', $insert_ids);
-		//增加推荐位
-		if (is_array($arrid)) {
-			foreach ($arrid as $sid) {
-				if ($sid) {
-					$row = $pos->from(null, 'id')->where('posid=' . $sid . ' and contentid=' . $cid)->select(false);
-					if ($row) {
-						if (!auth::check($this->roleid, 'position-edit', 'admin')) $this->adminMsg(lang('a-com-0', array('1' => 'position', '2' => 'edit')));
-						$set = array(
-							'url'         => $data['url'],
-							'catid'       => $data['catid'],
-							'title'       => $data['title'],
-							'thumb'       => $data['thumb'],
-							'description' => $data['description']
-						);
-						$pos->update($set, 'id=' . $row['id']);
-					} else {
-						if (!auth::check($this->roleid, 'position-add', 'admin')) $this->adminMsg(lang('a-com-0', array('1' => 'position', '2' => 'add')));
-						$set = array(
-							'url'         => $data['url'],
-							'catid'       => $data['catid'],
-							'title'       => $data['title'],
-							'thumb'       => $data['thumb'],
-							'posid'       => $sid,
-							'contentid'   => $cid,
-							'description' => $data['description']
-						);
-						$pos->insert($set);
-					}
-				}
-			}
-		}
-		//删除推荐位
-		$old_ids  = @explode(',', $position);
-		if (is_array($old_ids)) {
-		    foreach ($old_ids as $sid) {
-			    if (!in_array($sid, $arrid) && $sid) {
-					if (!auth::check($this->roleid, 'position-del', 'admin')) $this->adminMsg(lang('a-com-0', array('1' => 'position', '2' => 'del')));
-				    $pos->delete('posid=' . $sid . ' AND contentid=' . $cid);
-				}
-			}
-		}
-		//更新缓存
-	    $data     = array();
-		$pmodel   = $this->model('position');
-		$position = $pmodel->where('site=' . $this->siteid)->select();
-	    foreach ($position as $t) {
-	        $posid	= $t['posid'];
-	        $data[$posid] = $pos->where('posid=' . $posid)->order('listorder ASC, id DESC')->select();
-	        $data[$posid]['catid']  = $t['catid'];
-	        $data[$posid]['maxnum'] = $t['maxnum'];
-	    }
-	    //写入缓存文件中
-	    $this->cache->set('position_' . $this->siteid, $data);
-	}
 }

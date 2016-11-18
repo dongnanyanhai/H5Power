@@ -91,31 +91,20 @@ class PluginController extends Admin {
         if (!file_exists($file)) $this->adminMsg(lang('a-plu-4'));
         $config = require $file;
         if ($config['typeid'] == 1) {
-            //包含控制器的插件    
-            $install = $this->dir . $dir . DS . 'install.sql';
+            //包含控制器的插件
+            $install_fs = $this->dir . $dir . DS . 'data/install.sql';
+            $data_fs = $this->dir . $dir . DS . 'data/data.sql';
 
-            if (!file_exists($install)) $this->adminMsg(lang('a-plu-5'));
-            $sql = file_get_contents($install);
-            if(strpos($sql,'{menuid}')){
-                $menu_model = $this->model('menu');
-                $menu_data = $menu_model->findAll('menuid',false);
-                if($menu_data){
-                    $menuid = (int)$menu_data[0]['menuid'] + 1;
-                }else{
-                    $menuid = time();
-                }
+            if(file_exists($data_fs)){
+                $install_sql = file_get_contents($data_fs);
+            }else if(file_exists($install_fs)){
+                $install_sql = file_get_contents($install_fs);
+            }else{
+                $this->adminMsg(lang('a-plu-5'));
             }
-            if(strpos($sql,'{selectid}')){
-                $menu_data_model = $this->model('menu_data');
-                $menu_data = $menu_data_model->findAll('id',false);
-                if($menu_data){
-                    $selectid = (int)$menu_data[0]['id'] + 1;
-                }else{
-                    $selectid = time();
-                }
-                $selectid2 = $selectid + 1;
-            }
-            $sql = str_replace(array('{pre}','{prefix}','{namespace}','{menuid}','{selectid}','{selectid2}'), array($this->plugin->prefix,$this->plugin->prefix .$dir . '_',$dir,$menuid,$selectid,$selectid2), $sql);
+            
+            $sql = $install_sql;
+            $sql = str_replace(array('{pre}','{prefix}','{namespace}','{pluginname}'), array($this->plugin->prefix,$this->plugin->prefix .$dir . '_',$dir,$config['name']), $sql);
             $this->installsql($sql);
         }
         //代码调用插件，直接添加表中记录
@@ -142,11 +131,21 @@ class PluginController extends Admin {
             $this->adminMsg($html, '', 3, 1, 2);
         }
         if ($data['typeid'] == 1) {
-            //包含控制器的插件
-            $uninstall = $this->dir . $data['dir'] . DS . 'uninstall.sql';
+
+            //删除固定表
+            $uninstall = $this->dir . $data['dir'] . DS . 'data/uninstall.sql';
             if (!file_exists($uninstall)) $this->adminMsg(lang('a-plu-10'));
             $sql = file_get_contents($uninstall);
             $sql = str_replace(array('{pre}','{prefix}','{namespace}'), array($this->plugin->prefix,$this->plugin->prefix .$data['dir'] . '_',$data['dir']), $sql);
+
+            // 删除通过模型生成的表和model文件
+            $all_tables = $this->getTables();
+            $plugin_prefix = $this->plugin->prefix . $data['dir'] ."_";
+            foreach ($all_tables as $k => $v) {
+                if(strpos($v['Name'], $plugin_prefix) === 0 && strpos($sql,$v['Name']) === false){
+                    $sql = $sql . "\nDROP TABLE IF EXISTS `".$v['Name']."`;"; 
+                }
+            }
             $this->installsql($sql);
         }
         //代码调用插件，直接删除表中记录
@@ -420,6 +419,137 @@ class PluginController extends Admin {
             }
         }
         return $maxk;
+    }
+
+    /*
+     * 数据备份
+     */
+    public function exportAction() {
+        $size = 5120;
+        $action = $this->get('action');
+        if ($action) {
+            $fileid    = $this->get('fileid');
+            $random    = $this->get('random');
+            $tableid   = $this->get('tableid');
+            $startfrom = $this->get('startfrom');
+            $this->export_database($size, $action, $fileid, $random, $tableid, $startfrom);
+        }else{
+            $pluginid = $this->get('pluginid');
+            $data     = $this->plugin->find($pluginid);
+            if (empty($data)) $this->adminMsg(lang('a-plu-3'));
+            $plugin_prefix = $this->plugin->prefix . $data['dir'] ."_";
+            $all_tables = $this->getTables();
+            $tables = array();
+            foreach ($all_tables as $k => $v) {
+                if(strpos($v['Name'], $plugin_prefix) === 0){
+                    $tables[] = $v['Name'];
+                }
+            }
+            $this->cache->set('plugin_bakup_tables', array('tables' => $tables, 'time' => time(),'dir'=>$data['dir']));
+            $this->adminMsg('正在备份数据...', url('admin/plugin/export', array('action' => 1, 'size' => $size)), 0, 1, 2);
+        }
+    }
+
+    /*
+     * 取当前数据库中的所有表信息
+     */
+    private function getTables() {
+        $data = $this->plugin->execute('SHOW TABLE STATUS FROM `' . $this->plugin->dbname . '`');
+        foreach ($data as $key=>$t) {
+            $data[$key]['fc'] = substr($t['Name'], 0, strlen($this->plugin->prefix)) != $this->plugin->prefix ? 0 : 1;
+        }
+        return $data;
+    }
+    
+    /**
+     * 数据库导出方法
+     * @param  $sizelimit 卷大小
+     * @param  $action 操作
+     * @param  $fileid 卷标
+     * @param  $random 随机字段
+     * @param  $tableid 
+     * @param  $startfrom 
+     */
+    private function export_database($sizelimit, $action, $fileid, $random, $tableid, $startfrom) {
+        set_time_limit(0);
+        $dumpcharset = 'utf8';
+        $fileid      = ($fileid != '') ? $fileid : 1;
+        $c_data      = $this->cache->get('plugin_bakup_tables');
+        $tables      = $c_data['tables'];
+        $time        = $c_data['time'];
+        $dir         = $c_data['dir'];
+        $plugin_prefix = $this->plugin->prefix . $dir ."_";
+        if (empty($tables)) $this->adminMsg('数据缓存不存在，请重新选择备份');
+        if ($fileid  == 1) $random = mt_rand(1000, 9999);
+        $this->plugin->query("SET NAMES 'utf8';\n\n");
+        $tabledump   = '';
+        $tableid     = ($tableid!= '') ? $tableid : 0;
+        $startfrom   = ($startfrom != '') ? intval($startfrom) : 0;
+        for ($i      = $tableid; $i < count($tables) && strlen($tabledump) < $sizelimit * 1000; $i++) {
+            $offset  = 100;
+            if (!$startfrom) {
+                $tabledump  .= "DROP TABLE IF EXISTS `$tables[$i]`;\n"; 
+                $createtable = $this->plugin->execute("SHOW CREATE TABLE `$tables[$i]` ", false);
+                $tabledump  .= $createtable['Create Table'] . ";\n\n";
+                $tabledump   = preg_replace("/(DEFAULT)*\s*CHARSET=[a-zA-Z0-9]+/", "DEFAULT CHARSET=utf8", $tabledump);
+            }
+            $numrows       = $offset;
+            while (strlen($tabledump) < $sizelimit * 1000 && $numrows == $offset) {
+                $sql       = "SELECT * FROM `$tables[$i]` LIMIT $startfrom, $offset";
+                $numfields = $this->plugin->num_fields($sql);
+                $numrows   = $this->plugin->num_rows($sql);
+                //获取表字段
+                $fields_data = $this->plugin->execute("SHOW COLUMNS FROM `$tables[$i]`");
+                $fields_name = array();
+                foreach($fields_data as $r) {
+                    $fields_name[$r['Field']] = $r['Type'];
+                }
+                $rows = $this->plugin->execute($sql);
+                $name = array_keys($fields_name);
+                $r    = array();
+                if ($rows) {
+                    foreach ($rows as $row) {
+                        $r[]   = $row;
+                        $comma = "";
+                        $tabledump .= "INSERT INTO `$tables[$i]` VALUES(";
+                        for($j = 0; $j < $numfields; $j++) {
+                            $tabledump .= $comma . "'" . @mysql_escape_string($row[$name[$j]]) . "'";
+                            $comma  = ",";
+                        }
+                        $tabledump .= ");\n";
+                    }
+                }
+                $startfrom += $offset;
+            }
+            $tabledump .= "\n";
+            $startfrom  = $numrows == $offset ? $startfrom : 0;
+        }
+        $i   = $startfrom ? $i - 1 : $i;
+        $bakfile_path = PLUGIN_DIR . $dir . DS . 'data' . DS;
+        if (!is_dir($bakfile_path)) {
+            //创建备份主目录
+            mkdir($bakfile_path, 0777);
+            file_put_contents($bakfile_path . 'index.html', '');
+        }
+        if (trim($tabledump)) {
+            $tabledump = "# h5pcms bakfile\n# version:" . CMS_VERSION . " \n# time:" . date('Y-m-d H:i:s') . "\n# http://www.h5power.cn\n# --------------------------------------------------------\n\n\n" . $tabledump;
+            $tabledump = str_replace($plugin_prefix, '{prefix}', $tabledump);
+            $tableid   = $i;
+            // $filename  = 'h5pcms_' . date('Ymd') . '_' . $random . '_' . $fileid . '.sql';
+            $filename  = 'data.sql';
+            $altid     = $fileid;
+            $fileid++;
+            if (!is_dir($bakfile_path)) mkdir($bakfile_path, 0777);
+            $bakfile = $bakfile_path . $filename;
+            file_put_contents($bakfile, $tabledump);
+            @chmod($bakfile, 0777);
+            $url = url('admin/plugin/export', array('size' => $sizelimit, 'action' => $action, 'fileid' => $fileid, 'random' => $random, 'tableid' => $tableid, 'startfrom' => $startfrom));
+            $this->adminMsg("备份#$filename", $url, 0, 1, 2);
+        } else {
+            $this->cache->delete('plugin_bakup_tables');
+            file_put_contents($bakfile_path . 'index.html', '');
+            $this->adminMsg("备份完成", url('admin/plugin/index'), 3, 1, 1);
+        }
     }
 
 }

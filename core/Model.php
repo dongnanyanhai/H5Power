@@ -16,8 +16,6 @@ abstract class Model extends Fn_base {
 	protected	$table_name;
 	protected	$field_type;
 	protected	$table_field;
-
-	public $is_plugin_model;
 	
 	/**
 	 * 构造函数
@@ -31,9 +29,6 @@ abstract class Model extends Fn_base {
 		$this->db 			= $slave_params && is_array($slave_params) ? mysql_slave::getInstance($params, $slave_params) : mysql::getInstance($params);	
 		$this->dbname       = $params['dbname'];
 		$this->prefix 		= ($params['prefix']) ? trim($params['prefix']) : '';
-		if($this->is_plugin_model){
-			$this->prefix = $this->prefix . APP::get_plugin_id() . "_" ;
-		}
 		$this->cache_dir 	= SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR;
 		return true;		
 	}

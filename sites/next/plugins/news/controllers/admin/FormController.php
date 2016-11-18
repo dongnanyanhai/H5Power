@@ -13,13 +13,13 @@ class FormController extends Admin {
 		parent::__construct();
 		if ($this->action == 'index') $this->redirect(url($this->namespace . '/admin_model/index', array('typeid'=>3)));
 		$this->cid     = (int)$this->get('cid');
-		$formmodel     = $this->get_model('form');
+		$formmodel     = $this->get_model($this->namespace.'_model_form');
 		$this->modelid = (int)$this->get('modelid');
 		if (empty($this->modelid)) $this->adminMsg(lang('a-for-1'));
 		$this->model   = $formmodel[$this->modelid];
 		if (empty($this->model)) $this->adminMsg(lang('a-for-2', array('1'=>$this->modelid)));
 		$this->table   = $this->model['tablename'];
-		$this->form    = $this->model($this->table);
+		$this->form    = $this->plugin_model($this->namespace,$this->table);
 		$joinmodel     = $this->cache->get('model_join_' . $this->siteid);
 		$this->join    = isset($joinmodel[$this->model['joinid']]) ? $joinmodel[$this->model['joinid']] : null;
 		$join_info     = lang('a-for-3');
@@ -169,7 +169,7 @@ class FormController extends Admin {
 				'setting'		=> array2string($cfg),
 				'categorytpl'	=> $data['categorytpl'],
 			);
-			$model= $this->model('model');
+			$model= $this->plugin_model($this->namespace,'model');
 			$model->update($set, 'modelid=' . $this->modelid);
 			$this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_form/config', array('modelid' => $this->modelid, 'cid' => $this->cid, 'typeid' => $this->post('typeid'))), 3, 1, 1);
 		}
@@ -252,7 +252,7 @@ class FormController extends Admin {
 			$cid  = (int)$this->post('cid');
 			if ($this->join && empty($cid)) $this->adminMsg(lang('a-for-17'), '', 1);
 			if ($this->join) {
-				$table = $this->model($this->join['tablename']);
+				$table = $this->plugin_model($this->namespace,$this->join['tablename']);
 				$cdata = $table->find($cid, 'id');
 				if (empty($cdata)) $this->adminMsg(lang('a-for-5', array('1'=>$this->join['modelname'], '2'=>$cid)));
 			}

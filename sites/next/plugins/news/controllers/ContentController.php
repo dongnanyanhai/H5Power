@@ -49,7 +49,7 @@ class ContentController extends Plugin {
 	    $id		= (int)$this->get('id');
 	    $page	= $this->get('page') ? (int)$this->get('page') : 1;
 	    $data	= $this->content->find($id);	//查询当前文档数据
-	    $model	= $this->get_model();	//获取模型缓存
+	    $model	= $this->get_model($this->namespace.'_model_content');	//获取模型缓存
 	    $catid	= $data['catid'];	//赋值栏目id
 	    $cat	= $this->cats[$catid];	//获取当前文档的栏目数据
 	    if (empty($data) || $data['status'] == 0) {	//判断数据是否存在或文档状态是否通过
@@ -62,7 +62,7 @@ class ContentController extends Plugin {
 		    header('HTTP/1.1 404 Not Found');
 			$this->msg(lang('con-0', array('1' => ($catdir && empty($catid) ? $catdir : $catid))));
 		}
-	    $table	= $this->model($model[$data['modelid']]['tablename']);
+	    $table	= $this->plugin_model($this->namespace,$model[$data['modelid']]['tablename']);
 	    $_data	= $table->find($id);	//附表数据查询
 	    $data	= array_merge($data, $_data); //合并主表和附表
 		$data	= $this->getFieldData($model[$cat['modelid']], $data);	//格式化部分数据类型
@@ -118,7 +118,7 @@ class ContentController extends Plugin {
 			}
 		} else {
 		    //普通搜索
-		    $search  = $this->model('search');
+		    $search  = $this->plugin_model($this->namespace,'search');
 			$start   = ($page - 1) * (int)$this->site['SITE_SEARCH_PAGE'];
 			$limit   = $this->site['SITE_SEARCH_PAGE'] ? (int)$this->site['SITE_SEARCH_PAGE'] : 10;
 			$cache   = (int)$this->site['SITE_SEARCH_INDEX_CACHE'];
@@ -144,7 +144,7 @@ class ContentController extends Plugin {
 	    $this->view->assign(array(
 			'id'         => $id,
 			'kw'         => $kw,
-			'model'      => $this->get_model(),
+			'model'      => $this->get_model($this->namespace.'_model_content'),
 			'catid'      => $catid,
 			'modelid'    => $modelid,
 	        'searchpage' => $pagelist,
@@ -171,7 +171,7 @@ class ContentController extends Plugin {
 			$this->view->display('post');
 		} else {
 			if (!isset($this->cats[$catid])) $this->msg(lang('m-con-9', array('1' => $catid)), null, 1);
-			$model    = $this->get_model();
+			$model    = $this->get_model($this->namespace.'_model_content');
 			$modelid  = $this->cats[$catid]['modelid'];
 			if (!isset($model[$modelid])) $this->msg(lang('m-con-10'), null, 1);
 			//投稿权限验证

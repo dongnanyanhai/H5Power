@@ -8,12 +8,12 @@ class FormController extends Plugin {
 	
 	public function __construct() {
         parent::__construct();
-		$model   = $this->get_model('form');
+		$model   = $this->get_model($this->namespace.'_model_form');
 		$modelid = (int)$this->get('modelid');
 		if (empty($modelid)) $this->msg(lang('for-0'));
 		$this->model   = $model[$modelid];
 		if (empty($this->model)) $this->msg(lang('for-1', array('1'=>$modelid)));
-		$this->form    = $this->model($this->model['tablename']);
+		$this->form    = $this->plugin_model($this->namespace,$this->model['tablename']);
 		$this->modelid = $modelid;
 		$this->view->assign(array(
 			'table'     => $this->model['tablename'],
@@ -28,7 +28,7 @@ class FormController extends Plugin {
 	public function postAction() {
 	    $cid		= (int)$this->get('cid');
 		$backurl	= urldecode($this->get('backurl'));
-		$joinmodel	= $this->cache->get('model_join_' . $this->siteid);
+		$joinmodel	= $this->cache->get($this->namespace.'_model_join_' . $this->siteid);
 		$joindata	= isset($joinmodel[$this->model['joinid']]) ? $joinmodel[$this->model['joinid']] : null;
 		if ($joindata && empty($cid)) $this->callback(lang('for-2', array('1'=>$joindata['modelname'])));
 		if ($joindata) { //关联内容数据

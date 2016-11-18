@@ -174,8 +174,6 @@ class ContentModel extends Model {
         $this->query('delete from ' . $this->prefix . 'content_' . App::get_site_id() . '_extend where id=' . $id);
         //删除审核表
         $this->query('delete from ' . $this->prefix . 'content_' . App::get_site_id() . '_verify where id=' . $id);
-        //删除推荐位信息
-        $this->query('delete from ' . $this->prefix . 'position_data where contentid=' . $id);
     }
     
     /**
@@ -283,13 +281,13 @@ class ContentModel extends Model {
     public function set_extend_data($id, $data) {
         $table  = 'content_' . App::get_site_id() . '_extend';
         $row    = $this->from($table)->where('id=' . (int)$id)->select(false);
-        if (empty($data['relation']) && empty($data['verify']) && empty($data['position']) && empty($row)) return false;
+        if (empty($data['relation']) && empty($data['verify']) && empty($row)) return false;
         if (empty($row)) {
             //添加数据
-            $this->query("insert into " . $this->prefix . $table . " values ($id," . $data['catid'] . ",'" . $data['relation'] . "','" . $data['verify'] . "','" . $data['position'] . "')");
+            $this->query("insert into " . $this->prefix . $table . " values ($id," . $data['catid'] . ",'" . $data['relation'] . "','" . $data['verify'] . "')");
         } else {
             //更新数据
-            $this->query("update " . $this->prefix . $table . " set `catid`=" . $data['catid'] . ",`relation`='" . $data['relation'] . "',`verify`='" . $data['verify'] . "',`position`='" . $data['position'] . "' where `id`=$id");
+            $this->query("update " . $this->prefix . $table . " set `catid`=" . $data['catid'] . ",`relation`='" . $data['relation'] . "',`verify`='" . $data['verify'] . "' where `id`=$id");
         }
         return true;
     }

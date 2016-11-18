@@ -57,85 +57,85 @@ CREATE TABLE `{pre}linkage` (
   KEY `child` (`child`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `{pre}member`;
-CREATE TABLE `{pre}member` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `username` char(20) NOT NULL DEFAULT '',
-  `password` char(32) NOT NULL DEFAULT '',
-  `salt` CHAR(10) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `nickname` varchar(50) NOT NULL,
-  `avatar` varchar(100) NOT NULL DEFAULT '',
-  `groupid` smallint(5) NOT NULL DEFAULT '1',
-  `modelid` smallint(5) NOT NULL,
-  `credits` int(10) NOT NULL,
-  `regdate` bigint(10) unsigned NOT NULL DEFAULT '0',
-  `regip` varchar(50) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
-  `randcode` varchar(32) NOT NULL,
-  `lastloginip` varchar(15) NOT NULL,
-  `lastlogintime` bigint(10) NOT NULL,
-  `loginip` varchar(15) NOT NULL,
-  `logintime` bigint(10) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `username` (`username`),
-  KEY `groupid` (`groupid`),
-  KEY `status` (`status`),
-  KEY `modelid` (`modelid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `{pre}member`;
+-- CREATE TABLE `{pre}member` (
+--   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+--   `username` char(20) NOT NULL DEFAULT '',
+--   `password` char(32) NOT NULL DEFAULT '',
+--   `salt` CHAR(10) NOT NULL,
+--   `email` varchar(100) NOT NULL,
+--   `nickname` varchar(50) NOT NULL,
+--   `avatar` varchar(100) NOT NULL DEFAULT '',
+--   `groupid` smallint(5) NOT NULL DEFAULT '1',
+--   `modelid` smallint(5) NOT NULL,
+--   `credits` int(10) NOT NULL,
+--   `regdate` bigint(10) unsigned NOT NULL DEFAULT '0',
+--   `regip` varchar(50) NOT NULL,
+--   `status` tinyint(1) NOT NULL DEFAULT '0',
+--   `randcode` varchar(32) NOT NULL,
+--   `lastloginip` varchar(15) NOT NULL,
+--   `lastlogintime` bigint(10) NOT NULL,
+--   `loginip` varchar(15) NOT NULL,
+--   `logintime` bigint(10) NOT NULL,
+--   PRIMARY KEY (`id`),
+--   KEY `username` (`username`),
+--   KEY `groupid` (`groupid`),
+--   KEY `status` (`status`),
+--   KEY `modelid` (`modelid`)
+-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `{pre}member_count`;
-CREATE TABLE `{pre}member_count` (
-  `id` mediumint(8) NOT NULL,
-  `post` mediumint(5) NOT NULL,
-  `pms` mediumint(5) NOT NULL,
-  `updatetime` bigint(10) NOT NULL,
-  KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `{pre}member_count`;
+-- CREATE TABLE `{pre}member_count` (
+--   `id` mediumint(8) NOT NULL,
+--   `post` mediumint(5) NOT NULL,
+--   `pms` mediumint(5) NOT NULL,
+--   `updatetime` bigint(10) NOT NULL,
+--   KEY `id` (`id`)
+-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `{pre}member_group`;
-CREATE TABLE `{pre}member_group` (
-  `id` smallint(5) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `credits` mediumint(8) NOT NULL,
-  `allowpost` mediumint(8) NOT NULL,
-  `allowpms` mediumint(8) NOT NULL,
-  `allowattachment` tinyint(1) NOT NULL,
-  `postverify` tinyint(1) NOT NULL,
-  `auto` tinyint(1) NOT NULL DEFAULT '0',
-  `filesize` smallint(5) NOT NULL,
-  `listorder` tinyint(3) NOT NULL,
-  `disabled` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `{pre}member_group`;
+-- CREATE TABLE `{pre}member_group` (
+--   `id` smallint(5) NOT NULL AUTO_INCREMENT,
+--   `name` varchar(20) NOT NULL,
+--   `credits` mediumint(8) NOT NULL,
+--   `allowpost` mediumint(8) NOT NULL,
+--   `allowpms` mediumint(8) NOT NULL,
+--   `allowattachment` tinyint(1) NOT NULL,
+--   `postverify` tinyint(1) NOT NULL,
+--   `auto` tinyint(1) NOT NULL DEFAULT '0',
+--   `filesize` smallint(5) NOT NULL,
+--   `listorder` tinyint(3) NOT NULL,
+--   `disabled` tinyint(1) NOT NULL,
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `{pre}member_group` VALUES('1','新手上路','0','3','1','0','1','0','5','0','0');
-INSERT INTO `{pre}member_group` VALUES('2','普通会员','20','1','0','0','1','0','10','0','0');
-INSERT INTO `{pre}member_group` VALUES('3','中级会员','50','10','0','0','0','0','20','0','0');
-INSERT INTO `{pre}member_group` VALUES('4','高级会员','100','12','0','1','0','0','50','0','0');
-INSERT INTO `{pre}member_group` VALUES('5','金牌会员','200','100','10','1','0','0','0','0','0');
+-- INSERT INTO `{pre}member_group` VALUES('1','新手上路','0','3','1','0','1','0','5','0','0');
+-- INSERT INTO `{pre}member_group` VALUES('2','普通会员','20','1','0','0','1','0','10','0','0');
+-- INSERT INTO `{pre}member_group` VALUES('3','中级会员','50','10','0','0','0','0','20','0','0');
+-- INSERT INTO `{pre}member_group` VALUES('4','高级会员','100','12','0','1','0','0','50','0','0');
+-- INSERT INTO `{pre}member_group` VALUES('5','金牌会员','200','100','10','1','0','0','0','0','0');
 
-DROP TABLE IF EXISTS `{pre}member_pms`;
-CREATE TABLE `{pre}member_pms` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `sendname` varchar(30) NOT NULL DEFAULT '',
-  `sendid` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `toname` varchar(30) NOT NULL DEFAULT '',
-  `toid` mediumint(8) NOT NULL,
-  `isadmin` tinyint(1) NOT NULL,
-  `title` varchar(60) NOT NULL DEFAULT '',
-  `sendtime` bigint(10) unsigned NOT NULL DEFAULT '0',
-  `hasview` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `senddel` mediumint(8) NOT NULL,
-  `todel` mediumint(8) NOT NULL,
-  `content` text,
-  PRIMARY KEY (`id`),
-  KEY `sendtime` (`sendtime`),
-  KEY `sendid` (`sendid`),
-  KEY `hasview` (`hasview`),
-  KEY `isadmin` (`isadmin`),
-  KEY `toid` (`toid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `{pre}member_pms`;
+-- CREATE TABLE `{pre}member_pms` (
+--   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+--   `sendname` varchar(30) NOT NULL DEFAULT '',
+--   `sendid` mediumint(8) unsigned NOT NULL DEFAULT '0',
+--   `toname` varchar(30) NOT NULL DEFAULT '',
+--   `toid` mediumint(8) NOT NULL,
+--   `isadmin` tinyint(1) NOT NULL,
+--   `title` varchar(60) NOT NULL DEFAULT '',
+--   `sendtime` bigint(10) unsigned NOT NULL DEFAULT '0',
+--   `hasview` tinyint(1) unsigned NOT NULL DEFAULT '0',
+--   `senddel` mediumint(8) NOT NULL,
+--   `todel` mediumint(8) NOT NULL,
+--   `content` text,
+--   PRIMARY KEY (`id`),
+--   KEY `sendtime` (`sendtime`),
+--   KEY `sendid` (`sendid`),
+--   KEY `hasview` (`hasview`),
+--   KEY `isadmin` (`isadmin`),
+--   KEY `toid` (`toid`)
+-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `{pre}oauth`;
@@ -363,7 +363,7 @@ INSERT INTO `{pre}menu_data` (`id`, `site`, `menuid`, `parentid`, `arrparentid`,
 (21, 1, 2, 12, '', 0, '', 1, 0, '后台菜单', 'admin/menu/index', '', '', '', 0),
 (22, 1, 2, 0, '', 1, '', 1, 0, '网站管理', '#', '#', '#', '', 4),
 (23, 1, 2, 22, '', 0, '', 1, 0, '网站配置', 'admin/site/config', '', '', '', 0),
-(24, 1, 2, 22, '', 0, '', 1, 0, '多网站管理', 'admin/site/index', '', '', '', 0),
+(24, 1, 2, 22, '', 0, '', 0, 0, '多网站管理', 'admin/site/index', '', '', '', 0),
 (25, 1, 2, 0, '', 1, '', 0, 0, '模板管理', '#', '#', '#', '', 5),
 (26, 1, 2, 25, '', 0, '', 1, 0, '网站模板', 'admin/theme/index', '', '', '', 0),
 (27, 1, 2, 25, '', 0, '', 1, 0, '标签向导', 'admin/theme/demo', '', '', '', 0),
@@ -373,12 +373,11 @@ INSERT INTO `{pre}menu_data` (`id`, `site`, `menuid`, `parentid`, `arrparentid`,
 (31, 1, 2, 29, '', 0, '', 1, 0, '清除静态文件', 'admin/html/clear', '', '', '', 0),
 (32, 1, 2, 29, '', 0, '', 1, 0, '更新全站缓存', 'admin/index/cache', '', '', '', 0),
 (33, 1, 2, 29, '', 0, '', 1, 0, '更新SiteMap', 'admin/index/updatemap', '', '', '', 0),
-(34, 1, 2, 29, '', 0, '', 1, 0, '更新内容地址', 'admin/content/updateurl/', '', '', '', 0),
-(35, 1, 2, 0, '', 1, '', 1, 0, '管理员设置', '#', '#', '#', '', 7),
-(36, 1, 2, 35, '', 0, '', 1, 0, '添加管理员', 'admin/user/add', '', '', '', 0),
-(37, 1, 2, 35, '', 0, '', 1, 0, '管理员管理', 'admin/user/index', '', '', '', 0),
-(38, 1, 2, 35, '', 0, '', 1, 0, '角色权限管理', 'admin/auth/index', '', '', '', 0),
-(39, 1, 2, 35, '', 0, '', 1, 0, '更新权限缓存', 'admin/auth/cache', '', '', '', 0);
+(34, 1, 2, 0, '', 1, '', 1, 0, '管理员设置', '#', '#', '#', '', 7),
+(35, 1, 2, 35, '', 1, '', 1, 0, '添加管理员', 'admin/user/add', '', '', '', 0),
+(36, 1, 2, 35, '', 1, '', 1, 0, '管理员管理', 'admin/user/index', '', '', '', 0),
+(37, 1, 2, 35, '', 0, '', 1, 0, '角色权限管理', 'admin/auth/index', '', '', '', 0),
+(38, 1, 2, 35, '', 0, '', 1, 0, '更新权限缓存', 'admin/auth/cache', '', '', '', 0);
 
 -- (21, 1, 3, 0, '1,21,26,27,28,35,41,42,58,3,13,48,52,16', 1, '22,23,60,24,25', 1, 0, '栏目模型', '#', '#', '', '', 0),
 -- (22, 1, 3, 21, '22,23,60,24,25', 0, '', 1, 0, '栏目管理', 'admin/category/index', '', 'category-index', '', 1),

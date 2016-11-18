@@ -36,7 +36,7 @@ class CategoryController extends Admin {
 	    }
 		$data = $this->category->getData();
 	    $this->view->assign(array(
-			'model' => $this->get_model(),
+			'model' => $this->get_model($this->namespace.'_model_content'),
 			'list'  => $this->tree->get_tree_data($data)
 		));
 		$this->view->display('admin/category_list');
@@ -91,8 +91,8 @@ class CategoryController extends Admin {
 				$this->redirect(url($this->namespace .'/admin_category/cache'));
 			}
 	    }
-	    $model  = $this->get_model();
-	    $catmodel  = $this->get_model('category');
+	    $model  = $this->get_model($this->namespace.'_model_content');
+	    $catmodel  = $this->get_model($this->namespace.'_model_category');
 	    $catid  = (int)$this->get('catid');
 		$json_m = json_encode($model);
 	    $this->view->assign(array(
@@ -134,8 +134,8 @@ class CategoryController extends Admin {
         if (empty($catid)) $this->adminMsg(lang('a-cat-7'));
 		if (!isset($this->cats[$catid])) $this->adminMsg(lang('m-con-9', array('1' => $catid)));
         $data    = $this->category->find($catid);
-	    $model   = $this->get_model();
-	    $catmodel  = $this->get_model('category');
+	    $model   = $this->get_model($this->namespace.'_model_content');
+	    $catmodel  = $this->get_model($this->namespace.'_model_category');
 		$json_m  = json_encode($model);
 	    $this->view->assign(array(
 	        'data'				=> $data,
@@ -226,12 +226,12 @@ class CategoryController extends Admin {
 	public function cacheAction($show=0, $site_id=0) {
 	    $this->category->repair(); //递归修复栏目数据
 		$site_id   = $site_id ? $site_id : $this->siteid;
-	    $model     = $this->get_model('content', $site_id);
+	    $model     = $this->get_model($this->namespace.'_model_content', $site_id);
 	    $data      = $this->category->getData($site_id); //数据库查询最新数据
 		$siteid    = $this->category->getSiteId($site_id);
 	    $category  = $category_dir = $count = array();
 	    // 菜单模型
-	    $catmodel  = $this->get_model('category');
+	    $catmodel  = $this->get_model($this->namespace.'_model_category');
 
 	    foreach ($data as $t) {
 	        $catid = $t['catid'];
@@ -294,7 +294,7 @@ class CategoryController extends Admin {
 		    // 栏目对应的菜单模型
 		    if(!empty($t['catmid']) && !empty($t['catsid'])){
 		    	$model_setting = $catmodel[$t['catmid']];
-			    $form = $this->model($model_setting['tablename']);
+			    $form = $this->plugin_model($this->namespace,$model_setting['tablename']);
 			    $setting_data = $form->find($t['catsid']);
 			    if($setting_data){
 			    	$category[$t['catid']]['more'] = $setting_data;
@@ -317,13 +317,13 @@ class CategoryController extends Admin {
         if (empty($catid)) $this->adminMsg(lang('a-cat-7'));
 		if (!isset($this->cats[$catid])) $this->adminMsg(lang('m-con-9', array('1' => $catid)));
         $catdata    = $this->category->find($catid);
-	    $catmodel  = $this->get_model('category');
+	    $catmodel  = $this->get_model($this->namespace.'_model_category');
 	    // 栏目对应的菜单模型
 	    $catmid = $catdata['catmid'];
 	    $catsid = $catdata['catsid'];
 	    if(empty($catmid)) $this->adminMsg(lang('a-fnx-88'));
 	    $model = $catmodel[$catmid];
-	    $form = $this->model($model['tablename']);
+	    $form = $this->plugin_model($this->namespace,$model['tablename']);
 
 	    if ($this->isPostForm()) {
 	    	if(!$catsid){
