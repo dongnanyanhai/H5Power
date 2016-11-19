@@ -183,35 +183,13 @@ class MenuController extends Admin{
 	 */
 	public function cacheAction($show=0,$site_id=0) {
 		$this->menu_data->repair();
-		$data = array();
-		$topmenu = array();
-		$site_id = $site_id ? $site_id : $this->siteid;
-		$menu = $this->menu->where('site=' . $site_id)->where('ismenu=1')->select();
-
-		foreach ($menu as $k => $v) {
-			$topmenu[$v['menuid']] = $v;
+		// 获取顶部菜单
+		$top_menu = $this->menu->cache();
+		// var_dump($top_menu);
+		if($top_menu && is_array($top_menu)){
+			$re = $this->menu_data->cache($top_menu);
 		}
-
-		$this->cache->set('menu_top_' . $site_id, $topmenu);
-
-		foreach ($menu as $t) {
-			$menuid = $t['menuid'];
-
-			$submenu = $this->menu_data->where('menuid=' . $menuid)->where('parentid=0')->where('ismenu=1')->order('listorder ASC, id ASC')->select();
-
-			if($submenu){
-
-				foreach ($submenu as $k => $v) {
-					$subid = $v['id'];
-					$data[$menuid][$subid] = $this->menu_data->where('menuid=' . $menuid)->where('parentid='.$subid)->where('ismenu=1')->order('listorder ASC, id ASC')->select();
-					$data[$menuid][$subid]['name'] = $v['name'];
-				}
-
-			}
-		}
-
-		// 写入缓存文件
-		$this->cache->set('menu_list_' . $site_id, $data);
+		
 		$show or $this->adminMsg(lang('a-update'),'', 3, 1, 1);
 	}
 }

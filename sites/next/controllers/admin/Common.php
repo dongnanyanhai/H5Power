@@ -42,6 +42,22 @@ class Admin extends Common {
         
         $menu['top']  = $this->cache->get('menu_top_'.$this->siteid);
         $menu['list']  = $this->cache->get('menu_list_'.$this->siteid);
+        if(!$menu['top'] || !$menu['list']){
+            $be_menu = $this->model('menu');
+            $be_menu_data = $this->model('menu_data');
+            // 更新后台菜单
+            $be_menu_data->repair();
+            // 获取顶部菜单
+            $top_menu = $be_menu->cache();
+            // var_dump($top_menu);
+            if($top_menu && is_array($top_menu)){
+                $menu['top'] = $top_menu;
+                $list_menu = $be_menu_data->cache($top_menu);
+                if($list_menu && is_array($list_menu)){
+                    $menu['list'] = $list_menu;
+                }
+            }
+        }
 
         $last_menuid = end($menu['top'])['menuid'];
         $plugins = $this->cache->get('plugin');

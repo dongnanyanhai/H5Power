@@ -66,4 +66,25 @@ class Menu_dataModel extends Model{
 			}
 		}
 	}
+
+	public function cache($menu = 0){
+		if(!$menu || !is_array($menu)){
+			return false;
+		}
+		foreach ($menu as $t) {
+			$menuid = $t['menuid'];
+			$submenu = $this->where('menuid=' . $menuid)->where('parentid=0')->where('ismenu=1')->order('listorder ASC, id ASC')->select();
+			if($submenu){
+				foreach ($submenu as $k => $v) {
+					$subid = $v['id'];
+					$data[$menuid][$subid] = $this->where('menuid=' . $menuid)->where('parentid='.$subid)->where('ismenu=1')->order('listorder ASC, id ASC')->select();
+					$data[$menuid][$subid]['name'] = $v['name'];
+				}
+			}
+		}
+		$cache = new cache_file();
+		// 写入缓存文件
+		$cache->set('menu_list_' . APP::get_site_id(), $data);
+		return $data;
+	}
 }
