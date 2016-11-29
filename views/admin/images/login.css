@@ -10,9 +10,10 @@ body{ background:#f3f3f3;}
 .width{ width:980px; margin:auto; overflow:hidden;}
 .logo{ float:left; margin-top:10px;}
 .login{ background:url(login_bg.png) repeat-x; width:100%; height:460px;}
-.login_bg{ background:url(login_bg_X.png) left top no-repeat; width:950px; margin:auto; overflow:hidden; height:460px;}
-.login_box{ float:right; width:280px; height:300px; margin-top:80px; }
-.login_box ul{ margin:30px 20px; float:left;}
+/*.login_bg{ background:url(login_bg_X.png) left top no-repeat; width:950px; margin:auto; overflow:hidden; height:460px;}*/
+.login_bg{width:950px; margin:auto; overflow:hidden; height:460px;background:url(login.png) left top no-repeat;}
+.login_box{ float:right; margin-top:65px;background-color: #fff;border-radius: 6px; }
+.login_box ul{ margin:30px 25px; float:left;}
 .login_box ul li{ height:35px; line-height:35px; margin-bottom:10px;}
 .login_box .tx{ border:1px #ddd solid; height:28px; line-height:28px; width:200px; padding-left:10px; color:#ccc; font-family:microsoft yahei;}
 .login_box .in{ border:1px #9C0 solid; height:28px; line-height:28px; width:200px; padding-left:10px; font-family:microsoft yahei;-webkit-transition:.3s; -moz-transition:.3s;-webkit-box-shadow:0 0 3px #999; -moz-box-shadow:0 0 3px #999;}

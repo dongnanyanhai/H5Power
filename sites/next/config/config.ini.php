@@ -59,11 +59,12 @@ return array(
 	'SITE_TAG_CACHE'          => '',  //TAG列表缓存时间，单位小时
 	'SITE_TAG_URLRULE'        => '',  //TAG列表URL规则
 	'SITE_TAG_URL'            => '',  //TAG的URL规则
-	'SITE_FNX_WXAPPID'        => 'wx94a3e27fe7ef0baf',  //微信JS-SDK AppId
+	'SITE_FNX_WXAPPID'        => '123456',  //微信JS-SDK AppId
 	'SITE_FNX_WXAPPSECRET'    => 'ca9551d488125ac866f86a88ba0f1706',  //微信JS-SDK AppSecret
 	'SITE_FNX_WXTOKEN'        => 'ahaitest',  //
 	'SITE_FNX_WXAES_KEY'      => 'ijnokmlqwwww',  //
-	'SITE_FNX_WXPAYID'        => '',
-	'SITE_FNX_WXPAYSECRET'    => '',
-	'SITE_FNX_WXPAYCERTPATH'  => '',
+	'SITE_FNX_WXPAYID'        => '',  //商户ID
+	'SITE_FNX_WXPAYSECRET'    => '',  //商户密匙
+	'SITE_FNX_WXPAYCERTPATH'  => '',  //微信支付证书路径
+
 );

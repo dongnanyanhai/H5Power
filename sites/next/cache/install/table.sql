@@ -138,22 +138,22 @@ CREATE TABLE `{pre}linkage` (
 -- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `{pre}oauth`;
-CREATE TABLE `{pre}oauth` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(30) NOT NULL DEFAULT '',
-  `oauth_openid` varchar(80) NOT NULL DEFAULT '',
-  `oauth_name` varchar(30) NOT NULL DEFAULT '',
-  `oauth_data` text NOT NULL,
-  `nickname` varchar(255) NOT NULL DEFAULT '',
-  `avatar` varchar(255) NOT NULL DEFAULT '',
-  `logintimes` bigint(10) unsigned NOT NULL DEFAULT '0',
-  `logintime` bigint(10) unsigned NOT NULL DEFAULT '0',
-  `addtime` bigint(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `username` (`username`),
-  KEY `site` (`oauth_openid`,`oauth_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `{pre}oauth`;
+-- CREATE TABLE `{pre}oauth` (
+--   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+--   `username` varchar(30) NOT NULL DEFAULT '',
+--   `oauth_openid` varchar(80) NOT NULL DEFAULT '',
+--   `oauth_name` varchar(30) NOT NULL DEFAULT '',
+--   `oauth_data` text NOT NULL,
+--   `nickname` varchar(255) NOT NULL DEFAULT '',
+--   `avatar` varchar(255) NOT NULL DEFAULT '',
+--   `logintimes` bigint(10) unsigned NOT NULL DEFAULT '0',
+--   `logintime` bigint(10) unsigned NOT NULL DEFAULT '0',
+--   `addtime` bigint(10) unsigned NOT NULL DEFAULT '0',
+--   PRIMARY KEY (`id`),
+--   KEY `username` (`username`),
+--   KEY `site` (`oauth_openid`,`oauth_name`)
+-- ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `{pre}plugin`;
