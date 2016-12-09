@@ -461,6 +461,7 @@ abstract class App {
 	 * 返回插件模型的唯一实例(单例模式)
 	 */
 	public static function plugin_model($plugin, $table_name) {
+
 		if (!$table_name || !$plugin) {
 			return false;
 		}
@@ -472,13 +473,15 @@ abstract class App {
 		}
 
 		$key = strtolower($model_name);
+
 		if (isset(self::$_objects[$key])) {
 			return self::$_objects[$key];
 		}
 
-		require $model_file;
+		include_once $model_file;
 		self::$_objects[$key] = new $model_name();
 		self::$_objects[$key]->prefix = self::$_objects[$key]->prefix . $plugin . "_" ;
+
 		return self::$_objects[$key];
 	}
 
@@ -486,18 +489,19 @@ abstract class App {
 	 * 静态加载文件
 	 */
 	public static function load_file($file_name) {
+
 		if (!$file_name) {
 			return false;
 		}
-
+		
 		if (!isset(self::$_inc_files[$file_name]) || self::$_inc_files[$file_name] == false) {
 			if (!is_file($file_name)) {
 				Controller::halt('The file:' . $file_name . ' not found!');
 			}
-
 			include_once $file_name;
 			self::$_inc_files[$file_name] = true;
 		}
+
 		return self::$_inc_files[$file_name];
 	}
 }

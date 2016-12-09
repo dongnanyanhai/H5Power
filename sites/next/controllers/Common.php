@@ -59,7 +59,8 @@ class Common extends Controller {
         	define('ROOT_SITE_PATH', '/');
         	define('SITE_THEME',self::get_theme_url());
         }
-		define('ADMIN_THEME',	ROOT_SITE_PATH . basename(VIEW_DIR) . '/admin/');
+		// define('ADMIN_THEME',	ROOT_SITE_PATH . basename(VIEW_DIR) . '/admin/');
+		define('ADMIN_THEME',	str_replace(array('\\', '//'), '/', SITE_ROOT . basename(VIEW_DIR) . '/admin/' ));
 		define('EXT_PATH',		ROOT_SITE_PATH . EXTENSION_PATH . '/');
 		define('LANG_PATH',		ROOT_SITE_PATH . EXTENSION_PATH . '/language/' . SYS_LANGUAGE . '/');
 		//禁止访问

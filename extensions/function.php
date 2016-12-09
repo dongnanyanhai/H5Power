@@ -1369,7 +1369,7 @@ function get_tag_data($keyword) {
  * 后台权限验证
  */
 function admin_auth($roleid, $action) {
-	return auth::check($roleid, $action, 'admin');
+	return auth::check($roleid, $action);
 }
 
 /**

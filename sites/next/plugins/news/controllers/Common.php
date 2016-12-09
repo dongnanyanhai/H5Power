@@ -30,6 +30,7 @@ class Plugin extends Common {
         $this->cats_dir      = $this->get_category_dir();
         $this->content       = $this->plugin_model($this->namespace,'content_' . $this->siteid);
 
+
         // $this->viewpath = SITE_PATH . $this->site['PLUGIN_DIR'] . '/' . $this->data['dir'] . '/views/';
         $this->viewpath = PLUGIN_DIR . $this->site['PLUGIN_DIR'] . '/' . $this->data['dir'] . '/views/';
         $this->assign(array(

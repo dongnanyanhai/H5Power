@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="{ADMIN_THEME}images/reset.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/system.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/dialog.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/main.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/switchbox.css" rel="stylesheet" type="text/css" />
+<link href="{ADMIN_THEME}images/table_form.css" rel="stylesheet" type="text/css" />
+<script src="{ADMIN_THEME}js/jquery.min.js"></script>
+
+<title>admin</title>
+</head>
+<body style="font-weight: normal;">
+<form action="" method="post">
+<div class="subnav">
+	<div class="content-menu ib-a blue line-x">
+		<a href="javascript:;" class="on"><em>{lang('a-aut-9')}</em></a><span>|</span>
+		<a href="{url('admin/auth/')}"><em>{lang('a-aut-7')}</em></a><span>|</span>
+		<a href="{url('admin/auth/add')}"><em>{lang('a-aut-8')}</em></a>
+	</div>
+	<div class="table-list">
+		<table width="100%">
+		<thead>
+		<tr>
+			<th align="left" width="110">{lang('a-aut-9')}</th>
+			<th align="left"></th>
+			</tr>
+		</thead>
+		<tbody>
+		{loop $data['top'] $k=>$v}
+			{php $py_top = word2pinyin($v['name']);}
+			<tr height="25">
+				<td align="left" colspan="2">
+					<input type="checkbox" onClick="setC('{$k}_{$py_top}')" id="c_{$k}_{$py_top}" {if $roleid==1} checked disabled{/if}>&nbsp;&nbsp;{$v['name']}
+				</td>
+			</tr>
+			{loop $data['list'][$k] $kk=>$vv}
+			{php $py_list = word2pinyin($vv['name']);}
+			<tr height="25">
+				<td align="left" style="border-right: 1px dashed #ccc;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onClick="setC('{$k}_{$kk}_{$py_list}')" class="c_{$k}_{$py_top}" id="c_{$k}_{$kk}_{$py_list}" {if $roleid==1} checked disabled{/if}>&nbsp;&nbsp;{$vv['name']}:
+				</td>
+				<td align="left">
+					{loop $vv $kkk=>$vvv}
+						{if is_array($vvv)}
+						<?php $checked = @in_array($vvv['url'], $privates) ? true : false;?>
+						<input type="checkbox" name="auth[]" value="{$vvv['url']}" class="c_{$k}_{$py_top} c_{$k}_{$kk}_{$py_list}" {if $checked}checked{/if} {if $roleid==1} checked disabled{/if}>&nbsp;&nbsp;{$vvv['name']}&nbsp;&nbsp;&nbsp;
+						{/if}
+					{/loop}
+				</td>
+			</tr>
+			{/loop}
+		{/list}
+		<tr height="44">
+			<td align="left">&nbsp;</td>
+			<td align="left">
+			<input class="button" type="submit" name="submit" value="{lang('a-submit')}" />
+			</td>
+		</tr>
+		<tbody>
+		</table>
+	</div>
+</div>
+</form>
+</body>
+<script type="text/javascript">
+function setC(c) {
+	if($("#c_"+c).attr('checked')) {
+		$(".c_"+c).attr("checked",true);
+	} else {
+		$(".c_"+c).attr("checked",false);
+	}
+}
+</script>
+</html>

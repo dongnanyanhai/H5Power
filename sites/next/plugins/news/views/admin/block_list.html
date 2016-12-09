@@ -17,8 +17,8 @@
 <div class="subnav">
 	<div class="content-menu ib-a blue line-x">
 		<a href="{url($s.'/admin_block')}" class="on"><em>{lang('a-fnx-96')}</em></a><span>|</span>
-		{if admin_auth($userinfo['roleid'], 'block-add')}<a href="{url($s.'/admin_block/add')}"><em>{lang('a-add')}</em></a><span>|</span>{/if}
-		{if admin_auth($userinfo['roleid'], 'block-cache')}<a href="{url($s.'/admin_block/cache')}"><em>{lang('a-cache')}</em></a>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_block/add')}<a href="{url($s.'/admin_block/add')}"><em>{lang('a-add')}</em></a><span>|</span>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_block/cache')}<a href="{url($s.'/admin_block/cache')}"><em>{lang('a-cache')}</em></a>{/if}
 	</div>
 	<div class="bk10"></div>
 	<div class="table-list">
@@ -43,14 +43,14 @@
 		<td align="left">
 		<?php $del = url($s.'/admin_block/del/',array('id'=>$t['id']));?>
 		<a href="javascript:;" onClick="getViewData('{$t['id']}');">{lang('a-blo-6')}</a> | 
-		{if admin_auth($userinfo['roleid'], 'block-edit')}<a href="{url($s.'/admin_block/edit',array('id'=>$t['id']))}">{lang('a-edit')}</a> | {/if}
-		{if admin_auth($userinfo['roleid'], 'block-edit')}<a href="{url($s.'/admin_block/set',array('id'=>$t['id']))}">{lang('a-fnx-87')}</a> | {/if}
-		{if admin_auth($userinfo['roleid'], 'block-del')}<a href="javascript:;" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_block/edit')}<a href="{url($s.'/admin_block/edit',array('id'=>$t['id']))}">{lang('a-edit')}</a> | {/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_block/edit')}<a href="{url($s.'/admin_block/set',array('id'=>$t['id']))}">{lang('a-fnx-87')}</a> | {/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_block/del')}<a href="javascript:;" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a>{/if}
 		</td>
 	</tr>
 	{/loop}
 	<tr height="25">
-	    <td colspan="4" align="left"> <input {if !admin_auth($userinfo['roleid'], 'block-del')}disabled{/if} type="submit" class="button" value="{lang('a-del')}" name="submit_del" onclick="return confirm_del()" />&nbsp;</td>
+	    <td colspan="5" align="left"> <input {if !admin_auth($userinfo['roleid'], $s.'/admin_block/del')}disabled{/if} type="submit" class="button" value="{lang('a-del')}" name="submit_del" onclick="return confirm_del()" />&nbsp;</td>
 	</tr>
 	</table>
 	{$pagelist['html']}

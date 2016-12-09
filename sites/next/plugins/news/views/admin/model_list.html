@@ -35,9 +35,9 @@ function cdisabled(id, c) {
 <div class="subnav">
 	<div class="content-menu ib-a blue line-x">
 		<a href="{url($s.'/admin_model/index',  array('typeid'=>$typeid))}" class="on"><em>{lang('a-aut-14')}</em></a><span>|</span>
-		{if admin_auth($userinfo['roleid'], 'model-add')}<a href="{url($s.'/admin_model/add', array('typeid'=>$typeid))}"><em>{lang('a-add')}</em></a><span>|</span>{/if}
-		{if admin_auth($userinfo['roleid'], 'model-import')}<a href="{url($s.'/admin_model/import', array('typeid'=>$typeid))}"><em>{lang('a-import')}</em></a><span>|</span>{/if}
-		{if admin_auth($userinfo['roleid'], 'model-cache')}<a href="{url($s.'/admin_model/cache', array('typeid'=>$typeid))}"><em>{lang('a-cache')}</em></a>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_model/add')}<a href="{url($s.'/admin_model/add', array('typeid'=>$typeid))}"><em>{lang('a-add')}</em></a><span>|</span>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_model/import')}<a href="{url($s.'/admin_model/import', array('typeid'=>$typeid))}"><em>{lang('a-import')}</em></a><span>|</span>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_model/cache')}<a href="{url($s.'/admin_model/cache', array('typeid'=>$typeid))}"><em>{lang('a-cache')}</em></a>{/if}
 	</div>
 	<div class="bk10"></div>
 	<div class="table-list">
@@ -60,7 +60,7 @@ function cdisabled(id, c) {
 				<td align="left">{$t['modelname']}</td>
 				<td align="left">{php echo preg_replace('/\_([0-9]+)\_/', '_' . $siteid . '_', $t['tablename']);}</td>
 				<td align="left">
-				{if admin_auth($userinfo['roleid'], 'model-fields')}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_model/fields')}
 					{if $typeid==1}
 					<a href="{url($s.'/admin_content/',array('modelid'=>$t['modelid']))}">{lang('a-fnx-97')}</a> |
 					{/if}
@@ -68,11 +68,11 @@ function cdisabled(id, c) {
 					<a href="{url($s.'/admin_form/list',array('modelid'=>$t['modelid']))}">{lang('a-fnx-97')}</a> | 
 					{/if}
 				{/if}
-				{if admin_auth($userinfo['roleid'], 'model-fields')}<a href="{url($s.'/admin_model/fields/',array('typeid'=>$typeid, 'modelid'=>$t['modelid']))}">{lang('a-aut-18')}</a> | {/if}
-				{if admin_auth($userinfo['roleid'], 'model-edit')}<a href="{url($s.'/admin_model/edit',array('typeid'=>$typeid,'modelid'=>$t['modelid']))}">{lang('a-edit')}</a> | {/if}
-				{if admin_auth($userinfo['roleid'], 'model-cdisabled')}<a href="javascript:cdisabled({$t['modelid']}, {$disable});">{if $disable}<font color=red>{lang('a-qi')}</font>{else}{lang('a-jin')}{/if}</a> | {/if}
-				{if admin_auth($userinfo['roleid'], 'model-export')}<a href="{url($s.'/admin_model/export',array('typeid'=>$typeid, 'modelid'=>$t['modelid']))}">{lang('a-export')}</a> | {/if}
-				{if admin_auth($userinfo['roleid'], 'model-del')}<a href="javascript:del({$t['modelid']});">{lang('a-del')}</a> {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_model/fields')}<a href="{url($s.'/admin_model/fields/',array('typeid'=>$typeid, 'modelid'=>$t['modelid']))}">{lang('a-aut-18')}</a> | {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_model/edit')}<a href="{url($s.'/admin_model/edit',array('typeid'=>$typeid,'modelid'=>$t['modelid']))}">{lang('a-edit')}</a> | {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_model/cdisabled')}<a href="javascript:cdisabled({$t['modelid']}, {$disable});">{if $disable}<font color=red>{lang('a-qi')}</font>{else}{lang('a-jin')}{/if}</a> | {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_model/export')}<a href="{url($s.'/admin_model/export',array('typeid'=>$typeid, 'modelid'=>$t['modelid']))}">{lang('a-export')}</a> | {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_model/del')}<a href="javascript:del({$t['modelid']});">{lang('a-del')}</a> {/if}
 				</td>
 			</tr>
 			{/loop}

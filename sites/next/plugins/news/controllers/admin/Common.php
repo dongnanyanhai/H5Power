@@ -10,8 +10,8 @@ class Admin extends Plugin {
 	public function __construct() {
 		parent::__construct();
 		$this->user = $this->model('user');
-		$this->isAdminLogin();
-        if (!auth::check($this->roleid, $this->controller . '-' . $this->action, $this->namespace)) {
+		$this->isAdminLogin($this->namespace);
+        if (!auth::check($this->roleid, $this->namespace . '/' .$this->controller . '/' . $this->action, $this->namespace)) {
             $this->adminMsg(lang('a-com-0', array('1' => $this->controller, '2' => $this->action)));
         }
 		$sites	= App::get_site();
@@ -72,9 +72,12 @@ class Admin extends Plugin {
 	    if ($this->namespace != $namespace) return false;
         if ($controller && $this->controller != $controller) return false;
         if ($this->namespace == 'admin' && $this->controller == 'login') return false;
+
         if ($this->session->is_set('user_id')) {
             $userid = $this->session->get('user_id');
+
             $this->userinfo = $this->user->userinfo($userid);
+
             if ($this->userinfo) {
 				$this->roleid = $this->userinfo['roleid'];
 			    if (empty($this->userinfo['site']) || $this->userinfo['site'] == $this->siteid) return false;
@@ -88,17 +91,15 @@ class Admin extends Plugin {
      * 验证角色是否对指定菜单有操作权限
      */
     protected function checkUserAuth($option, $roleid = 0) {
-        $data_role = require CONFIG_DIR . 'auth.role.ini.php';
         $roleid    = $roleid ? $roleid : $this->roleid;
-        $role      = $data_role[$roleid];
-        if (!$role) return false;
-        
-        if (!is_array($option)) $option = array($option);
-
-        foreach ($role as $t) {
-            if (in_array($t, $option)) return true;
+        $data_role = $this->user->roleinfo($roleid);
+        $privates     = string2array($data_role['privates']);
+        if (!$privates) return false;
+        if(in_array($option,$privates)){
+            return true;
+        }else{
+            return false;
         }
-        return false;
     }
 	
 	/**

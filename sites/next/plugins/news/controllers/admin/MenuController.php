@@ -12,64 +12,11 @@ class MenuController extends Admin{
     function __construct(){
         parent::__construct();
         // $this->menu = $this->model('menu');
-        $this->menu_data = $this->plugin_model($this->namespace,'menu');
+        $this->menu_data = $this->plugin_model($this->namespace,'pluginmenu');
         $this->tree = $this->instance('tree');
         $this->tree->config(array('id' => 'id', 'parent_id' => 'parentid', 'name' => 'name'));
     }
-
-    // public function indexAction(){
-    //  if ($this->post('submit')) {
-    //      foreach ($_POST as $var => $value) {
-    //          if(strpos($var,'del_') !== false){
-    //              $id = (int)str_replace('del_','',$var);
-    //              $this->menu->del($id);
-    //          }
-    //      }
-    //      $this->adminMsg($this->getCacheCode('menu') . lang('success'), url('admin/menu/index'), 3, 1, 1);
-    //  }
-
-    //  $data = $this->menu->where('site='.$this->siteid)->select();
-    //  $this->view->assign('list',$data);
-    //  $this->view->display('admin/menu_list');
-    // }
-
-    // public function addAction(){
-    //  if ($this->post('submit')){
-    //      $data = $this->post('data');
-    //      if (empty($data['name'])) $this->adminMsg(lang('a-fnx-63'));
-    //      $data['site'] = $this->siteid;
-    //      if ($this->menu->set(0,$data)){
-    //          $this->adminMsg($this->getCacheCode('menu') . lang('success'),url('admin/menu/index'),3,1,1);
-    //      }else {
-    //          $this->adminMsg(lang('failure'));
-    //      }
-    //  }
-    //  $this->view->display('admin/menu_add');
-    // }
-
-    // public function editAction(){
-    //  $menuid = (int)$this->get('menuid');
-    //  if (empty($menuid)) $this->adminMsg(lang('a-fnx-64'));
-    //  if ($this->post('submit')) {
-    //      $data = $this->post('data');
-    //      if (empty($data['name'])) $this->adminMsg(lang('a-fnx-63'));
-    //      $data['site'] = $this->siteid;
-    //      $this->menu->set($menuid,$data);
-    //      $this->adminMsg($this->getCacheCode('menu') . lang('success'),url('admin/menu/index'),3,1,1);
-    //  }
-    //  $data = $this->menu->find($menuid);
-    //  if (empty($data)) $this->adminMsg(lang('a-fnx-64'));
-    //  $this->view->assign('data',$data);
-    //  $this->view->display('admin/menu_add');
-    // }
-
-    // public function delAction() {
-    //  $menuid = (int)$this->get('menuid');
-    //  if (empty($menuid)) $this->adminMsg(lang('a-fnx-64'));
-    //  $this->menu->del($menuid);
-    //  $this->adminMsg($this->getCacheCode('menu') . lang('success'),url('admin/menu/index'), 3, 1, 1);
-    // }
-
+    
     public function indexAction() {
         if ($this->post('submit_order') && $this->post('form') == 'order') {
             foreach ($_POST as $var => $value) {
@@ -166,18 +113,7 @@ class MenuController extends Admin{
     public function cacheAction($show=0,$site_id=0) {
         $this->menu_data->repair();
         $site_id = $site_id ? $site_id : $this->siteid;
-
-        $submenu = $this->menu_data->where('id > 0')->where('parentid=0')->where('ismenu=1')->order('listorder ASC, id ASC')->select();
-
-        if($submenu){
-            foreach ($submenu as $k => $v) {
-                $subid = $v['id'];
-                $data[$v['id']] = $this->menu_data->where('id > 0')->where('parentid='.$subid)->where('ismenu=1')->order('listorder ASC, id ASC')->select();
-                $data[$v['id']]['name'] = $v['name'];
-            }
-        }
-        // 写入缓存文件
-        $this->cache->set($this->namespace . '_menu_' . $site_id, $data);
+        $this->menu_data->cache(true);
         $show or $this->adminMsg(lang('a-update'),url($this->namespace .'/admin_menu/index'), 3, 1, 1);
     }
 

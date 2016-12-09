@@ -11,7 +11,7 @@ class Admin extends Common {
         parent::__construct();
         $this->user = $this->model('user');
         $this->isAdminLogin();
-        if (!auth::check($this->roleid, $this->controller . '-' . $this->action, $this->namespace)) {
+        if (!auth::check($this->roleid, $this->namespace . '/' .$this->controller . '/' . $this->action, $this->namespace)) {
             $this->adminMsg(lang('a-com-0', array('1' => $this->controller, '2' => $this->action)));
         }
         $sites  = App::get_site();
@@ -27,84 +27,102 @@ class Admin extends Common {
             $this->view->assign($variable);
         }
     }
-    
-    /**
-     * 系统默认菜单
-     */
-    protected function sysMenu() {
-        $last_menuid = 0;
+    // 获取系统后台菜单
+    protected function get_sys_menu($ismenu=true){
         $menu = array();
+        $be_menu = $this->model('menu');
+        $be_menu_data = $this->model('menu_data');
+        // 更新后台菜单
+        $be_menu_data->repair();
+        // 获取顶部菜单
+        $top_menu = $be_menu->cache($ismenu);
+        // var_dump($top_menu);
+        if($top_menu && is_array($top_menu)){
+            $menu['top'] = $top_menu;
+            $list_menu = $be_menu_data->cache($top_menu,$ismenu);
+            if($list_menu && is_array($list_menu)){
+                $menu['list'] = $list_menu;
+            }
+        }
+
+        return $menu;
+    }
+
+    protected function get_plugins_menu($plugins,$menu,$ismenu=true){
+
+        $last_menuid = end($menu['top'])['menuid'];
+        $menu_data = null;
+        // 获取数据库前缀
+        $params = Controller::load_config('database');
+        $prefix = ($params['prefix']) ? trim($params['prefix']) : '';
+
         $temp_menu = array(
             "site" => $this->siteid,
             "ismenu" => "1",
         );
 
+        foreach ($plugins as $k => $v) {
+
+            $last_menuid = $last_menuid + 1;
+            $temp_menu["menuid"] = $last_menuid;
+            $temp_menu["name"] = $v['name'];
+            $temp_menu["url"] = $v['url']?$v['url']:$v['dir'].'/admin_category/index';
+            $temp_menu["namespace"] = $v['dir'];
+            $temp_menu["select"] = 1;
+            // 获取插件菜单
+            $plugin_menu = array();
+            $plugin_menu = $this->cache->get($v['dir'].'_menu_'.$this->siteid);
+
+            if(!$plugin_menu || !is_array($plugin_menu)){
+                // 阿海注：
+                // 不得不承认，下面这个转换模型数据表前缀的做法非常不合理
+                // 这意味着，实际上在实例化插件的菜单类时，只用了第一个插件的菜单类代码
+                // 后面其他插件的菜单代码实际上并不会被载入并且用到
+                // 但我暂时没有想到其他更好的办法来解决，只能说，所有插件的菜单类代码一定要一致！！！
+                if($menu_data == null){
+                    $menu_data = $this->plugin_model($v['dir'],'pluginmenu');
+                }else{
+                    $menu_data->prefix = $prefix . $v['dir'] . "_";
+                }
+                $plugin_menu = $menu_data->cache($ismenu,$v['dir'],$this->siteid);
+                
+            }
+            if(!$v['select']){
+                foreach ($plugin_menu as $nk => $nv) {
+                    foreach ($nv as $lk => $lv) {
+                        if(is_array($lv) && $lv['url'] == $temp_menu["url"]){
+                            $temp_menu["select"] = $lv['id'];
+                        }
+                    }
+                }
+            }else{
+                $temp_menu["select"] = $v['select'];
+            }
+            $menu['list'][$last_menuid] = $plugin_menu;
+            $menu['top'][$last_menuid] = $temp_menu;
+            unset($plugin_menu);
+        }
+        return $menu;
+    }
+    
+    /**
+     * 系统默认菜单
+     */
+    protected function sysMenu() {
+
+        $last_menuid = 0;
+        $menu = array();
         
         $menu['top']  = $this->cache->get('menu_top_'.$this->siteid);
         $menu['list']  = $this->cache->get('menu_list_'.$this->siteid);
         if(!$menu['top'] || !$menu['list']){
-            $be_menu = $this->model('menu');
-            $be_menu_data = $this->model('menu_data');
-            // 更新后台菜单
-            $be_menu_data->repair();
-            // 获取顶部菜单
-            $top_menu = $be_menu->cache();
-            // var_dump($top_menu);
-            if($top_menu && is_array($top_menu)){
-                $menu['top'] = $top_menu;
-                $list_menu = $be_menu_data->cache($top_menu);
-                if($list_menu && is_array($list_menu)){
-                    $menu['list'] = $list_menu;
-                }
-            }
+            $menu = $this->get_sys_menu(true);
         }
 
-        $last_menuid = end($menu['top'])['menuid'];
         $plugins = $this->cache->get('plugin');
         
         if($plugins && is_array($plugins)){
-
-            foreach ($plugins as $k => $v) {
-
-                $last_menuid = $last_menuid + 1;
-
-                $temp_menu["menuid"] = $last_menuid;
-                $temp_menu["name"] = $v['name'];
-                $temp_menu["url"] = $v['url']?$v['url']:$v['dir'].'/admin_category/index';
-                $temp_menu["namespace"] = $v['dir'];
-                $temp_menu["select"] = 1;
-
-                // 获取插件菜单
-                $plugin_menu = array();
-                $plugin_menu = $this->cache->get($v['dir'].'_menu_'.$this->siteid);
-                if(!$plugin_menu || !is_array($plugin_menu)){
-                    $menu_data = $this->plugin_model($v['dir'],'menu');
-                    $submenu = $menu_data->where('id > 0')->where('parentid=0')->where('ismenu=1')->order('listorder ASC, id ASC')->select();
-                    if($submenu){
-                        foreach ($submenu as $nk => $nv) {
-                            $subid = $nv['id'];
-                            $plugin_menu[$nv['id']] = $menu_data->where('id > 0')->where('parentid='.$subid)->where('ismenu=1')->order('listorder ASC, id ASC')->select();
-                            $plugin_menu[$nv['id']]['name'] = $nv['name'];
-                        }
-                    }
-                    $this->cache->set($v['dir'] . '_menu_' . $this->siteid, $plugin_menu);
-                }
-                if(!$v['select']){
-                    foreach ($plugin_menu as $nk => $nv) {
-                        foreach ($nv as $lk => $lv) {
-                            if(is_array($lv) && $lv['url'] == $temp_menu["url"]){
-                                $temp_menu["select"] = $lv['id'];
-                            }
-                        }
-                    }
-                }else{
-                    $temp_menu["select"] = $v['select'];
-                }
-
-                $menu['list'][$last_menuid] = $plugin_menu;
-                $menu['top'][$last_menuid] = $temp_menu;
-                unset($plugin_menu);
-            }
+            $menu = $this->get_plugins_menu($plugins,$menu,true);
         }
         return $menu;
     }
@@ -172,6 +190,8 @@ class Admin extends Common {
         $roleid   = $roleid ? $roleid : $this->roleid;
         //加载用户自定义菜单
         $usermenu = string2array($this->userinfo['usermenu']);
+        // var_dump($usermenu);
+        // exit();
         $member_menu = 0;
         $member_k = 0;
         foreach ($menu['list'] as $k => $v) {
@@ -188,8 +208,8 @@ class Admin extends Common {
             if (!empty($usermenu)) {
                 foreach ($usermenu as $k => $t) {
                     $t['sys'] = 1;
-                    $t['id'] = '996' . $k;
-                    $menu['list'][$member_menu][$member_k]['996' . $k] = str_replace('{site}', $this->siteid, $t);                 
+                    $t['id'] = '999' . $k;
+                    $menu['list'][$member_menu][$member_k]['999' . $k] = str_replace('{site}', $this->siteid, $t);                 
                 }
             }
             return $menu;
@@ -198,43 +218,46 @@ class Admin extends Common {
 
         if (!empty($usermenu) && $member_menu) {
             foreach ($usermenu as $k => $t) {
-                $t['id'] = '996' . $k;
-                $menu['list'][$member_menu][$member_k]['996' . $k] = $t;
+                $t['id'] = '999' . $k;
+                $menu['list'][$member_menu][$member_k]['999' . $k] = $t;
             }
         }
 
-        // $menuid = $menudata = array();
-
-        // foreach ($menu['list'] as $id => $t) {
-        //     if ($id == 0) continue;
-        //     foreach ($t as $oid => $v) {
-        //         foreach ($v as $iid => $r) {
-        //             //内菜单控制
-                    
-        //             if ($r['option'] && !$this->checkUserAuth(explode(',',$r['option']), $roleid)) {
-
-        //                 if ($r['url'] == $menu['top'][$id]['url']) {
-        //                     $menu['top'][$id]['url'] = url('admin/index/main');
-        //                 }
-
-        //                 unset($menu['list'][$id][$oid][$iid]);
-        //             } else {
-        //                 $menuid[]   = $iid;
-        //                 isset($menudata[$id]) or $menudata[$id] = array('select' => $iid, 'url' => $r['url']);
-        //             }
-        //         }
-        //         //如果子菜单全部被删除
-        //         if (empty($menu['list'][$id][$oid])) unset($menu['list'][$id][$oid]);
-        //     }
-        // }
-        // foreach ($menu['top'] as $id => $t) {
-        //     if ($id == 0) continue;
-        //     if (!$this->checkUserAuth(explode(',',$t['option']), $roleid)) unset($menu['top'][$id]);
-        //     if (!in_array($t['select'], $menuid) && isset($menu['top'][$id])) {
-        //         $menu['top'][$id]['url']    = $menudata[$id]['url'];
-        //         $menu['top'][$id]['select'] = $menudata[$id]['select'];
-        //     }
-        // }
+        foreach ($menu['list'] as $id => $t) {
+            if ($id == 1) continue;
+            foreach ($t as $oid => $v) {
+                foreach ($v as $iid => $r) {
+                    //内菜单控制
+                    if(is_array($r)){
+                        if ($r['url'] && !$this->checkUserAuth($r['url'], $roleid)) {
+                            unset($menu['list'][$id][$oid][$iid]);
+                            if ($r['url'] == $menu['top'][$id]['url']) {
+                                $now_first_menu = reset($menu['list'][$id][$oid]);
+                                if(is_array($now_first_menu)){
+                                    $menu['top'][$id]['url'] = $now_first_menu['url'];
+                                    $menu['top'][$id]['select'] = $now_first_menu['id'];
+                                }else{
+                                    $menu['top'][$id]['url'] = 'admin/index/main';
+                                }
+                            }
+                        }
+                    }
+                }
+                //如果子菜单全部被删除
+                $has_sub_menu = false;
+                foreach ($menu['list'][$id][$oid] as $c_k => $c_v) {
+                    if(is_array($c_v)){
+                        $has_sub_menu = true;
+                        break;
+                    }
+                }
+                if ($has_sub_menu == false) unset($menu['list'][$id][$oid]);
+            }
+        }
+        foreach ($menu['top'] as $id => $t) {
+            if ($id == 1) continue;
+            if (empty($menu['list'][$id])) unset($menu['top'][$id]);
+        }
         return $menu;
     }
     
@@ -242,17 +265,15 @@ class Admin extends Common {
      * 验证角色是否对指定菜单有操作权限
      */
     protected function checkUserAuth($option, $roleid = 0) {
-        $data_role = require CONFIG_DIR . 'auth.role.ini.php';
         $roleid    = $roleid ? $roleid : $this->roleid;
-        $role      = $data_role[$roleid];
-        if (!$role) return false;
-        
-        if (!is_array($option)) $option = array($option);
-
-        foreach ($role as $t) {
-            if (in_array($t, $option)) return true;
+        $data_role = $this->user->roleinfo($roleid);
+        $privates     = string2array($data_role['privates']);
+        if (!$privates) return false;
+        if(in_array($option,$privates)){
+            return true;
+        }else{
+            return false;
         }
-        return false;
     }
     
     /**

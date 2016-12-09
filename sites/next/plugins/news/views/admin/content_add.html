@@ -5,14 +5,7 @@ function otcats($cats,$catids,$catid2s){
 	if ($cats[$catids]['arrchildid']){
 		$childs = explode(",",$cats[$catids]['arrchildid']);
 		foreach ($childs as $k => $v) {
-			# code...
 			$ischeck = (in_array($v,$catid2s))?"checked":"";
-			//$iscatid = ($v == $catid)?"disabled":"";
-			//var_dump((int)$v);
-			//var_dump($catid);
-			// if ($v != $catid){
-			// 	$otcatsdata = $otcatsdata.'<dd>'.$cats[$v]['catname'].'&nbsp;<input type="checkbox" value="'.$v.'"'.$ischeck.' '.$iscatid.' >&nbsp;&nbsp;&nbsp;</dd>';
-			// }
 			$otcatsdata = $otcatsdata.'<dd>'.$cats[$v]['catname'].'&nbsp;<input type="checkbox" value="'.$v.'"'.$ischeck.' >&nbsp;&nbsp;&nbsp;</dd>';
 			if($cats[$v]['arrchildid']){
 				$otcatsdata = $otcatsdata.otcats($cats,$v,$catid2s);

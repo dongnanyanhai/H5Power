@@ -16,8 +16,8 @@
 	<div class="content-menu ib-a blue line-x">
 		<a href="{url($s.'/admin_model/index',  array('typeid'=>$typeid))}"><em>{lang('a-aut-14')}</em></a><span>|</span>
 		<a href="{url($s.'/admin_model/add', array('typeid'=>$typeid))}" class="on"><em>{lang('a-add')}</em></a><span>|</span>
-		{if admin_auth($userinfo['roleid'], 'model-import')}<a href="{url($s.'/admin_model/import', array('typeid'=>$typeid))}"><em>{lang('a-import')}</em></a><span>|</span>{/if}
-		{if admin_auth($userinfo['roleid'], 'model-cache')}<a href="{url($s.'/admin_model/cache', array('typeid'=>$typeid))}"><em>{lang('a-cache')}</em></a>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_model/import')}<a href="{url($s.'/admin_model/import', array('typeid'=>$typeid))}"><em>{lang('a-import')}</em></a><span>|</span>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_model/cache')}<a href="{url($s.'/admin_model/cache', array('typeid'=>$typeid))}"><em>{lang('a-cache')}</em></a>{/if}
 	</div>
 	<div class="table-list">
 		<form action="" method="post">

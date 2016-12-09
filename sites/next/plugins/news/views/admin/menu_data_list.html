@@ -16,8 +16,8 @@
 <div class="subnav">
 	<div class="content-menu ib-a blue line-x">
 		<a href="{url($s.'/admin_menu/list/')}" class="on"><em>{lang('a-pos-0')}</em></a><span>|</span>
-		{if admin_auth($userinfo['roleid'], 'menu-adddata')}<a href="{url($s.'/admin_menu/adddata/')}"><em>{lang('a-add')}</em></a><span>|</span>{/if}
-		{if admin_auth($userinfo['roleid'], 'menu-cache')}<a href="{url($s.'/admin_menu/cache')}"><em>{lang('a-cache')}</em></a>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_menu/adddata')}<a href="{url($s.'/admin_menu/adddata/')}"><em>{lang('a-add')}</em></a><span>|</span>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_menu/cache')}<a href="{url($s.'/admin_menu/cache')}"><em>{lang('a-cache')}</em></a>{/if}
 	</div>
 	<div class="bk10"></div>
 	<div class="table-list">
@@ -52,18 +52,18 @@
 			</td>
 			<td align="left">
 			<a href="{$t['url']}" target="_blank">{lang('a-cat-23')}</a> | 
-			{if admin_auth($userinfo['roleid'], 'menu-adddata')}<a href="{url($s.'/admin_menu/adddata',array('menuid'=>$menuid,'id'=>$t['id']))}">{lang('a-add')}</a> | {/if}
-			{if admin_auth($userinfo['roleid'], 'menu-editdata')}<a href="{url($s.'/admin_menu/editdata/',array('menuid'=>$menuid,'id'=>$t['id']))}">{lang('a-edit')}</a> | 
+			{if admin_auth($userinfo['roleid'], $s.'/admin_menu/adddata')}<a href="{url($s.'/admin_menu/adddata',array('menuid'=>$menuid,'id'=>$t['id']))}">{lang('a-add')}</a> | {/if}
+			{if admin_auth($userinfo['roleid'], $s.'/admin_menu/editdata')}<a href="{url($s.'/admin_menu/editdata/',array('menuid'=>$menuid,'id'=>$t['id']))}">{lang('a-edit')}</a> | 
 			{/if}
 			<?php $del = url($s.'/admin_menu/deldata/',array('id'=>$t['id'],'menuid'=>$t['menuid']));?>
-			{if admin_auth($userinfo['roleid'], 'menu-deldata')}<a href="javascript:;" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a>{/if}
+			{if admin_auth($userinfo['roleid'], $s.'/admin_menu/deldata')}<a href="javascript:;" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a>{/if}
 			</td>
 		</tr>
 		{/loop}
 		<tr>
 			<td colspan="6" align="left">
-			<input {if !admin_auth($userinfo['roleid'], 'menu-editdata')}disabled{/if} type="submit" class="button" value="{lang('a-order')}" name="submit_order" onClick="$('#list_form').val('order')" />&nbsp;
-			<input {if !admin_auth($userinfo['roleid'], 'menu-deldata')}disabled{/if} type="submit" class="button" value="{lang('a-del')}" name="submit_del" onClick="return confirm_del()" />&nbsp;<div class="onShow">{lang('a-pos-8')}</div>
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_menu/editdata')}disabled{/if} type="submit" class="button" value="{lang('a-order')}" name="submit_order" onClick="$('#list_form').val('order')" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_menu/deldata')}disabled{/if} type="submit" class="button" value="{lang('a-del')}" name="submit_del" onClick="return confirm_del()" />&nbsp;<div class="onShow">{lang('a-pos-8')}</div>
 			</td>
 		</tr>     
 		</tbody>

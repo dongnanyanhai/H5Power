@@ -26,15 +26,23 @@ class MenuModel extends Model{
 		$this->query('delete from '.$table . ' where menuid='.$menuid);
 	}
 
-	public function cache(){
+	public function cache($ismenu=true){
 		$topmenu = array();
-		$menu = $this->where('site=' . APP::get_site_id())->where('ismenu=1')->select();
+		if($ismenu){
+			$menu = $this->where('site=' . APP::get_site_id())->where('ismenu=1')->select();
+		}else{
+			$menu = $this->where('site=' . APP::get_site_id())->select();
+		}
+		
 		if($menu && is_array($menu)){
 			foreach ($menu as $k => $v) {
 				$topmenu[$v['menuid']] = $v;
 			}
 			$cache = new cache_file();
-			$cache->set('menu_top_' . APP::get_site_id(), $topmenu);
+			if($ismenu){
+				$cache->set('menu_top_' . APP::get_site_id(), $topmenu);
+			}
+			
 			return $topmenu;
 		}else{
 			return false;

@@ -67,13 +67,18 @@ class Menu_dataModel extends Model{
 		}
 	}
 
-	public function cache($menu = 0){
+	public function cache($menu = 0,$ismenu = true){
 		if(!$menu || !is_array($menu)){
 			return false;
 		}
 		foreach ($menu as $t) {
 			$menuid = $t['menuid'];
-			$submenu = $this->where('menuid=' . $menuid)->where('parentid=0')->where('ismenu=1')->order('listorder ASC, id ASC')->select();
+			if($ismenu){
+				$submenu = $this->where('menuid=' . $menuid)->where('parentid=0')->where('ismenu=1')->order('listorder ASC, id ASC')->select();
+			}else{
+				$submenu = $this->where('menuid=' . $menuid)->where('parentid=0')->order('listorder ASC, id ASC')->select();
+			}
+			
 			if($submenu){
 				foreach ($submenu as $k => $v) {
 					$subid = $v['id'];
@@ -84,7 +89,9 @@ class Menu_dataModel extends Model{
 		}
 		$cache = new cache_file();
 		// 写入缓存文件
-		$cache->set('menu_list_' . APP::get_site_id(), $data);
+		if($ismenu){
+			$cache->set('menu_list_' . APP::get_site_id(), $data);
+		}
 		return $data;
 	}
 }

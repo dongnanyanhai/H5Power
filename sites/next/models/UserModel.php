@@ -40,7 +40,14 @@ class UserModel extends Model {
 	 * @return multitype:
 	 */
 	public function get_role_list() {
-	    return $this->from('role')->order('roleid ASC')->select();
+		$role = $this->from('role')->order('roleid ASC')->select();
+		$re_role = array();
+		if(is_array($role)){
+			foreach ($role as $k => $v) {
+				$re_role[$v['roleid']] = $v;
+			}
+		}
+	    return $re_role;
 	}
 	
 	/**
@@ -90,6 +97,16 @@ class UserModel extends Model {
 	    $sql    = "replace into " . $this->prefix . "role (roleid, rolename, description) values (" . $roleid . ", '" . $rolename . "', '" . $description . "')";
 	    $result = $this->query($sql);
 	    return $result ? 1 : -1;
+	}
+
+	public function set_role_privates($roleid=0,$privates){
+		if($roleid){
+			$sql    = "update " . $this->prefix . "role set `privates`='".$privates."' where roleid = ".$roleid;
+	    	$result = $this->query($sql);
+	    	return $result ? 1 : -1;
+		}else{
+			return false;
+		}
 	}
 	
 	public function del_role($roleid) {

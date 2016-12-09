@@ -21,7 +21,7 @@
 	<a href="{url($s.'/admin_form/list',array('status'=>0,'modelid'=>$modelid,'cid'=>$cid))}"><em>{lang('a-con-21')}({$count[0]})</em></a><span>|</span>
 	<a href="{url($s.'/admin_form/list',array('status'=>3,'modelid'=>$modelid,'cid'=>$cid))}"><em>{lang('a-con-23')}({$count[3]})</em></a><span>|</span>
 	<a href="{url($s.'/admin_form/add',array('modelid'=>$modelid, 'cid'=>$cid))}" class="on"><em>{lang('a-con-24')}</em></a><span>|</span>
-	{if admin_auth($userinfo['roleid'], 'form-config')}<a href="{url($s.'/admin_form/config',array('modelid'=>$modelid, 'cid'=>$cid))}"><em>{lang('a-con-60')}</em></a><span>|</span>{/if}
+	{if admin_auth($userinfo['roleid'], $s.'/admin_form/config')}<a href="{url($s.'/admin_form/config',array('modelid'=>$modelid, 'cid'=>$cid))}"><em>{lang('a-con-60')}</em></a><span>|</span>{/if}
 	<a href="{$site_url}{url('form/post',array('modelid'=>$modelid, 'cid'=>$cid))}" target="_blank"><em>{lang('a-con-61')}</em></a><span>|</span>
 	<a href="{$site_url}{url('form/list',array('modelid'=>$modelid, 'cid'=>$cid))}" target="_blank"><em>{lang('a-con-62')}</em></a>
 	</div>

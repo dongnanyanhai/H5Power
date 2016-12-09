@@ -290,15 +290,16 @@ CREATE TABLE `{pre}relatedlink` (
 
 DROP TABLE IF EXISTS `{pre}role`;
 CREATE TABLE `{pre}role` (
-  `roleid` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `roleid` int(3) unsigned NOT NULL AUTO_INCREMENT,
   `rolename` varchar(50) NOT NULL,
   `description` text NOT NULL,
+  `privates` text NOT NULL,
   PRIMARY KEY (`roleid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
-INSERT INTO `{pre}role` VALUES('1','超级管理员','超级管理员');
-INSERT INTO `{pre}role` VALUES('2','总编','总编');
-INSERT INTO `{pre}role` VALUES('3','编辑','编辑');
+INSERT INTO `{pre}role` VALUES('1','超级管理员','超级管理员','');
+INSERT INTO `{pre}role` VALUES('2','总编','总编','');
+INSERT INTO `{pre}role` VALUES('3','编辑','编辑','');
 
 DROP TABLE IF EXISTS `{pre}user`;
 CREATE TABLE `{pre}user` (

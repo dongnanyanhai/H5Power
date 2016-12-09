@@ -19,7 +19,7 @@
 		<a href="{url($s.'/admin_content/verify', array('status'=>3, 'modelid'=>$modelid))}" {if $status==3}class="on"{/if}><em>{lang('a-con-21')}({$count[1]})</em></a><span>|</span>
 		<a href="{url($s.'/admin_content/verify', array('status'=>2, 'modelid'=>$modelid))}" {if $status==2}class="on"{/if}><em>{lang('a-con-22')}({$count[2]})</em></a><span>|</span>
 		<a href="{url($s.'/admin_content/index', array('recycle'=>1, 'modelid'=>$modelid))}" {if $recycle==1}class="on"{/if}><em>{lang('a-con-23')}({$count[0]})</em></a><span>|</span>
-		{if admin_auth($userinfo['roleid'], 'content-add')}<a href="{url($s.'/admin_content/add', array('modelid'=>$modelid))}"><em>{lang('a-con-24')}</em></a>{/if}
+		{if admin_auth($userinfo['roleid'], $s.'/admin_content/add')}<a href="{url($s.'/admin_content/add', array('modelid'=>$modelid))}"><em>{lang('a-con-24')}</em></a>{/if}
 	</div>
 	<div class="bk10"></div>
 	<div class="explain-col">
@@ -76,40 +76,40 @@
 			<td align="left">
 			{if $a=='verify'}
 				<?php $del = url($s.'/admin_content/delverify/',array('catid'=>$t['catid'],'id'=>$t['id']));?>
-				{if admin_auth($userinfo['roleid'], 'content-editverify')}<a href="{url($s.'/admin_content/editverify',array('id'=>$t['id']))}">{lang('a-edit')}</a> | {/if}
-				{if admin_auth($userinfo['roleid'], 'content-delverify')}<a href="javascript:;" clz="1" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a> {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_content/editverify')}<a href="{url($s.'/admin_content/editverify',array('id'=>$t['id']))}">{lang('a-edit')}</a> | {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_content/delverify')}<a href="javascript:;" clz="1" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a> {/if}
 			{else}
 				{loop $join $j}
 				<a href="{url($s.'/admin_form/list',array('cid'=>$t['id'], 'modelid'=>$j['modelid']))}">{$j['modelname']}</a> |
 				{/loop}
 				<?php $del = url($s.'/admin_content/del/',array('catid'=>$t['catid'],'id'=>$t['id']));?>
 				<a href="{$site_url}{$t['url']}" clz="1" target="_blank">{lang('a-cat-23')}</a> | 
-				{if admin_auth($userinfo['roleid'], 'content-edit')}<a href="{url($s.'/admin_content/edit',array('id'=>$t['id']))}">{lang('a-edit')}</a> | {/if}
-				{if admin_auth($userinfo['roleid'], 'content-del')}<a href="javascript:;" clz="1" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a> {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_content/edit')}<a href="{url($s.'/admin_content/edit',array('id'=>$t['id']))}">{lang('a-edit')}</a> | {/if}
+				{if admin_auth($userinfo['roleid'], $s.'/admin_content/del')}<a href="javascript:;" clz="1" onClick="if(confirm('{lang('a-confirm')}')){ window.location.href='{$del}'; }">{lang('a-del')}</a> {/if}
 			{/if}
 			</td>
 		</tr>
 		{/loop}
 		<tr>
 			<td colspan="8" align="left">
-			<input {if !admin_auth($userinfo['roleid'], 'content-edit')}disabled{/if} type="submit" class="button" value="{lang('a-order')}" name="submit_order" onClick="$('#list_form').val('order')" {if $a=='verify'}disabled{/if} />&nbsp;
-			<input {if ($a=='index' && !admin_auth($userinfo['roleid'], 'content-del')) || ($a=='verify' && !admin_auth($userinfo['roleid'], 'content-delverify'))}disabled{/if} type="submit" class="button" value="{lang('a-del')}" name="submit_del" onClick="$('#list_form').val('del');return confirm_del();" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_content/edit')}disabled{/if} type="submit" class="button" value="{lang('a-order')}" name="submit_order" onClick="$('#list_form').val('order')" {if $a=='verify'}disabled{/if} />&nbsp;
+			<input {if ($a=='index' && !admin_auth($userinfo['roleid'], $s.'/admin_content/del')) || ($a=='verify' && !admin_auth($userinfo['roleid'], $s.'/admin_content/delverify'))}disabled{/if} type="submit" class="button" value="{lang('a-del')}" name="submit_del" onClick="$('#list_form').val('del');return confirm_del();" />&nbsp;
 			{if $a=='verify'}
-			<input {if !admin_auth($userinfo['roleid'], 'content-verify')}disabled{/if} type="submit" class="button" value="{lang('a-con-36')}" name="submit_status_1" onClick="$('#list_form').val('status_1')" />&nbsp;
-			<input {if !admin_auth($userinfo['roleid'], 'content-verify')}disabled{/if} type="submit" class="button" value="{lang('a-con-37')}" name="submit_status_0" onClick="$('#list_form').val('status_0')" />&nbsp;
-			<input {if !admin_auth($userinfo['roleid'], 'content-verify')}disabled{/if} type="submit" class="button" value="{lang('a-con-38')}" name="submit_status_2" onClick="$('#list_form').val('status_2')" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_content/verify')}disabled{/if} type="submit" class="button" value="{lang('a-con-36')}" name="submit_status_1" onClick="$('#list_form').val('status_1')" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_content/verify')}disabled{/if} type="submit" class="button" value="{lang('a-con-37')}" name="submit_status_0" onClick="$('#list_form').val('status_0')" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_content/verify')}disabled{/if} type="submit" class="button" value="{lang('a-con-38')}" name="submit_status_2" onClick="$('#list_form').val('status_2')" />&nbsp;
 			{else}
 			{if $recycle}
-			<input {if !admin_auth($userinfo['roleid'], 'content-edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-36')}" name="submit_status_1" onClick="$('#list_form').val('status_1')" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_content/edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-36')}" name="submit_status_1" onClick="$('#list_form').val('status_1')" />&nbsp;
 			{else}
-			<input {if !admin_auth($userinfo['roleid'], 'content-edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-39')}" name="submit_status_3" onClick="$('#list_form').val('status_3')" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_content/edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-39')}" name="submit_status_3" onClick="$('#list_form').val('status_3')" />&nbsp;
 			{/if}
 			{lang('a-con-40')}
 			<select name="movecatid">
 			<option value="0"> ---- </option>
 			{$category}
 			</select>
-			<input {if !admin_auth($userinfo['roleid'], 'content-edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-41')}" name="submit_move" onClick="$('#list_form').val('move')" />&nbsp;
+			<input {if !admin_auth($userinfo['roleid'], $s.'/admin_content/edit')}disabled{/if} type="submit" class="button" value="{lang('a-con-41')}" name="submit_move" onClick="$('#list_form').val('move')" />&nbsp;
 			{/if}
 			</td>
 		</tr>    

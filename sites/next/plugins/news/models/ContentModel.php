@@ -56,7 +56,9 @@ class ContentModel extends Model {
     public function set($id, $tablename, $data) {
         $id = intval($id);
         if (!$this->is_table_exists($tablename)) return lang('m-con-37', array('1' => $tablename));
-        $table = Controller::model($tablename); //加载附表Model
+        // var_dump(APP::get_plugin_id());
+        // exit();
+        $table = Controller::plugin_model(APP::get_plugin_id(),$tablename); //加载附表Model
         if (empty($data['catid'])) return lang('m-con-8');
         $_data = $id ? $this->find($id) : null;
         //数组转化为字符

@@ -1,44 +1,53 @@
 <?php
 
 class AuthController extends Admin {
-
+	public $role;
     public function __construct() {
 		parent::__construct();
+		$this->role = $this->user->get_role_list();
+		
 	}
 	
 	public function indexAction() {
-	    $role = $this->user->get_role_list();
-	    $this->view->assign('list', $role);
+	    $this->view->assign('list', $this->role);
 		$this->view->display('admin/auth');
 	}
 	
 	public function listAction() {
 	    $roleid    = $this->get('roleid');
 	    if (!$roleid) $this->adminMsg(lang('a-aut-0'));
-	    //权限配置文件
-        $data_file = CONFIG_DIR . 'auth.role.ini.php';
-        //当前角色拥有的权限
-        $data_role = require $data_file;
-        $role      = $data_role[$roleid];
-        //权限模块配置
-        // $data_auth = require CONFIG_DIR . 'auth.option.ini.php';
-        // $cache = new cache_file();
-        $data_auth = $data  = $this->cache->get('menu_list_'.App::get_site_id());
+
+        $privates = array();
+        if($this->role[$roleid]['privates'] != ''){
+        	$privates = string2array($this->role[$roleid]['privates']);
+        }
+
+        $data_auth = array();
+		$data_auth = $this->get_sys_menu(false);
+		$plugins = $this->cache->get('plugin');
+
+		if($plugins && is_array($plugins)){
+			$data_auth = $this->get_plugins_menu($plugins,$data_auth,false);
+		}
+
+
         if ($this->post('submit')) {
             if ($roleid == 1) $this->adminMsg(lang('a-aut-1'));
-            $auth = array();
-            foreach ($_POST as $v=>$t) {
-                if (strpos($v, 'auth_')!==false && $t==1) { $auth[] = substr($v, 5); }
+            $auth = $_POST['auth'];
+            if(isset($_POST['auth']) && !empty($_POST['auth'])){
+            	$re = $this->user->set_role_privates($roleid,array2string($_POST['auth']));
+            	if($re){
+            		// 更新成功
+            		$this->adminMsg($this->getCacheCode('auth') . lang('success'), url('admin/auth/list', array('roleid'=>$roleid)), 3, 1, 1);
+            	}else{
+            		// 更新失败
+            		$this->adminMsg($this->getCacheCode('auth') . lang('failure'), url('admin/auth/list', array('roleid'=>$roleid)), 3, 1, 1);
+            	}
             }
-            $data_role[$roleid] = $auth;
-            $content = "<?php" . PHP_EOL . "if (!defined('IN_FINECMS')) exit();" . PHP_EOL . PHP_EOL . "/**" . PHP_EOL . " * 用户权限配置信息" . PHP_EOL . " */".PHP_EOL
-            . "return " . var_export($data_role, true) . ";";
-            file_put_contents($data_file, $content);
-            $this->adminMsg($this->getCacheCode('auth') . lang('success'), url('admin/auth/list', array('roleid'=>$roleid)), 3, 1, 1);
         }
         $this->view->assign(array(
             'roleid' => $roleid,
-            'role'   => $role,
+            'privates'   => $privates,
             'data'   => $data_auth,
         ));
 		$this->view->display('admin/auth_list');
