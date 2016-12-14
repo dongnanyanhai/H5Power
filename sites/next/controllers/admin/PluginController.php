@@ -109,6 +109,7 @@ class PluginController extends Admin {
         }
         //代码调用插件，直接添加表中记录
         $config['dir'] = $dir;
+        $config['controller'] = $dir.$config['controller'];
         $config['setting'] = addslashes(var_export($config['fields'], true));
         if (file_exists($this->dir . $dir . DS . 'mark.txt')) $config['markid'] = (int)file_get_contents($this->dir . $dir . DS . 'mark.txt');
         $this->plugin_model->insert($config);

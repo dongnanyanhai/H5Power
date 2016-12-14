@@ -7,6 +7,7 @@ return array(
     'version' => '0.1',
     'typeid'  => 1,
     'description' => "会员管理插件",
+    'controller' => '/admin_member/index',
     'fields' => array(
        
     )

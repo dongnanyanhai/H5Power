@@ -66,7 +66,9 @@ class Admin extends Common {
             $last_menuid = $last_menuid + 1;
             $temp_menu["menuid"] = $last_menuid;
             $temp_menu["name"] = $v['name'];
-            $temp_menu["url"] = $v['url']?$v['url']:$v['dir'].'/admin_category/index';
+
+            $temp_menu["url"] = $v['controller']?$v['controller']:$v['dir'].'/admin_category/index';
+
             $temp_menu["namespace"] = $v['dir'];
             $temp_menu["select"] = 1;
             // 获取插件菜单
