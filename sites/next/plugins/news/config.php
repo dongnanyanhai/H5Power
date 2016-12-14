@@ -7,6 +7,7 @@ return array(
     'version' => '0.1',
     'typeid'  => 1,
     'description' => "内容管理插件化",
+    'controller' => '',
     'fields' => array(
        
     )
