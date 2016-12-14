@@ -466,6 +466,8 @@ abstract class App {
 			return false;
 		}
 
+		// var_dump($table_name);
+
 		$model_name = ucfirst(strtolower($table_name)) . 'Model';
 		$model_file = PLUGIN_DIR . $plugin . DS . 'models' . DS . $model_name . '.php';
 		if (!is_file($model_file)) {

@@ -107,7 +107,7 @@ class IndexController extends Admin {
 				} elseif ($var == 'ADMIN_NAMESPACE' && (!isset($config[$var]) || empty($config[$var]))) {
 				    $value = "'admin'";
 				} elseif ($var == 'SYS_VAR_PREX' && (!isset($config[$var]) || empty($config[$var]))) {
-				    $value = "'finecms_" . substr(md5(time()), 0, 5) . "_'";
+				    $value = "'h5pcms_" . substr(md5(time()), 0, 5) . "_'";
 				} elseif ($var == 'SITE_MEMBER_COOKIE' && (!isset($config[$var]) || empty($config[$var]))) {
 				    $value = "'" . substr(md5(time()), 5, 15) . "'";
 				} elseif ($var == 'SYS_CAPTCHA_MODE' && (!isset($config[$var]) || empty($config[$var]))) {
@@ -385,10 +385,10 @@ class IndexController extends Admin {
 	 * 更新地图
 	 */
 	public function updatemapAction() {
-	    $fp = @fopen(SITE_ROOT . 'finecms_test.txt', 'wb');
-		if (!file_exists(SITE_ROOT . 'finecms_test.txt') || $fp === false) $this->adminMsg(lang('app-9', array('1' => SITE_ROOT)));
+	    $fp = @fopen(SITE_ROOT . 'h5pcms_test.txt', 'wb');
+		if (!file_exists(SITE_ROOT . 'h5pcms_test.txt') || $fp === false) $this->adminMsg(lang('app-9', array('1' => SITE_ROOT)));
 		@fclose($fp);
-		if (file_exists(SITE_ROOT . 'finecms_test.txt')) unlink(SITE_ROOT . 'finecms_test.txt');
+		if (file_exists(SITE_ROOT . 'h5pcms_test.txt')) unlink(SITE_ROOT . 'h5pcms_test.txt');
 	    $count = sitemap_xml();
 	    $this->adminMsg(lang('a-ind-39') . '(#' . $count . ')', '', 3, 1, 1);
 	}

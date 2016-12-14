@@ -7,7 +7,6 @@
 
 class Plugin extends Common {
     
-    protected $plugin;   //插件模型
     protected $data;     //插件数据
     protected $viewpath; //视图目录
 
@@ -18,9 +17,6 @@ class Plugin extends Common {
     
     public function __construct() {
         parent::__construct();
-        // $this->plugin   = $this->plugin_model($this->namespace,'plugin');
-        $this->plugin   = $this->cache->get("plugin");
-        // $this->data     = $this->plugin->where('dir=?', $this->namespace)->select(false);
         $this->data     = $this->plugin[$this->namespace];
         if (empty($this->data))     $this->adminMsg('插件尚未安装', url('admin/plugin'));
         if ($this->data['disable']) $this->adminMsg('插件尚未开启', url('admin/plugin'));

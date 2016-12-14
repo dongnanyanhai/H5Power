@@ -3,12 +3,12 @@
 class PluginController extends Admin {
     
     private $dir;
-    private $plugin;
+    private $plugin_model;
     
     public function __construct() {
         parent::__construct();
         $this->dir    = PLUGIN_DIR;
-        $this->plugin = $this->model('plugin');
+        $this->plugin_model = $this->model('plugin');
     }
     
     /**
@@ -24,7 +24,7 @@ class PluginController extends Admin {
                     if (file_exists($file) && filesize($file) != 0) {
                         $setting = require $file;
                         $setting['dir'] = $dir;
-                        $row    = $this->plugin->where('dir=?', $dir)->select(false);
+                        $row    = $this->plugin_model->where('dir=?', $dir)->select(false);
                         $list[] = $row ? $row : $setting;
                     } else {
                         $list[] = array('name' => '<font color="#FF0000">' . lang('a-plu-2') . '</font>', 'dir' => $dir);
@@ -41,12 +41,12 @@ class PluginController extends Admin {
      */
     public function setAction() {
         $pluginid = $this->get('pluginid');
-        $data     = $this->plugin->find($pluginid);
+        $data     = $this->plugin_model->find($pluginid);
         if (empty($data)) $this->adminMsg(lang('a-plu-3'));
         if ($this->post('submit')) {
             $setting = $this->post('data');
             $setting = array2string($setting);
-            $this->plugin->update(array('setting' => $setting), 'pluginid=' . $pluginid);
+            $this->plugin_model->update(array('setting' => $setting), 'pluginid=' . $pluginid);
             $this->adminMsg(lang('success'), url('admin/plugin/set/', array('pluginid' => $pluginid)), 3, 1, 1);
         }
         $setting = string2array($data['setting']);
@@ -77,7 +77,7 @@ class PluginController extends Admin {
         unset($sql); 
         foreach($ret as $query) {  
             if(trim($query)) { 
-                $this->plugin->query($query) or die($this->halt('数据导入出错<hr>' . mysql_error() . '<br>SQL语句：<br>' . $query));
+                $this->plugin_model->query($query) or die($this->halt('数据导入出错<hr>' . mysql_error() . '<br>SQL语句：<br>' . $query));
             } 
         }
     }
@@ -104,14 +104,14 @@ class PluginController extends Admin {
             }
             
             $sql = $install_sql;
-            $sql = str_replace(array('{pre}','{prefix}','{namespace}','{pluginname}'), array($this->plugin->prefix,$this->plugin->prefix .$dir . '_',$dir,$config['name']), $sql);
+            $sql = str_replace(array('{pre}','{prefix}','{namespace}','{pluginname}'), array($this->plugin_model->prefix,$this->plugin_model->prefix .$dir . '_',$dir,$config['name']), $sql);
             $this->installsql($sql);
         }
         //代码调用插件，直接添加表中记录
-        $config['dir']     = $dir;
+        $config['dir'] = $dir;
         $config['setting'] = addslashes(var_export($config['fields'], true));
         if (file_exists($this->dir . $dir . DS . 'mark.txt')) $config['markid'] = (int)file_get_contents($this->dir . $dir . DS . 'mark.txt');
-        $this->plugin->insert($config);
+        $this->plugin_model->insert($config);
         $this->adminMsg($this->getCacheCode('plugin') . lang('a-plu-6'), url('admin/plugin/index'), 3, 0, 1);
     }
     
@@ -121,7 +121,7 @@ class PluginController extends Admin {
     public function delAction() {
         $pluginid = $this->get('pluginid');
         $result   = $this->get('result');
-        $data     = $this->plugin->find($pluginid);
+        $data     = $this->plugin_model->find($pluginid);
         if (empty($data)) $this->adminMsg(lang('a-plu-3'));
         if (empty($result)) {
             $html = lang('a-plu-7') . '<div style="padding-top:10px;text-align:center">
@@ -136,11 +136,11 @@ class PluginController extends Admin {
             $uninstall = $this->dir . $data['dir'] . DS . 'data/uninstall.sql';
             if (!file_exists($uninstall)) $this->adminMsg(lang('a-plu-10'));
             $sql = file_get_contents($uninstall);
-            $sql = str_replace(array('{pre}','{prefix}','{namespace}'), array($this->plugin->prefix,$this->plugin->prefix .$data['dir'] . '_',$data['dir']), $sql);
+            $sql = str_replace(array('{pre}','{prefix}','{namespace}'), array($this->plugin_model->prefix,$this->plugin_model->prefix .$data['dir'] . '_',$data['dir']), $sql);
 
             // 删除通过模型生成的表和model文件
             $all_tables = $this->getTables();
-            $plugin_prefix = $this->plugin->prefix . $data['dir'] ."_";
+            $plugin_prefix = $this->plugin_model->prefix . $data['dir'] ."_";
             foreach ($all_tables as $k => $v) {
                 if(strpos($v['Name'], $plugin_prefix) === 0 && strpos($sql,$v['Name']) === false){
                     $sql = $sql . "\nDROP TABLE IF EXISTS `".$v['Name']."`;"; 
@@ -149,7 +149,7 @@ class PluginController extends Admin {
             $this->installsql($sql);
         }
         //代码调用插件，直接删除表中记录
-        $this->plugin->delete('pluginid=' . $pluginid);
+        $this->plugin_model->delete('pluginid=' . $pluginid);
         $this->adminMsg($this->getCacheCode('plugin') . lang('a-plu-11'), url('admin/plugin/index'), 1, 0, 1);
     }
     
@@ -166,7 +166,7 @@ class PluginController extends Admin {
             <a href="' . url('admin/plugin/index') . '" style="font-size:14px;">' . lang('a-plu-9') . '</a></div>';
             $this->adminMsg($html, '', 3, 1, 2);
         }
-        $data    = $this->plugin->getOne('dir=?', $dir);
+        $data    = $this->plugin_model->getOne('dir=?', $dir);
         if ($data) {
             if ($data['typeid'] == 1) {
                 //包含控制器的插件
@@ -177,15 +177,15 @@ class PluginController extends Admin {
                     //数据表
                     if (is_array($sqldata)) {
                         foreach ($sqldata as $sql) {
-                            $this->plugin->query(str_replace('{prefix}', $this->plugin->prefix, $sql));
+                            $this->plugin_model->query(str_replace('{prefix}', $this->plugin_model->prefix, $sql));
                         }
                     } else {
-                        $this->plugin->query(str_replace('{prefix}', $this->plugin->prefix, $sqldata));
+                        $this->plugin_model->query(str_replace('{prefix}', $this->plugin_model->prefix, $sqldata));
                     }
                 }
             }
             //代码调用插件，直接删除表中记录
-            $this->plugin->delete('pluginid=' . $data['pluginid']);
+            $this->plugin_model->delete('pluginid=' . $data['pluginid']);
         }
         //删除硬盘数据
         if (is_dir($this->dir . $dir)) {
@@ -201,10 +201,10 @@ class PluginController extends Admin {
      */
     public function disableAction() {
         $pluginid = $this->get('pluginid');
-        $data     = $this->plugin->find($pluginid);
+        $data     = $this->plugin_model->find($pluginid);
         if (empty($data)) $this->adminMsg(lang('a-plu-3'));
         $disable  = $data['disable'] == 1 ? 0 : 1;
-        $this->plugin->update(array('disable' => $disable), 'pluginid=' . $pluginid);
+        $this->plugin_model->update(array('disable' => $disable), 'pluginid=' . $pluginid);
         $this->adminMsg($this->getCacheCode('plugin') . lang('success'), url('admin/plugin/index/'), 3, 1, 1);
     }
     
@@ -212,7 +212,7 @@ class PluginController extends Admin {
      * 插件缓存
      */
     public function cacheAction($show=0) {
-        $data = $this->plugin->where('disable=0')->select();
+        $data = $this->plugin_model->where('disable=0')->select();
         $row  = array();
         foreach ($data as $t) {
             $row[$t['dir']] = $t;
@@ -227,7 +227,7 @@ class PluginController extends Admin {
      */
     public function ajaxviewAction() {
         $pluginid = $this->get('pluginid');
-        $data     = $this->plugin->find($pluginid);
+        $data     = $this->plugin_model->find($pluginid);
         if (empty($data)) exit(lang('a-plu-3'));
         $msg  = "<textarea id='p_" . $pluginid . "' style='font-size:12px;width:100%;height:60px;overflow:hidden;'>";
         $msg .= "{plugin('" . $data['dir'] . "')}" . PHP_EOL . "<!--将代码放到index.html" . PHP_EOL . "或者footer.html最底部-->";
@@ -240,7 +240,7 @@ class PluginController extends Admin {
      */
     public function ajaxtestpAction() {
         $id    = $this->post('id');
-        $data  = $this->plugin->find($id);
+        $data  = $this->plugin_model->find($id);
         if (empty($data)) exit('<font color=red>' . lang('a-plu-16') . '</font>');
         $code1 = "{plugin('" . $data['dir'] . "')}";
         $code2 = '{plugin("' . $data['dir'] . '")}';
@@ -256,7 +256,7 @@ class PluginController extends Admin {
      */
     public function ajaxupdateAction() {
         $id   = (int)$this->post('id');
-        $data = $this->plugin->find($id);
+        $data = $this->plugin_model->find($id);
         if (empty($data))   exit('<font color=red>' . lang('a-plu-16') . '</font>');
         if (fn_check_url()) exit('<font color=red>' . lang('a-plu-18') . '</font>');
         if (empty($data['markid'])) exit('<font color=red>' . lang('a-plu-19') . '</font>');
@@ -312,7 +312,7 @@ class PluginController extends Admin {
         if (empty($install) && is_dir(PLUGIN_DIR . $dir)) $this->adminMsg(lang('a-plu-25', array('1' => $dir)));
         if ($install) {
             //升级信息检测
-            $data = $this->plugin->getOne('dir=?', $dir);
+            $data = $this->plugin_model->getOne('dir=?', $dir);
             if (empty($data))             $this->adminMsg(lang('a-plu-26', array('1' => $dir)));
             if ($data['markid'] != $mark) $this->adminMsg(lang('a-plu-27', array('1' => $dir)));
         }
@@ -395,7 +395,7 @@ class PluginController extends Admin {
             'version'     => $config['version'],
             'description' => $config['description']
         );
-        $this->plugin->update($update, 'pluginid=' . $data['pluginid']);
+        $this->plugin_model->update($update, 'pluginid=' . $data['pluginid']);
         $this->adminMsg(lang('a-plu-36'), url('admin/plugin/'), 3, 1, 1);
     }
     
@@ -435,9 +435,9 @@ class PluginController extends Admin {
             $this->export_database($size, $action, $fileid, $random, $tableid, $startfrom);
         }else{
             $pluginid = $this->get('pluginid');
-            $data     = $this->plugin->find($pluginid);
+            $data     = $this->plugin_model->find($pluginid);
             if (empty($data)) $this->adminMsg(lang('a-plu-3'));
-            $plugin_prefix = $this->plugin->prefix . $data['dir'] ."_";
+            $plugin_prefix = $this->plugin_model->prefix . $data['dir'] ."_";
             $all_tables = $this->getTables();
             $tables = array();
             foreach ($all_tables as $k => $v) {
@@ -454,9 +454,9 @@ class PluginController extends Admin {
      * 取当前数据库中的所有表信息
      */
     private function getTables() {
-        $data = $this->plugin->execute('SHOW TABLE STATUS FROM `' . $this->plugin->dbname . '`');
+        $data = $this->plugin_model->execute('SHOW TABLE STATUS FROM `' . $this->plugin_model->dbname . '`');
         foreach ($data as $key=>$t) {
-            $data[$key]['fc'] = substr($t['Name'], 0, strlen($this->plugin->prefix)) != $this->plugin->prefix ? 0 : 1;
+            $data[$key]['fc'] = substr($t['Name'], 0, strlen($this->plugin_model->prefix)) != $this->plugin_model->prefix ? 0 : 1;
         }
         return $data;
     }
@@ -478,10 +478,10 @@ class PluginController extends Admin {
         $tables      = $c_data['tables'];
         $time        = $c_data['time'];
         $dir         = $c_data['dir'];
-        $plugin_prefix = $this->plugin->prefix . $dir ."_";
+        $plugin_prefix = $this->plugin_model->prefix . $dir ."_";
         if (empty($tables)) $this->adminMsg('数据缓存不存在，请重新选择备份');
         if ($fileid  == 1) $random = mt_rand(1000, 9999);
-        $this->plugin->query("SET NAMES 'utf8';\n\n");
+        $this->plugin_model->query("SET NAMES 'utf8';\n\n");
         $tabledump   = '';
         $tableid     = ($tableid!= '') ? $tableid : 0;
         $startfrom   = ($startfrom != '') ? intval($startfrom) : 0;
@@ -489,22 +489,22 @@ class PluginController extends Admin {
             $offset  = 100;
             if (!$startfrom) {
                 $tabledump  .= "DROP TABLE IF EXISTS `$tables[$i]`;\n"; 
-                $createtable = $this->plugin->execute("SHOW CREATE TABLE `$tables[$i]` ", false);
+                $createtable = $this->plugin_model->execute("SHOW CREATE TABLE `$tables[$i]` ", false);
                 $tabledump  .= $createtable['Create Table'] . ";\n\n";
                 $tabledump   = preg_replace("/(DEFAULT)*\s*CHARSET=[a-zA-Z0-9]+/", "DEFAULT CHARSET=utf8", $tabledump);
             }
             $numrows       = $offset;
             while (strlen($tabledump) < $sizelimit * 1000 && $numrows == $offset) {
                 $sql       = "SELECT * FROM `$tables[$i]` LIMIT $startfrom, $offset";
-                $numfields = $this->plugin->num_fields($sql);
-                $numrows   = $this->plugin->num_rows($sql);
+                $numfields = $this->plugin_model->num_fields($sql);
+                $numrows   = $this->plugin_model->num_rows($sql);
                 //获取表字段
-                $fields_data = $this->plugin->execute("SHOW COLUMNS FROM `$tables[$i]`");
+                $fields_data = $this->plugin_model->execute("SHOW COLUMNS FROM `$tables[$i]`");
                 $fields_name = array();
                 foreach($fields_data as $r) {
                     $fields_name[$r['Field']] = $r['Type'];
                 }
-                $rows = $this->plugin->execute($sql);
+                $rows = $this->plugin_model->execute($sql);
                 $name = array_keys($fields_name);
                 $r    = array();
                 if ($rows) {
