@@ -23,7 +23,7 @@ class cache_file extends Fn_base {
 	  */
 	 public function __construct($dir = null) {
 	 	//设置缓存目录
-	 	$this->cache_dir = $dir ? PLUGIN_DIR . $dir . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR : SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR;
+	 	$this->cache_dir = $dir ? PLUGIN_DIR . $dir . DS . 'cache' . DS : SITE_ROOT . 'cache' . DS . 'data' . DS;
 	 	return true;
 	 }
 	 

@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}pluginmenu` (
   `name` varchar(255) DEFAULT NULL,
   `url` varchar(255) NOT NULL DEFAULT '',
   `query` text NOT NULL,
+  `icon` varchar(50) NOT NULL DEFAULT '',
   `description` text NOT NULL,
   `listorder` mediumint(8) DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -167,13 +168,13 @@ CREATE TABLE `{prefix}oauth` (
   KEY `site` (`oauth_openid`,`oauth_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `{prefix}pluginmenu` (`id`, `site`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `isblank`, `name`, `url`, `query`, `description`, `listorder`) VALUES
-(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#', '', 0),
-(2, 1, 1, '', 0, '', 1, 0, '会员列表', '{namespace}/admin_member/index', '', '', 1),
-(3, 1, 1, '', 0, '', 1, 0, '短 消 息', '{namespace}/admin_member/pms', '', '', 2),
-(4, 1, 1, '', 0, '', 1, 0, '会 员 组', '{namespace}/admin_member/group', '', '', 3),
-(5, 1, 1, '', 0, '', 1, 0, '会员模型', '{namespace}/admin_model/index', '&amp;typeid=2', '', 4),
-(6, 1, 1, '', 0, '', 1, 0, '会员扩展', '{namespace}/admin_model/index', '&amp;typeid=4', '', 5),
-(7, 1, 1, '', 0, '', 1, 0, '会员配置', '{namespace}/admin_member/config', '&amp;type=user', '', 6),
-(8, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '', '', 7),
-(9, 1, 1, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '', '', 8);
+INSERT INTO `{prefix}pluginmenu` (`id`, `site`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `isblank`, `name`, `url`, `query`, `icon`, `description`, `listorder`) VALUES
+(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#', 'fa-user', '', 0),
+(2, 1, 1, '', 0, '', 1, 0, '会员列表', '{namespace}/admin_member/index', '', '', '', 1),
+(3, 1, 1, '', 0, '', 1, 0, '短 消 息', '{namespace}/admin_member/pms', '', '', '', 2),
+(4, 1, 1, '', 0, '', 1, 0, '会 员 组', '{namespace}/admin_member/group', '', '', '', 3),
+(5, 1, 1, '', 0, '', 1, 0, '会员模型', '{namespace}/admin_model/index', '&amp;typeid=2', '', '', 4),
+(6, 1, 1, '', 0, '', 1, 0, '会员扩展', '{namespace}/admin_model/index', '&amp;typeid=4', '', '', 5),
+(7, 1, 1, '', 0, '', 1, 0, '会员配置', '{namespace}/admin_member/config', '&amp;type=user', '', '', 6),
+(8, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '', '', '', 7),
+(9, 1, 1, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '', '', '', 8);

@@ -105,7 +105,9 @@
         <div id="DIV_M{$k}">
             {loop $menu['list'][$k] $name=>$n}
             <h3 class="f14">
-                <i class="fa fa-check-square-o text-danger" aria-hidden="true"></i>
+                {if $n['icon']}
+                <i class="fa {$n['icon']} text-danger" aria-hidden="true"></i>
+                {/if}
                 <i class="label switchs">{$n['name']}</i>
             </h3>
             <ul>

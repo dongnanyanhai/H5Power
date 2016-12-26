@@ -84,6 +84,7 @@ class Menu_dataModel extends Model{
 					$subid = $v['id'];
 					$data[$menuid][$subid] = $this->where('menuid=' . $menuid)->where('parentid='.$subid)->where('ismenu=1')->order('listorder ASC, id ASC')->select();
 					$data[$menuid][$subid]['name'] = $v['name'];
+					$data[$menuid][$subid]['icon'] = $v['icon'];
 				}
 			}
 		}

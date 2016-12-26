@@ -152,6 +152,17 @@ class PluginController extends Admin {
             }
             $this->installsql($sql);
         }
+        // 删除缓存文件
+        // 遍历系统数据缓存目录
+        $chache_dir = SITE_ROOT . 'cache' . DS . 'data' . DS;
+        $dirs = scandir($chache_dir);
+        foreach ($dirs as $file) {
+            if ($file != '.' && $file != '..') {
+                if(strpos($file,$data['dir']) === 0){
+                    unlink($chache_dir . $file);
+                }
+            }
+        }
         //代码调用插件，直接删除表中记录
         $this->plugin_model->delete('pluginid=' . $pluginid);
         $this->adminMsg($this->getCacheCode('plugin') . lang('a-plu-11'), url('admin/plugin/index'), 1, 0, 1);

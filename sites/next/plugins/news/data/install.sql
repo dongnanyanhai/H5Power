@@ -136,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}pluginmenu` (
   `name` varchar(255) DEFAULT NULL,
   `url` varchar(255) NOT NULL DEFAULT '',
   `query` text NOT NULL,
+  `icon` varchar(50) NOT NULL DEFAULT '',
   `description` text NOT NULL,
   `listorder` mediumint(8) DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -185,11 +186,11 @@ CREATE TABLE `{prefix}model_field` (
   KEY `modelid` (`modelid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `{prefix}pluginmenu` (`id`, `site`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `isblank`, `name`, `url`, `query`, `description`, `listorder`) VALUES
-(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#', '', 0),
-(2, 1, 1, '', 0, '', 1, 0, '栏目管理', '{namespace}/admin_category/index', '', '', 1),
-(3, 1, 1, '', 0, '', 1, 0, '菜单模型', '{namespace}/admin_model/index', '&amp;typeid=5', '', 2),
-(4, 1, 1, '', 0, '', 1, 0, '内容模型', '{namespace}/admin_model/index', '', '', 3),
-(5, 1, 1, '', 0, '', 1, 0, '表单模型', '{namespace}/admin_model/index', '&amp;typeid=3', '', 4),
-(6, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '', '', 5),
-(7, 1, 1, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '', '', 6);
+INSERT INTO `{prefix}pluginmenu` (`id`, `site`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `isblank`, `name`, `url`, `query`, `icon`, `description`, `listorder`) VALUES
+(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#','fa-cube', '', 0),
+(2, 1, 1, '', 0, '', 1, 0, '栏目管理', '{namespace}/admin_category/index', '','', '', 1),
+(3, 1, 1, '', 0, '', 1, 0, '菜单模型', '{namespace}/admin_model/index', '&amp;typeid=5','', '', 2),
+(4, 1, 1, '', 0, '', 1, 0, '内容模型', '{namespace}/admin_model/index', '','', '', 3),
+(5, 1, 1, '', 0, '', 1, 0, '表单模型', '{namespace}/admin_model/index', '&amp;typeid=3','', '', 4),
+(6, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '','', '', 5),
+(7, 1, 1, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '','', '', 6);

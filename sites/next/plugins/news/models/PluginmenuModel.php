@@ -85,6 +85,7 @@ class PluginmenuModel extends Model{
                 }
                 
                 $data[$v['id']]['name'] = $v['name'];
+                $data[$v['id']]['icon'] = $v['icon'];
             }
         }
         // 写入缓存文件
