@@ -389,7 +389,7 @@ class IndexController extends Admin {
 		if (!file_exists(SITE_ROOT . 'h5pcms_test.txt') || $fp === false) $this->adminMsg(lang('app-9', array('1' => SITE_ROOT)));
 		@fclose($fp);
 		if (file_exists(SITE_ROOT . 'h5pcms_test.txt')) unlink(SITE_ROOT . 'h5pcms_test.txt');
-	    $count = sitemap_xml();
+	    // $count = sitemap_xml();
 	    $this->adminMsg(lang('a-ind-39') . '(#' . $count . ')', '', 3, 1, 1);
 	}
 	

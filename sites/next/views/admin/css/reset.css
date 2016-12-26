@@ -16,7 +16,7 @@ a:hover{text-decoration:underline;}
 .red, .red a, a.red{color:red;}.green{color:#0E774A}
 select optgroup{color:#CAC8BB;}
 /*通用样式*/
-.hidden{display:none;}.invisible{visibility:hidden;}
+body .hidden{display:none;}.invisible{visibility:hidden;}
 .ib,.ib-a a{display:inline-block;zoom:1;*display:inline;}
 .clear:after{content:'\20';display:block;height:0;clear:both;}.clear{_zoom:1;}
 .f12{font-size: 12px}.f14{font-size: 14px}.f16{font-size: 16px}.f18{font-size:18px}.f20{font-size:20px}
@@ -85,7 +85,7 @@ select optgroup{color:#CAC8BB;}
     margin: 10px 0 0;
 }
 .pow-by {
-    background: url("bg-powered-by.png") no-repeat scroll 0 0 transparent;
+    background: url("../images/bg-powered-by.png") no-repeat scroll 0 0 transparent;
     float: right;
     height: 27px;
     margin: 0 5px 0 0;
