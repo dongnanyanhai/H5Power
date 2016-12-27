@@ -187,10 +187,11 @@ CREATE TABLE `{prefix}model_field` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `{prefix}pluginmenu` (`id`, `site`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `isblank`, `name`, `url`, `query`, `icon`, `description`, `listorder`) VALUES
-(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#','fa-cube', '', 0),
+(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#','fa-cube', '', 1),
 (2, 1, 1, '', 0, '', 1, 0, '栏目管理', '{namespace}/admin_category/index', '','', '', 1),
-(3, 1, 1, '', 0, '', 1, 0, '菜单模型', '{namespace}/admin_model/index', '&amp;typeid=5','', '', 2),
-(4, 1, 1, '', 0, '', 1, 0, '内容模型', '{namespace}/admin_model/index', '','', '', 3),
-(5, 1, 1, '', 0, '', 1, 0, '表单模型', '{namespace}/admin_model/index', '&amp;typeid=3','', '', 4),
-(6, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '','', '', 5),
-(7, 1, 1, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '','', '', 6);
+(3, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '','', '', 2),
+(4, 1, 0, '', 1, '', 1, 0, '高级功能', '#', '#','fa-cog', '', 1),
+(5, 1, 4, '', 0, '', 1, 0, '内容模型', '{namespace}/admin_model/index', '','', '', 1),
+(6, 1, 4, '', 0, '', 1, 0, '表单模型', '{namespace}/admin_model/index', '&amp;typeid=3','', '', 2),
+(7, 1, 4, '', 0, '', 1, 0, '菜单模型', '{namespace}/admin_model/index', '&amp;typeid=5','', '', 3),
+(8, 1, 4, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '','', '', 4);

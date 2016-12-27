@@ -167,10 +167,10 @@ class IndexController extends Admin {
 		// foreach ($sites as $sid => $t) {
 		// 	$caches[] = array('23', 'category', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
 		// }
-		//多网站推荐位缓存
-		foreach ($sites as $sid => $t) {
-			$caches[] = array('24', 'position', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
-		}
+		// //多网站推荐位缓存
+		// foreach ($sites as $sid => $t) {
+		// 	$caches[] = array('24', 'position', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));
+		// }
 		//多网站导航栏缓存
 		foreach ($sites as $sid => $t) {
 			$caches[] = array('241', 'navbar', 'cache', array('site' => $sid, 'text' => '(' . $sid . '/' . $count . ')'));

@@ -268,14 +268,15 @@ CREATE TABLE `{prefix}model_field` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `{prefix}pluginmenu` (`id`, `site`, `parentid`, `arrparentid`, `child`, `arrchildid`, `ismenu`, `isblank`, `name`, `url`, `query`, `icon`, `description`, `listorder`) VALUES
-(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#','fa-cube', '', 0),
+(1, 1, 0, '', 1, '', 1, 0, '模块功能', '#', '#','fa-cube', '', 1),
 (2, 1, 1, '', 0, '', 1, 0, '栏目管理', '{namespace}/admin_category/index', '','', '', 1),
-(3, 1, 1, '', 0, '', 1, 0, '菜单模型', '{namespace}/admin_model/index', '&amp;typeid=5','', '', 2),
-(4, 1, 1, '', 0, '', 1, 0, '内容模型', '{namespace}/admin_model/index', '','', '', 3),
-(5, 1, 1, '', 0, '', 1, 0, '表单模型', '{namespace}/admin_model/index', '&amp;typeid=3','', '', 4),
-(6, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '','', '', 5),
-(7, 1, 1, '', 0, '', 1, 0, '推荐管理', '{namespace}/admin_position/index', '', '', '', 7),
-(8, 1, 1, '', 0, '', 1, 0, '标签管理', '{namespace}/admin_tag/index', '', '', '', 8),
-(9, 1, 1, '', 0, '', 1, 0, '关联链接', '{namespace}/admin_relatedlink/index', '', '', '', 9),
-(10, 1, 1, '', 0, '', 1, 0, '联动菜单', '{namespace}/admin_linkage/index', '', '', '', 10),
-(11, 1, 1, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '','', '', 6);
+(3, 1, 1, '', 0, '', 1, 0, '模块配置', '{namespace}/admin_block/index', '','', '', 2),
+(4, 1, 1, '', 0, '', 0, 0, '推荐管理', '{namespace}/admin_position/index', '', '', '', 3),
+(5, 1, 1, '', 0, '', 0, 0, '标签管理', '{namespace}/admin_tag/index', '', '', '', 4),
+(6, 1, 1, '', 0, '', 0, 0, '关联链接', '{namespace}/admin_relatedlink/index', '', '', '', 5),
+(7, 1, 1, '', 0, '', 0, 0, '联动菜单', '{namespace}/admin_linkage/index', '', '', '', 6),
+(8, 1, 0, '', 1, '', 1, 0, '高级功能', '#', '#','fa-cog', '', 2),
+(9, 1, 8, '', 0, '', 1, 0, '内容模型', '{namespace}/admin_model/index', '','', '', 1),
+(10, 1, 8, '', 0, '', 1, 0, '表单模型', '{namespace}/admin_model/index', '&amp;typeid=3','', '', 2),
+(11, 1, 8, '', 0, '', 1, 0, '菜单模型', '{namespace}/admin_model/index', '&amp;typeid=5','', '', 3),
+(12, 1, 8, '', 0, '', 1, 0, '模块菜单', '{namespace}/admin_menu/index', '','', '', 4);
