@@ -3,7 +3,7 @@ html,body,input{font:12px/1.5 tahoma,arial,\5b8b\4f53,sans-serif;}
 html,body{
     height: 100%;
     /*font-family: Microsoft YaHei,Helvetica,STHeiti STXihei,Microsoft JhengHei,Arial;*/
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.42857143;
     color: #333;
     background-color: #fff;
@@ -569,6 +569,7 @@ body fieldset.blue legend {
     float: left;
     list-style-type: none;
     border: none;
+    font-size: 14px;
 }
 .header .nav li a {
     padding: 0 15px;

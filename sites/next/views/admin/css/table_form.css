@@ -300,9 +300,9 @@ textarea.input-focus {
 
 select {
     min-width: 80px;
-    height: 32px;
-    padding: 4px 10px;
-    font-size: 14px;
+    height: 28px;
+    padding: 2px 5px;
+    font-size: 12px;
     line-height: 1.333333;
     color: #555;
     background-color: #fff;
@@ -328,6 +328,7 @@ input[type="checkbox"],
 input[type="radio"] {
     line-height: normal;
     margin: 0px 0px 0px;
+    min-height: 32px;
 }
 
 /*表格表单*/

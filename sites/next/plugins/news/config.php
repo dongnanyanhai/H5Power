@@ -6,7 +6,7 @@ return array(
     'author'  => 'AHai',
     'version' => '0.1',
     'typeid'  => 1,
-    'description' => "内容管理插件化",
+    'description' => "内容管理-精简版",
     'controller' => '',
     'fields' => array(
        

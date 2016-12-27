@@ -27,7 +27,7 @@ html.addbg body {
 html,body,input,textarea{
     height: 100%;
     /*font-family: Microsoft YaHei,Helvetica,STHeiti STXihei,Microsoft JhengHei,Arial;*/
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.42857143;
     color: #333;
     background-color: #fff;
@@ -628,7 +628,8 @@ body fieldset.blue legend {
     padding-left: 0;
     list-style: none;
     border-bottom: 1px solid #ddd;
-    height: 36px;
+    /*height: 36px;*/
+    height: 33px;
     clear: both;
     margin-left: 0;
 }

@@ -3,7 +3,6 @@
 class ModelModel extends Model {
 
     public function __construct() {
-        $this->is_plugin_model = true;
         parent::__construct();
     }
     
@@ -106,7 +105,6 @@ class ModelModel extends Model {
         $c      = "<?php" . PHP_EOL . PHP_EOL .
         "class " . $table . "Model extends " . $e . " {" . PHP_EOL . PHP_EOL .
         "    public function __construct() {" . PHP_EOL .
-        "        \$this->is_plugin_model = true;" . PHP_EOL .
         "        parent::__construct();" . PHP_EOL .
         "    }" . PHP_EOL . PHP_EOL .
         "    public function get_primary_key() {" . PHP_EOL .

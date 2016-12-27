@@ -499,7 +499,7 @@ class Common extends Controller {
      */
     protected function getModelJoin($modelid) {
         if (empty($modelid)) return null;
-        $data   = $this->get_model('form');
+        $data   = $this->get_model($this->namespace.'_model_form');
         $return = null;
         if ($data) {
             foreach ($data as $t) {
@@ -650,7 +650,7 @@ class Common extends Controller {
         $dir        = substr($dir, -1) == '/' ? substr($dir, 0, -1) : $dir;
         $htmlfile   = $dir ? $dir . '/' . $file : $file;
         ob_start();
-        $model = $this->get_model('form');
+        $model = $this->get_model($this->namespace.'_model_form');
         $form  = $model[$mid];
         if (empty($form)) return false;
         if (!isset($form['setting']['form']['url']['tohtml']) || empty($form['setting']['form']['url']['tohtml'])) return false;

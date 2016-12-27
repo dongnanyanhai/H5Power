@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="{ADMIN_THEME}libs/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}libs/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}css/system.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}css/dialog.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}css/main.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}css/switchbox.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}css/table_form.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="{ADMIN_THEME}js/jquery.min.js"></script>
+    <script type="text/javascript" src="{ADMIN_THEME}js/dialog.js"></script>
+    <script type="text/javascript">
+    var sitepath = "{SITE_PATH}{ENTRY_SCRIPT_NAME}";
+    </script>
+    <script type="text/javascript" src="{LANG_PATH}lang.js"></script>
+    <script type="text/javascript" src="{ADMIN_THEME}js/core.js"></script>
+    <title>admin</title>
+</head>
+
+<body style="font-weight: normal;">
+    <div class="subnav">
+        <div class="content-menu ib-a blue line-x">
+            <a href="{url($s.'/admin_block')}"><em>{lang('a-fnx-96')}</em></a><span>|</span> {if $a=="add"}
+            <a href="{url($s.'/admin_block/add')}" class="on"><em>{lang('a-add')}</em></a><span>|</span> {else}
+            <a href="{url($s.'/admin_block/add')}"><em>{lang('a-add')}</em></a><span>|</span>
+            <a href="{url($s.'/admin_block/edit',array('id'=>$data['id']))}"><em>{lang('a-edit')}</em></a><span>|</span>
+            <a href="{url($s.'/admin_block/set',array('id'=>$data['id']))}" class="on"><em>{lang('a-fnx-87')}</em></a><span>|</span> {/if}
+            <a href="{url($s.'/admin_block/cache')}"><em>{lang('a-cache')}</em></a>
+        </div>
+        <div class="bk10"></div>
+        <div class="table-list">
+            <form action="" method="post">
+                <input name="id" type="hidden" value="{$data['id']}">
+                <table width="100%" class="table_form">
+                    <tr>
+                        <th width="160">{lang('a-blo-7')}： </th>
+                        <td>
+                            <input class="input-text" type="text" name="data[name]" value="{$data['name']}" size="35" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{lang('a-blo-8')}： </th>
+                        <td id="block-setting">
+                            {php
+                                $item_s = '<div style="margin-top: 5px;margin-bottom: 5px;" class="item"><label>'.lang('a-fnx-89').'：</label><input class="input-text" type="text" name="data[setting][bsid][title]" value="" size="30" required /> <label>'.lang('a-fnx-90').'：</label><input class="input-text" type="text" name="data[setting][bsid][name]" value="" size="30" required /> <label>'.lang('a-fnx-91').'：</label>';
+                                $temp_s = ' <select name="data[setting][bsid][type]" onchange="select_type(this.value)" required="">';
+                            }
+                            {loop $type $i=>$v} 
+                                {php $temp_s = $temp_s.'<option value="'.$i.'">'.$v.'</option>'; }
+                            {/loop}
+                            {php
+                            $item_s = $item_s . $temp_s . '</select><button class="button" onclick="remove_setting(this);" style="margin-left: 15px;">'.lang('a-mod-129').'</button></div>';
+                            }
+                            {if is_array($data['setting'])}
+                                {loop $data['setting'] $k=>$j}
+                                    <div style="margin-top: 5px;margin-bottom: 5px;" class="item">
+                                        <label>{lang('a-fnx-89')}：</label><input class="input-text" type="text" name="data[setting][{$k}][title]" value="{$j['title']}" size="30" required />
+                                        <label>{lang('a-fnx-90')}：</label><input class="input-text" type="text" name="data[setting][{$k}][name]" value="{$j['name']}" size="30" required />
+                                        <label>{lang('a-fnx-91')}：</label>
+                                        <select id="type" name="data[setting][{$k}][type]" onChange="select_type(this.value)" required/>{loop $type $i=>$v}
+                                        <option value="{$i}" {if $j[ 'type']==$i}selected{/if}>{$v}</option>
+                                        {/loop}
+                                        </select><button type="button" class="button" onclick="remove_setting(this);" style="margin-left: 15px;">移除</button>
+                                    </div>
+                                {/loop}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <script type="text/javascript">
+                        function add_block_setting() {
+                            var c = '{$item_s}';
+                            var id = new Date().getTime();
+                            c = c.replace(/bsid/ig, id);
+                            $("#block-setting").append(c);
+                        }
+
+                        function remove_setting(obj) {
+                            var re = confirm("确定删除该字段？");
+                            if (re) {
+                                $(obj).parents('.item').remove();
+                            }
+                        }
+                        </script>
+                        <td>
+                            <button type="button" class="button" onclick="add_block_setting();" style="margin-left: 645px;">添加</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <td>
+                            <input class="button" type="submit" name="submit" value="{lang('a-submit')}" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+    function select_type(id) {
+        if (id == 2) {
+            $(".thumb_4").attr("id", "thumb_4");
+            $(".thumb_2").attr("id", "thumb");
+        } else if (id == 4) {
+            $(".thumb_2").attr("id", "thumb_2");
+            $(".thumb_4").attr("id", "thumb");
+        }
+        $("#text_1").hide();
+        $("#text_2").hide();
+        $("#text_3").hide();
+        $("#text_4").hide();
+        $("#text_" + id).show();
+
+    }
+
+    function check_show() {
+        var fileval = $("#file").val();
+        var point = fileval.lastIndexOf(".");
+        var filetype = fileval.substr(point);
+        if (filetype == ".jpg" || filetype == ".gif" || filetype == ".png" || filetype == ".JPG" || filetype == ".GIF" || filetype == ".PNG") {
+            preview('file');
+        } else {
+            file_info('file');
+        }
+    }
+    </script>
+</body>
+
+</html>

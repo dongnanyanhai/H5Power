@@ -3,7 +3,6 @@
 class Model_fieldModel extends Model {
 
     public function __construct() {
-        $this->is_plugin_model = true;
         parent::__construct();
     }
     

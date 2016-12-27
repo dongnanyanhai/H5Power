@@ -2,7 +2,7 @@
 if (!defined('IN_FINECMS')) exit();
 
 /**
- * FineCMS配置
+ * H5Power配置
  */
 return array(
 
