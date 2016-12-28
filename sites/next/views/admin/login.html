@@ -1,56 +1,56 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <META NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW">
-    <title>{$SITE_NAME}{lang('admin')}</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title>登录-管理后台</title>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="format-detection" content="telephone=no">
     <link href="{ADMIN_THEME}css/login.css" rel="stylesheet" type="text/css" />
+    <link href="{ADMIN_THEME}libs/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="{ADMIN_THEME}js/jquery.min.js"></script>
     <script type="text/javascript">
     $(function() {
-        $("#user").focus();
+        $("#pd-form-username").focus();
     });
     </script>
 </head>
 
-<body>
-    <div id="header">
-        <div class="width">
-            <div class="logo">
-                <a href="{SITE_PATH}" target="_blank"><img src="{ADMIN_THEME}images/logo.png" border="0" /></a>
-            </div>
+<body class="loginBody">
+    <div id="login" class="clearfix" style="margin-top: 100px">
+        <div class="login-form" id="login-frame">
+            <form action="" method="post">
+                <div id="loading" style="display:none;"></div>
+                <img src="{ADMIN_THEME}images/profle_1.png" />
+                <div class="text-left">
+                    <label>账号</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+                        <input type="text" class="form-control" name="username" id="pd-form-username" placeholder="请输入账号" autocomplete="off" />
+                    </div>
+                    <label>密码</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
+                        <input type="password" name="password" id="pd-form-password" class="form-control" placeholder="请输入密码" autocomplete="off" />
+                    </div>
+                    {if $SITE_ADMIN_CODE}
+                    <label>{lang('a-com-23')}</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></div>
+                        <input type="text" name="code" id="pd-form-code" class="form-control" placeholder="{lang('a-com-23')}" autocomplete="off" />
+                        <div class="input-group-addon" id="code-con"><img id="code" src="{url('api/captcha/', array('width'=>90, 'height'=>32))}" align="absmiddle" title="{lang('a-com-24')}" onclick="this.src='{url('api/captcha/', array('width'=>90, 'height'=>32))}&'+Math.random();"></div>
+                    </div>
+                    {/if}
+                </div>
+                <div class='login-item'>
+                    <input type="submit" class="btn" name="submit" value="{lang('a-login')}" style="cursor:pointer;" />
+                </div>
+                <div id="copyrights">© 2014-{date('Y')} <a href="http://www.h5power.cn" target="_blank">{CMS_NAME}-{CMS_VERSION}</a> All rights reserved.</div>
+            </form>
         </div>
     </div>
-    <div class="login">
-        <div class="login_bg">
-            <div class="login_box">
-                <ul>
-                    <form action="" method="post">
-                        <li>
-                            <input type="text" id="user" class="tx" onblur="this.className='tx'" onfocus="this.className='in'" name="username" />
-                        </li>
-                        <li>
-                            <input type="password" id="pwd" class="tx" onblur="this.className='tx'" onfocus="this.className='in'" name="password" />
-                        </li>
-                        {if $SITE_ADMIN_CODE}
-                        <li>
-                            <input name="code" type="text" class="ipt" onblur="this.className='ipt'" onfocus="this.className='int'" onclick="this.value=''" value="{lang('a-com-23')}" />
-                            <span style="padding-right:10px;"><img id="code" src="{url('api/captcha/', array('width'=>90, 'height'=>32))}" align="absmiddle" title="{lang('a-com-24')}" onclick="this.src='{url('api/captcha/', array('width'=>90, 'height'=>32))}&'+Math.random();" style="cursor:pointer;"></span></li>
-                        {/if}
-                        <input type="submit" class="btn" name="submit" value="{lang('a-login')}" style="cursor:pointer;" />
-                    </form>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div id="footer">
-        <div class="footer">
-            <p><a href="http://www.h5power.cn" target="_blank">{lang('a-com-12')}</a>
-                <p class="ptop">Powered by {CMS_NAME} v{CMS_VERSION} 2011-{date('Y')}, Processed in {runtime()} second(s).</p>
-        </div>
-    </div>
+    <div style="display:none"></div>
 </body>
 
 </html>

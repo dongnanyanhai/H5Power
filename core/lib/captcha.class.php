@@ -24,7 +24,8 @@ class captcha extends Fn_base {
 	public $charset = 'abcdefghkmnprstuvwyzABCDEFGHKLMNPRSTUVWYZ23456789';
 	
 	//设置背景色
-	public $background = '#EDF7FF';
+	// public $background = '#EDF7FF';
+	public $background = '#eeeeee';
 	
 	//生成验证码字符数
 	public $code_len = 4;

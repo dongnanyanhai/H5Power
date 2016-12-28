@@ -22,11 +22,11 @@ return array(
 	/* 网站相关配置 */
 
 	'SITE_ADMINLOG'           => true,  //后台操作日志开关
-	'SYS_ILLEGAL_CHAR'        => false,  //禁止非法字符提交
+	'SYS_ILLEGAL_CHAR'        => true,  //禁止非法字符提交
 	'SYS_ATTACK_LOG'          => true,  //系统攻击日志开关
 	'SYS_ATTACK_MAIL'         => false,  //是否发送邮件通知管理员
 	'SITE_ADMIN_CODE'         => false,  //后台登录验证码开关
-	'SITE_FNX_CATID2'         => true,  //“副栏目”开关
+	'SITE_FNX_CATID2'         => false,  //“副栏目”开关
 	'SITE_ADMIN_PAGESIZE'     => '15',  //后台数据分页条数
 	'SITE_SYSMAIL'            => '',  //用来接收网站的一些系统邮件
 	'SITE_FNX_FILESIZE'       => '20',  //文字块上传文件大小
