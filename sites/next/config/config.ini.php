@@ -16,7 +16,7 @@ return array(
 	'SYS_GZIP'                => false,  //是否Gzip压缩后输出
 	'SITE_MEMBER_COOKIE'      => '23x9670fbd65ec8c7',  //Cookie随机字符串
 	'SESSION_COOKIE_DOMAIN'   => '',  //多站点会员登录状态跨域保存域名，格式如.finecms.net（只针对多站点域名全是二级域名否则请留空）
-	'SYS_EDITOR'              => 'kindeditor',  //系统编辑器设置，默认kindeditor（自定义编辑器直接填写目录名称，如ueditor）
+	'SYS_EDITOR'              => 'kindeditor',  //系统编辑器设置，默认kindeditor
 	'SYS_CAPTCHA_MODE'        => '0',  //验证码输出模式：0,普通模式；1,兼容模式，若验证码显示不正常可在此调整输出模式
 
 	/* 网站相关配置 */
