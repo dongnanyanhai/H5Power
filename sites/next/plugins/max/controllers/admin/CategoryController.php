@@ -304,11 +304,11 @@ class CategoryController extends Admin {
 	    }
 	    //保存到缓存文件
 		if ($site_id == $siteid) {
-			$this->cache->set('category_' . $siteid,  $category);
+			$this->cache->set($this->namespace.'_category_' . $siteid,  $category);
 		} else {
-			$this->cache->set('category_' . $site_id, $count);
+			$this->cache->set($this->namespace.'_category_' . $site_id, $count);
 		}
-	    $this->cache->set('category_dir_' . $site_id, $category_dir);
+	    $this->cache->set($this->namespace.'_category_dir_' . $site_id, $category_dir);
 	    $show or $this->adminMsg(lang('a-update'), url($this->namespace .'/admin_category/index'), 3, 1, 1);
 	}
 	// 阿海新增，栏目模型设置

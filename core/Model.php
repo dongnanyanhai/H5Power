@@ -8,6 +8,7 @@ if (!defined('IN_FINECMS')) exit();
 abstract class Model extends Fn_base {
     
 	public	$prefix;
+	public	$default_prefix;
 	public	$cache_dir;
 	public	$primary_key;
 	protected	$db;
@@ -28,7 +29,7 @@ abstract class Model extends Fn_base {
 		//存在从库就调用mysql_slave类
 		$this->db 			= $slave_params && is_array($slave_params) ? mysql_slave::getInstance($params, $slave_params) : mysql::getInstance($params);	
 		$this->dbname       = $params['dbname'];
-		$this->prefix 		= ($params['prefix']) ? trim($params['prefix']) : '';
+		$this->prefix = $this->default_prefix = ($params['prefix']) ? trim($params['prefix']) : '';
 		$this->cache_dir 	= SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR;
 		return true;		
 	}

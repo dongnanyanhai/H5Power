@@ -55,8 +55,6 @@ class ContentModel extends Model {
     public function set($id, $tablename, $data) {
         $id = intval($id);
         if (!$this->is_table_exists($tablename)) return lang('m-con-37', array('1' => $tablename));
-        // var_dump(APP::get_plugin_id());
-        // exit();
         $table = Controller::plugin_model(APP::get_plugin_id(),$tablename); //加载附表Model
         if (empty($data['catid'])) return lang('m-con-8');
         $_data = $id ? $this->find($id) : null;
@@ -96,22 +94,6 @@ class ContentModel extends Model {
                 $content = str_replace(array('\\', '"'), array('', '\''), htmlspecialchars_decode($data['content']));
                 if (preg_match("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", $content, $img)) {
                     $data['thumb'] = $img[3];
-                }
-            }
-        }
-        //关键字处理
-        if ($data['keywords']) {
-            $data['keywords'] = str_replace('，', ',', $data['keywords']);
-            $tags = @explode(',', $data['keywords']);
-            if ($tags) {
-                foreach ($tags as $t) {
-                    $name  = trim($t);
-                    if ($name) {
-                        $d = $this->from('tag', 'id')->where('name=?', $name)->select(false);
-                        if (empty($d)) {
-                            $this->query('INSERT INTO `' . $this->prefix . 'tag` (`name`,`letter`) VALUES ("' . $name . '", "' . word2pinyin($name) . '")');
-                        }
-                    }
                 }
             }
         }

@@ -25,11 +25,10 @@ class Common extends Controller {
 
     public $plugin;
     
-    // protected $cats;
+    protected $cats;
+    protected $cats_dir;
     protected $site;
-    // protected $content;
-    // protected $cats_dir;
-    // protected $category;
+    
     
     public function __construct() {
         parent::__construct();
@@ -42,11 +41,6 @@ class Common extends Controller {
         $this->action       = App::get_action_id();
         $this->site         = App::get_config();
         $this->siteid       = App::get_site_id();
-        // $this->category      = $this->model('category');
-        // $this->cats          = $this->get_category();
-        // $this->cats_dir      = $this->get_category_dir();
-        // if (!is_file(MODEL_DIR . 'Content_' . $this->siteid . 'Model.php'))  App::display_error(lang('app-14', array(1 => $this->siteid)));
-        // $this->content       = $this->model('content_' . $this->siteid);
         //定义网站常量
         define('SITE_PATH',     self::get_base_url());
         define('SITE_URL',      self::get_server_name() . self::get_base_url());
@@ -78,6 +72,13 @@ class Common extends Controller {
         }
         //载入会员系统缓存
         $this->plugin   = $this->cache->get("plugin");
+        if(is_array($this->plugin)){
+            foreach ($this->plugin as $k => $v) {
+                $this->cats[$k] = $this->cache->get($k.'_category_' . $this->siteid);
+                $this->cats_dir[$k] = $this->cache->get($k.'_category_dir_' . $this->siteid);
+            }
+        }
+        
 
         // 存在会员中心插件，并已安装启用会员插件
         if (is_dir(PLUGIN_DIR . 'member') && !empty($this->plugin['member']) && !$this->plugin['member']['disable'] ) {
@@ -104,7 +105,8 @@ class Common extends Controller {
             's'         => $this->namespace,
             'c'         => $this->controller,
             'a'         => $this->action,
-            // 'cats'       => $this->cats,
+            'cats'      => $this->cats,
+            'cats_dir'  => $this->cats_dir,
             'param'     => $this->getParam(),
             'sites'     => App::get_site(),
             'siteid'    => $this->siteid,
@@ -678,9 +680,9 @@ class Common extends Controller {
      * 获取栏目缓存
      */
     protected function get_category() {
-        $cats = $this->cache->get('category_' . $this->siteid);
+        $cats = $this->cache->get($this->namespace.'_category_' . $this->siteid);
         if ($this->site['SITE_EXTEND_ID']) {
-            $data = $this->cache->get('category_' . $this->site['SITE_EXTEND_ID']);
+            $data = $this->cache->get($this->namespace.'_category_' . $this->site['SITE_EXTEND_ID']);
             if (empty($data)) return $cats;
             foreach ($data as $catid => $t) {
                 $t['items']   = $cats[$catid]['items'];
@@ -694,9 +696,9 @@ class Common extends Controller {
      * 获取栏目缓存目录名称
      */
     protected function get_category_dir() {
-        $cats = $this->cache->get('category_dir_' . $this->siteid);
+        $cats = $this->cache->get($this->namespace.'_category_dir_' . $this->siteid);
         if ($this->site['SITE_EXTEND_ID']) {
-            $data = $this->cache->get('category_dir_' . $this->site['SITE_EXTEND_ID']);
+            $data = $this->cache->get($this->namespace.'_category_dir_' . $this->site['SITE_EXTEND_ID']);
             return empty($data) ? $cats : $data;
         }
         return $cats;

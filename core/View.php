@@ -210,7 +210,7 @@ class View extends Fn_base {
         if (is_array($param)) {
             foreach($param as $key => $val) {
                 //参数归类
-                if (in_array($key, array('return', 'more', 'page', 'urlrule', 'num', 'join', 'on', 'order', 'table', 'pagesize', 'action', 'tag', 'extend', 'site', 'form', 'fields'))) {
+                if (in_array($key, array('return', 'more', 'page', 'urlrule', 'num', 'join', 'on', 'order', 'table', 'pagesize', 'action', 'tag', 'extend', 'site', 'form', 'fields','plugin'))) {
                     $system[$key] = $val;
                 } else {
                     if (substr($key, 0, 3) == 'NOT') {
@@ -364,23 +364,35 @@ class View extends Fn_base {
             $table  = 'content';
         }
         //加载Model实例
-        if (strpos($table, '.') !== false) {
-            list($plugin, $table) = explode('.', $table);
-            $db = App::plugin_model($plugin, $table);
-        } elseif ($table == 'content') {
-            $table  .= '_' . $system['site'];
-            if(APP::get_plugin_id()){
-                $db = Controller::plugin_model(APP::get_plugin_id(),$table);
-            }else{
-                $db = Controller::model($table);
+        if(isset($system['plugin']) && $system['plugin']){
+            if ($table == 'content') {
+                $db = Controller::plugin_model($system['plugin'],$table);
+                $table  .= '_' . $system['site'];
+                $db = Controller::plugin_model($system['plugin'],$table);
+            } else {
+                $db = Controller::plugin_model($system['plugin'],$table);
             }
-        } else {
-            if(APP::get_plugin_id()){
+        }else{
+            if (strpos($table, '.') !== false) {
+                list($plugin, $table) = explode('.', $table);
+                $db = App::plugin_model($plugin, $table);
+            } elseif ($table == 'content') {
                 $db = Controller::plugin_model(APP::get_plugin_id(),$table);
-            }else{
-                $db = Controller::model($table);
+                $table  .= '_' . $system['site'];
+                if(APP::get_plugin_id()){
+                    $db = Controller::plugin_model(APP::get_plugin_id(),$table);
+                }else{
+                    $db = Controller::model($table);
+                }
+            } else {
+                if(APP::get_plugin_id()){
+                    $db = Controller::plugin_model(APP::get_plugin_id(),$table);
+                }else{
+                    $db = Controller::model($table);
+                }
             }
         }
+
         $table          = $db->prefix . $table;
         $table_join     = $table_data = $table_fields = $table_join_fields = $table_data_fields = $arrchilds = null;
         $_table_fields  = $db->get_table_fields();

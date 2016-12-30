@@ -488,6 +488,7 @@ img {
     border-color: #4da7fd;
 }
 
+.login-item .btn:focus,
 .login-item .btn:hover{
     color: #fff;
     opacity: .9;

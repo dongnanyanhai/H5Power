@@ -252,13 +252,17 @@ abstract class App {
 	 * 项目文件的自动加载
 	 */
 	public static function auto_load($class_name) {
+
 		if (isset(self::$core_class_array[$class_name])) {
 			self::load_file(SYS_ROOT . self::$core_class_array[$class_name]);
 		} else if (substr($class_name, -5) == 'Model') {
+
 			if (is_file(MODEL_DIR . $class_name . '.php')) {
 				self::load_file(MODEL_DIR . $class_name . '.php');
 			} elseif ((is_file(PLUGIN_DIR . self::$namespace . DS . 'models' . DS . $class_name . '.php'))) {
+
 				self::load_file(PLUGIN_DIR . self::$namespace . DS . 'models' . DS . $class_name . '.php');
+
 			} else {
 				Controller::halt('The Model file: ' . $class_name . ' is not exists!');
 			}
@@ -466,10 +470,10 @@ abstract class App {
 			return false;
 		}
 
-		// var_dump($table_name);
-
 		$model_name = ucfirst(strtolower($table_name)) . 'Model';
+
 		$model_file = PLUGIN_DIR . $plugin . DS . 'models' . DS . $model_name . '.php';
+		
 		if (!is_file($model_file)) {
 			Controller::halt('The pluginModel(#' . $plugin . ') file:' . $model_name . '.php is not exists!');
 		}
@@ -477,6 +481,7 @@ abstract class App {
 		$key = strtolower($model_name);
 
 		if (isset(self::$_objects[$key])) {
+			self::$_objects[$key]->prefix = self::$_objects[$key]->default_prefix . $plugin . "_" ;
 			return self::$_objects[$key];
 		}
 

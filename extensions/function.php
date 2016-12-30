@@ -897,7 +897,6 @@ function navbar($navid) {
     }else{
     	return $row;
     }
-
 }
 /**
  * 编码转换函数

@@ -50,7 +50,14 @@ class Admin extends Common {
 
     protected function get_plugins_menu($plugins,$menu,$ismenu=true){
 
-        $last_menuid = end($menu['top'])['menuid'];
+        $last_menu = end($menu['top']);
+        
+        if(is_array($last_menu)){
+            $last_menuid = $last_menu['menuid'];
+        }else{
+            $last_menuid = 0;
+        }
+        
         $menu_data = null;
         // 获取数据库前缀
         $params = Controller::load_config('database');

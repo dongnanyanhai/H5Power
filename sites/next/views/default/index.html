@@ -8,7 +8,15 @@ body {font-family:"微软雅黑",arial,sans-serif}
 
 <body text=#000000 bgcolor=#ffffff>
 <blockquote>
-  <H1>Forbidden11</H1>
+  <H1>Forbidden</H1>
 Your client does not have permission to get this directory from this server.
+<div>
+	{list plugin=news catid=1 more=1}
+	{var_dump($t['title'])}
+	{/list}
+
+	<hr>
+	{var_dump($cats)}
+</div>
 </blockquote>
 </body></html>

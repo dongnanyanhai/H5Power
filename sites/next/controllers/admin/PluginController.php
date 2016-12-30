@@ -549,6 +549,8 @@ class PluginController extends Admin {
         if (trim($tabledump)) {
             $tabledump = "# h5pcms bakfile\n# version:" . CMS_VERSION . " \n# time:" . date('Y-m-d H:i:s') . "\n# http://www.h5power.cn\n# --------------------------------------------------------\n\n\n" . $tabledump;
             $tabledump = str_replace($plugin_prefix, '{prefix}', $tabledump);
+            $tabledump = str_replace("?s=".$dir."&", '?s={namespace}&', $tabledump);
+            $tabledump = str_replace("','".$dir."/admin_", "','{namespace}/admin_", $tabledump);
             $tableid   = $i;
             // $filename  = 'h5pcms_' . date('Ymd') . '_' . $random . '_' . $fileid . '.sql';
             $filename  = 'data.sql';

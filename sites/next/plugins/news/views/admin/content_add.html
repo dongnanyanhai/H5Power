@@ -83,14 +83,17 @@ function otcats($cats,$catids,$catid2s){
                                     <input type="text" class="input-text" size="50" id="catid2" value="{$data['catid2']}" name="data[catid2]" />
                                     <input type="button" style="width:66px;cursor:pointer;" class="button" onClick="setcatid2('catid2')" value="{lang('a-fnx-39')}" />
                                     <div id="setcats" style="display:none;">
-                                        {php $catid2s = explode(",",trim($data['catid2'])); } {loop $cats $cat} {if $cat['parentid'] == 0 && $cat['typeid'] == 1}
+                                    {php $catid2s = explode(",",trim($data['catid2'])); }
+                                    {loop $cats $cat}
+                                    {if $cat['parentid'] == 0 && $cat['typeid'] == 1}
                                         <dl>
                                             <dt>{$cat['catname']}&nbsp;
                                                 <input type="checkbox" value="{$cat['catid']}" {if in_array($cat[ 'catid'],$catid2s)}checked{/if}> &nbsp;&nbsp;&nbsp;
                                             </dt>
                                             {php echo otcats($cats,$cat['catid'],$catid2s);}
                                         </dl>
-                                        {/if} {/loop}
+                                        {/if}
+                                    {/loop}
                                     </div>
                                 </td>
                             </tr>
