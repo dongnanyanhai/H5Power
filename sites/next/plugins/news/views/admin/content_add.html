@@ -52,12 +52,12 @@ function otcats($cats,$catids,$catid2s){
                         <tbody>
                             {if $verify}
                             <tr>
-                                <th width="20%">{lang('a-mod-137')}：</th>
+                                <th width="160">{lang('a-mod-137')}：</th>
                                 <td><a href="{url($s.'/admin_content/editverify', array('id'=>$data['id']))}">{lang('a-mod-140')}</a></td>
                             </tr>
                             {/if}
                             <tr>
-                                <th width="20%">
+                                <th width="160">
                                     <font color="red">*</font>&nbsp;{lang('a-con-29')}：</th>
                                 <td>
                                     <select name="data[catid]" id="catid">
@@ -77,7 +77,7 @@ function otcats($cats,$catids,$catid2s){
                             {/if} {if $model['content']['catid2']['show'] && $SITE_FNX_CATID2}
                             <!-- 阿海新增 - 副栏目 -->
                             <tr>
-                                <!-- <th width="20%"><font color="red">*</font>&nbsp;{lang('a-fnx-38')}：</th> -->
+                                <!-- <th width="160"><font color="red">*</font>&nbsp;{lang('a-fnx-38')}：</th> -->
                                 <th>{$model['content']['catid2']['name']}：</th>
                                 <td>
                                     <input type="text" class="input-text" size="50" id="catid2" value="{$data['catid2']}" name="data[catid2]" />

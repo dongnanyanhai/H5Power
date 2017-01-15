@@ -1,12 +1,10 @@
 #
-# robots.txt for FineCMS
+# robots.txt for H5PowerCMS
 #
 User-agent: * 
-Disallow: /admin/
 Disallow: /core/
 Disallow: /extensions/
 Disallow: /sites/
-Disallow: /views/
 Disallow: /index.php?s=member*
-Disallow: /index.php?s=f*
+Disallow: /index.php?s=h5*
 Disallow: /index.php?c=api*
