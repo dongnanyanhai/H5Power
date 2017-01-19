@@ -30,7 +30,8 @@ class InstallController extends Controller {
             $this->view->set_view_dir(VIEW_DIR);
             if(IN_ROOTDIR == true){
                 // 根目录
-                define('SITE_THEME',  str_replace(array('\\', '//'), '/', SITE_ROOT . self::get_theme_url()));
+                $site_root_path = str_replace(APP_ROOT, "", SITE_ROOT);
+                define('SITE_THEME',  str_replace(array('\\', '//'), '/', $site_root_path . self::get_theme_url()));
             }else{
                 // 二级目录
                 define('SITE_THEME',  str_replace(array('\\', '//'), '/', self::get_theme_url()));
