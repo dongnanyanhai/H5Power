@@ -50,13 +50,15 @@ class Common extends Controller {
         
         if(IN_ROOTDIR){
             define('ROOT_SITE_PATH', SITE_PATH);
-            define('SITE_THEME',str_replace(array('\\', '//'), '/', SITE_ROOT. self::get_theme_url()));
+            $site_root_path = str_replace(APP_ROOT, "", SITE_ROOT);
+            define('SITE_THEME',str_replace(array('\\', '//'), '/', $site_root_path . self::get_theme_url()));
+            define('ADMIN_THEME',   str_replace(array('\\', '//'), '/', $site_root_path . basename(VIEW_DIR) . '/admin/' ));
         }else{
             define('ROOT_SITE_PATH', '/');
             define('SITE_THEME',self::get_theme_url());
+            define('ADMIN_THEME',   str_replace(array('\\', '//'), '/', SITE_PATH . basename(VIEW_DIR) . '/admin/' ));
         }
-        // define('ADMIN_THEME',    ROOT_SITE_PATH . basename(VIEW_DIR) . '/admin/');
-        define('ADMIN_THEME',   str_replace(array('\\', '//'), '/', SITE_ROOT . basename(VIEW_DIR) . '/admin/' ));
+        
         define('EXT_PATH',      ROOT_SITE_PATH . EXTENSION_PATH . '/');
         define('LANG_PATH',     ROOT_SITE_PATH . EXTENSION_PATH . '/language/' . SYS_LANGUAGE . '/');
         //禁止访问

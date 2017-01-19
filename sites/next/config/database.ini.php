@@ -6,12 +6,12 @@ if (!defined('IN_FINECMS')) exit();
  */
 return array(
 
-	'host'     => 'localhost', 
-	'username' => 'root', 
-	'password' => 'root', 
-	'dbname'   => 'cms_next', 
-	'prefix'   => 'h5p_', 
-	'charset'  => 'utf8', 
-	'port'     => '', 
+   'host'     => 'localhost', 
+   'username' => 'root', 
+   'password' => 'root', 
+   'dbname'   => 'cms_h5p', 
+   'prefix'   => 'h5p_', 
+   'charset'  => 'utf8', 
+   'port'     => '', 
 
 );

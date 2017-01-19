@@ -46,7 +46,7 @@ if (function_exists('ini_set')) {
 }
 
 if (function_exists('ini_set')) {
-	ini_set('memory_limit', '1024M');
+	@ini_set('memory_limit', '1024M');
 }
 
 if (SYS_COOKIE_DOMAIN && function_exists('ini_set')) {

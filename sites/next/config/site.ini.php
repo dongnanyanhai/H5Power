@@ -6,6 +6,6 @@ if (!defined('IN_FINECMS')) exit();
  */
 return array(
 
-	'1'     => 'cms.h5power.cn', 
+  '1'     => 'cms.h5power.cn', 
 
 );

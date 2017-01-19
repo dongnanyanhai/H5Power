@@ -16,9 +16,9 @@ define('APP_ROOT',   dirname(__FILE__) . DS);
 $sitesmap = require APP_ROOT.'sitesmap.php';
 
 if(!empty($sitesmap[$_SERVER['HTTP_HOST']])){
-    define('SITE_ROOT', $sitesmap[$_SERVER['HTTP_HOST']] . DS);
+    define('SITE_ROOT', APP_ROOT . $sitesmap[$_SERVER['HTTP_HOST']] . DS);
 }else{
-    define('SITE_ROOT', 'sites' . DS . 'default' . DS);
+    die("请通过sitemap.php绑定站点目录！");
 }
 
 $config = require SITE_ROOT . 'config/config.ini.php';
