@@ -52,7 +52,7 @@
         <div class="content-menu ib-a blue line-x">
             <a href="{url($s.'/admin_category/')}" class="on"><em>{lang('a-cat-12')}</em></a><span>|</span>
             {if admin_auth($userinfo['roleid'], $s.'/admin_category/add')}<a href="{url($s.'/admin_category/add')}"><em>{lang('a-cat-13')}</em></a><span>|</span>{/if}
-            {if admin_auth($userinfo['roleid'], $s.'/admin_category/url')}<a href="{url($s.'/admin_category/url')}"><em>{lang('a-cat-14')}</em></a><span>|</span>{/if}
+            <!-- {if admin_auth($userinfo['roleid'], $s.'/admin_category/url')}<a href="{url($s.'/admin_category/url')}"><em>{lang('a-cat-14')}</em></a><span>|</span>{/if} -->
             {if admin_auth($userinfo['roleid'], $s.'/admin_category/cache')}<a href="{url($s.'/admin_category/cache')}"><em>{lang('a-cache')}</em></a>{/if}
         </div>
         <div class="bk10"></div>

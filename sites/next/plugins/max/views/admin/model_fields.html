@@ -14,8 +14,7 @@
     <script type="text/javascript" src="{ADMIN_THEME}js/jquery.min.js"></script>
     <script type="text/javascript">
     function del(id) {
-        if (confirm('{lang('
-                a - mod - 29 ')}')) {
+        if (confirm('{lang("a-mod-29")}')) {
             var url = "{url($s.'/admin_model/delfield/',array('typeid'=>$typeid))}&fieldid=" + id;
             window.location.href = url;
         }
