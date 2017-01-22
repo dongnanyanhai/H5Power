@@ -1,3 +1,163 @@
-{list catid=$catid}
-{$t}
-{/list}
+<?php
+    // 判断是否玩过
+    if($_COOKIE['openid']){
+
+        // 已经玩过，这是第二次打开
+        $openid = $_COOKIE['openid'];
+    }else{
+
+        // 未玩过，这是第一次打开
+        // 设置唯一id
+        $openid = base_convert(uniqid(), 16, 10);
+        setcookie("openid",$openid,time() + 60*60*24*365);
+    }
+
+    $res_path = 'http://h5p-wx-static.h5power.cn/wx/2016/12/dbtwcj/';
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{$catname}</title>
+    <meta name="keywords" content="{$catname}" />
+    <meta name="description" content="{$content}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <!-- H5源力量 —— 专注微信H5活动开发，联系方式：978868928@qq.com-->
+    <meta name="author" content="阿海">
+    <meta name="email" content="978868928@qq.com">
+    <!-- <link rel="stylesheet" href="{$res_path}lib/Swiper/dist/css/swiper.min.css"> -->
+    <!-- <link rel="stylesheet" href="{$res_path}css/animate.min.css"> -->
+    <link rel="stylesheet" href="{$res_path}css/common.css">
+    <link rel="stylesheet" href="{$res_path}css/style.css">
+</head>
+
+<body>
+    <i id="music-btn" class="circle"></i>
+    <div id="loading" class="loading">
+        <div class="inner">
+            <div class="spinner"><i class="rect1"></i><i class="rect2"></i><i class="rect3"></i><i class="rect4"></i><i class="rect5"></i>
+            </div>
+            <p class="loading_rate" id="loading_rate">1%</p>
+            <p class="loading_progress">
+                <span class="bar" id="bar"></span>
+            </p>
+        </div>
+    </div>
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- 第1页 -->
+
+            <!-- 模板开始 -->
+            <!-- 
+            <div class="swiper-slide page" id="pageX" data-num="x">
+                <div class="p-bg">
+                    <img src="img/bg.png">
+                </div>
+                <div class="p-contents autosize" data-w="640" data-h="1008" data-top="middle" data-left="center">
+                    <img src="img/pX-cloud1.png" id="pX-cloud1" class="animated infinite pulse">
+                    <div id="pX-container" class="p-container">
+                        <img src="img/pX-img.png" id="pX-img" class="p-container-bg">
+                        <img src="img/dot.png" id="-dot" class="animated infinite">
+                        <button id="pX-click" class="p-click"></button>
+                        <button id="pX-click" class="p-click"></button>
+                    </div>
+                </div>
+            </div>
+             -->
+            <!-- 模板结束 -->
+        </div>
+    </div>
+    
+    <script src="{$res_path}js/jquery-2.2.4.min.js"></script>
+    <!-- Swiper JS -->
+    <!-- <script src="{$res_path}lib/Swiper/dist/js/swiper.jquery.min.js"></script> -->
+    <!-- kute.min.js -->
+    <!-- <script src="{$res_path}lib/kute.js/dist/kute.min.js"></script> -->
+    <!-- <script src="{$res_path}lib/kute.js/dist/kute-jquery.min.js"></script> -->
+    <script src="{$res_path}js/lib.js"></script>
+    <script src="{$res_path}js/main.js"></script>
+    <script>
+        var openid = "{$openid}";
+        var plugin_id = "{$s}";
+        // 定义资源目录，方便PHP后台配合！
+        var res_dir = "";
+        // 跟后台搭配后，记得切换
+        // var res_dir = "{SITE_THEME}fiat/";
+
+        // 所有图片
+        var res_imgs = "music.png";
+        // 基本配置
+        var configs = {
+            // 是否播放音乐
+            playMuisc:false,
+            // 是否现在帧率信息
+            showStats:true,
+            useSwiper:false,
+        }
+        
+        // 判断图片资源载入进度
+        loading();
+    </script>
+
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    {php $site_url = SITE_URL;}
+    <?php
+        $js = wxjs();
+
+        $share_title = $meta_title ? $meta_title : $catname;
+
+        $share_link = $meta_url ? $meta_url : $js->getUrl();
+        
+        $share_imgurl = $meta_image ? $meta_image : $image;
+
+        if(strpos($share_imgurl,'http://') !== 0){
+            $share_imgurl = $site_url . $share_imgurl;
+        }
+
+        $share_desc = $meta_description ? $meta_description : $content;
+    ?>
+    <script>
+    // 开始设置微信分享！
+    wx.config(<?php echo $js->config(array("onMenuShareTimeline","onMenuShareAppMessage","onMenuShareQQ","onMenuShareWeibo"), true, true) ?>);
+
+    wx.ready(function() {
+        // 在这里调用 API
+        // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+        wx.onMenuShareTimeline({
+            title: '{$share_title}', // 分享标题
+            link: '{$share_link}', // 分享链接
+            imgUrl: '{$share_imgurl}', // 分享图标
+            success: function() {
+                // 用户确认分享后执行的回调函数
+                MtaH5.clickStat('wxpshare');
+            },
+            cancel: function() {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+
+        // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+        wx.onMenuShareAppMessage({
+            title: '{$share_title}', // 分享标题
+            desc: '{$share_desc}', // 分享描述
+            link: '{$share_link}', // 分享链接
+            imgUrl: '{$share_imgurl}', // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function() {
+                // 用户确认分享后执行的回调函数
+                MtaH5.clickStat('wxpshare');
+            },
+            cancel: function() {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+    });
+    </script>
+</body>
+
+</html>
