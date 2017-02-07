@@ -58,7 +58,7 @@ class Common extends \Fn_base
         
 
         // 用以发送微信公众号信息的类实例
-        $this->staff = new \Overtrue\Wechat\Staff($this->app_id, $this->app_secret);
+        // $this->staff = new \Overtrue\Wechat\Staff($this->app_id, $this->app_secret);
 
     }
 
@@ -99,7 +99,9 @@ class Common extends \Fn_base
         return self::$errinfo;
     }
 
-    public function get_content_data($id){
+    public function get_content_data($id,$plugin_id =""){
+
+        $plugin_id = $plugin_id ? $plugin_id : \App::get_plugin_id();
 
         $id = (int)$id;
 
@@ -108,7 +110,7 @@ class Common extends \Fn_base
             return false;
         }
 
-        $content = \Controller::model('content_' . $this->siteid);
+        $content = \Controller::plugin_model($plugin_id,'content_' . $this->siteid);
 
         $data = $content->find($id);
         
@@ -118,7 +120,7 @@ class Common extends \Fn_base
             // 存在对应id的数据
 
             // 获取站点模型缓存
-            $model = get_model_data('content',$this->siteid);
+            $model = get_model_data($plugin_id.'_model_content',$this->siteid);
 
             if ($data['status'] == 0) { 
                 //判断数据是否存在或文档状态是否通过
@@ -130,7 +132,7 @@ class Common extends \Fn_base
                 return false;
             }
 
-            $table  = \Controller::model($model[$data['modelid']]['tablename']);
+            $table  = \Controller::plugin_model($plugin_id,$model[$data['modelid']]['tablename']);
 
             $_data  = $table->find($id);    //附表数据查询
 
@@ -145,7 +147,9 @@ class Common extends \Fn_base
     }
 
         // 添加表单数据
-    public function set_content_data($modelid,$data){
+    public function set_content_data($modelid,$data,$plugin_id =""){
+
+        $plugin_id = $plugin_id ? $plugin_id : \App::get_plugin_id();
 
         $modelid = (int)$modelid;
 
@@ -154,11 +158,11 @@ class Common extends \Fn_base
             return false;
         }
 
-        $model = get_model_data('content',$this->siteid);
+        $model = get_model_data($plugin_id.'_model_content',$this->siteid);
 
         $content_model = $model[$modelid];
 
-        $content = \Controller::model('content_' . $this->siteid);
+        $content = \Controller::plugin_model($plugin_id,'content_' . $this->siteid);
 
         $temp_data['modelid']    = (int)$modelid;
         $temp_data['inputtime']  = $temp_data['updatetime'] = time();
@@ -185,7 +189,9 @@ class Common extends \Fn_base
     }
 
     // 根据$id获取表单数据
-    public function get_form_data($modelid,$conditions = '',$id=0){
+    public function get_form_data($modelid,$conditions = '',$id=0,$plugin_id =""){
+
+        $plugin_id = $plugin_id ? $plugin_id : \App::get_plugin_id();
 
         if(empty($modelid)){
             self::$errinfo = '未提供准确的Modelid';
@@ -194,9 +200,9 @@ class Common extends \Fn_base
 
         $modelid = (int)$modelid;
 
-        $model = get_model_data('form',$this->siteid);
+        $model = get_model_data($plugin_id.'_model_form',$this->siteid);
         $form_model = $model[$modelid];
-        $form = \Controller::model($form_model['tablename']);
+        $form = \Controller::plugin_model($plugin_id,$form_model['tablename']);
 
         if(!empty($conditions)){
             // 根据条件查询
@@ -239,7 +245,9 @@ class Common extends \Fn_base
     }
 
     // 添加表单数据
-    public function set_form_data($modelid,$data){
+    public function set_form_data($modelid,$data,$plugin_id =""){
+
+        $plugin_id = $plugin_id ? $plugin_id : \App::get_plugin_id();
 
         $modelid = (int)$modelid;
 
@@ -248,11 +256,11 @@ class Common extends \Fn_base
             return false;
         }
 
-        $model = get_model_data('form',$this->siteid);
+        $model = get_model_data($plugin_id.'_model_form',$this->siteid);
 
         $form_model = $model[$modelid];
 
-        $form = \Controller::model($form_model['tablename']);
+        $form = \Controller::plugin_model($plugin_id,$form_model['tablename']);
 
         $temp_data['ip'] = \client::get_user_ip();
         $temp_data['cid'] = '';

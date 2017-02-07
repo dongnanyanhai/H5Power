@@ -828,7 +828,8 @@ function pblock($plugin,$id) {
     $data  = $cache->get($plugin.'_block');
     $row   = $data[$id];
     if (empty($row)) return null;
-    return htmlspecialchars_decode(string2array($row['content']));
+    // return htmlspecialchars_decode(string2array($row['content']));
+    return string2array($row['content']);
 }
 
 /**
