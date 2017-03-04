@@ -292,6 +292,39 @@ class Common extends \Fn_base
 
     }
 
+    // 根据条件或$id删除表单数据
+    public function del_form_data($modelid,$conditions = '',$id=0,$plugin_id =""){
+
+        $plugin_id = $plugin_id ? $plugin_id : \App::get_plugin_id();
+
+        if(empty($modelid)){
+            self::$errinfo = '未提供准确的Modelid';
+            return false;
+        }
+
+        $modelid = (int)$modelid;
+
+        $model = get_model_data($plugin_id.'_model_form',$this->siteid);
+        $form_model = $model[$modelid];
+        $form = \Controller::plugin_model($plugin_id,$form_model['tablename']);
+
+        if(!empty($conditions)){
+            // 根据条件删除
+            $re = $form->delete($conditions);
+            return $re;
+
+        }else if(!empty($id)){
+            // 删除指定id数据
+            $id = (int)$id;
+            $re = $form->delete('id = ' .$id);
+            return $re;
+        }
+        
+        self::$errinfo = '未提供查询条件或id';
+        return false;
+
+    }
+
     // 实际处理方法，交由子类覆盖实现
     // public function doit($id){}
 

@@ -92,7 +92,7 @@ class ModelController extends Admin {
 					$this->adminMsg(lang('a-mod-220', array('1' => ucfirst($tablename) . 'Model.php')));
 				}
 			    // $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/index/', array('typeid' => $this->typeid)), 3, 1, 1);
-			    $this->redirect(url($this->namespace .'/admin_model/cache'));
+			    $this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 			} else {
 			    $this->adminMsg(lang('failure'));
 			}
@@ -144,7 +144,7 @@ class ModelController extends Admin {
 				}
 			}
 	        // $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/index/', array('typeid' => $this->typeid)), 3, 1, 1);
-	        $this->redirect(url($this->namespace .'/admin_model/cache'));
+	        $this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	    }
 	    $modelid = (int)$this->get('modelid');
 		$fdata   = $this->get_model($this->namespace.'_model_form');	//表单模型数据缓存
@@ -180,7 +180,7 @@ class ModelController extends Admin {
 		unset($data[$mid]);
 		$this->cache->set($this->namespace.'_'.$name, $data);
 	    // $all or $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/index/', array('typeid' => $this->typeid)), 3, 1, 1);
-	    $this->redirect(url($this->namespace .'/admin_model/cache'));
+	    $this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	}
 	
 	/**
@@ -200,7 +200,7 @@ class ModelController extends Admin {
 	            }
 	        }
 			// $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/fields/', array('modelid' => $modelid, 'typeid' => $this->typeid)), 3, 1, 1);
-			$this->redirect(url($this->namespace .'/admin_model/cache'));
+			$this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	    }
 		$setting = string2array($data['setting']);
 	    $this->view->assign(array(
@@ -351,7 +351,7 @@ class ModelController extends Admin {
 			$setting['default'][$name] = $this->post('data');
 			$this->_model->update(array('setting' => array2string($setting)), 'modelid=' . $modelid);
 			// $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/fields/', array('typeid' => $this->typeid, 'modelid' => $modelid)), 3, 1, 1);
-			$this->redirect(url($this->namespace .'/admin_model/cache'));
+			$this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	    }
 	    $this->view->assign(array(
 	        'data'    => $field,
@@ -386,7 +386,7 @@ class ModelController extends Admin {
 	    $disable = $data['disabled'] == 1 ? 0 : 1;
 	    $field->update(array('disabled' => $disable), 'fieldid=' . $fieldid);
 	    // $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/fields/', array('typeid' => $this->typeid, 'modelid' => $data['modelid'])), 3, 1, 1);
-	    $this->redirect(url($this->namespace .'/admin_model/cache'));
+	    $this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	}
 	
 	/**
@@ -400,7 +400,7 @@ class ModelController extends Admin {
 		if ($data['field'] == 'content') $this->adminMsg(lang('a-mod-11'));
 	    if ($field->del($data)) {
 	        // $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/fields/', array('typeid' => $this->typeid, 'modelid' => $data['modelid'])), 3, 1, 1);
-	        $this->redirect(url($this->namespace .'/admin_model/cache'));
+	        $this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	    } else {
 	        $this->adminMsg(lang('failure'));
 	    }
@@ -417,7 +417,7 @@ class ModelController extends Admin {
 	    $setting['disable'] = $setting['disable'] == 1 ? 0 : 1;
 	    $this->_model->update(array('setting' => array2string($setting)), 'modelid=' . $modelid);
 	    // $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/index/', array('typeid' => $this->typeid)), 3, 1, 1);
-	    $this->redirect(url($this->namespace .'/admin_model/cache'));
+	    $this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	}
 	
 	/*
@@ -489,7 +489,7 @@ class ModelController extends Admin {
 			if (substr($content['setting'], -1) == "'")   $content['setting'] = substr($content['setting'], 0, -1);
 			$field->update($content, 'modelid=' . $modelid . ' and field="content"');
 			// $this->adminMsg($this->getCacheCode('model') . lang('success'), url($this->namespace . '/admin_model/index/', array('typeid' => $this->typeid)), 3, 1, 1);
-			$this->redirect(url($this->namespace .'/admin_model/cache'));
+			$this->redirect(url($this->namespace .'/admin_model/cache',array("typeid"=>$this->typeid)));
 	    }
 	    $this->view->display('admin/model_import');
 	}
