@@ -37,7 +37,7 @@ function form_input($setting = '') {
 	<tbody>
 	<tr> 
       <td width="100">' . lang('a-mod-96') . ' ：</td>
-      <td><input type="text" class="input-text" size="10" value="' . (isset($setting['size']) ? $setting['size'] : '150') . '" name="setting[size]"><font color="gray">px</font></td>
+      <td><input type="text" class="input-text" size="10" value="' . (isset($setting['size']) ? $setting['size'] : '500') . '" name="setting[size]"><font color="gray">px</font></td>
     </tr>
 	<tr> 
       <td>' . lang('a-mod-95') . ' ：</td>

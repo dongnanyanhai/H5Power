@@ -100,11 +100,12 @@ function get_form_status($status) {
 /**
  * 读取栏目缓存数据
  */
-function get_category_data($site = 0) {
+function get_category_data($plugin = null,$site = 0) {
+    $plugin = $plugin ? $plugin : APP::get_plugin_id();
 	$cfg  	= App::get_config();
 	$cache 	= new cache_file();
 	$site	= empty($site) ? App::get_site_id() : $site;
-    return $cfg['SITE_EXTEND_ID'] ? $cache->get('category_' . $cfg['SITE_EXTEND_ID']) : $cache->get('category_' . $site);
+    return $cfg['SITE_EXTEND_ID'] ? $cache->get($plugin . '_category_' . $cfg['SITE_EXTEND_ID']) : $cache->get($plugin . '_category_' . $site);
 }
 
 /**

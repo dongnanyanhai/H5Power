@@ -529,7 +529,7 @@ abstract class Model extends Fn_base {
 				$sql_str .= $this->_parts[$part_name];
 				unset($this->_parts[$part_name]);
 			}
-		}
+		}		
 		return $this->execute($sql_str, $all_data, $cache);
 	}
 	

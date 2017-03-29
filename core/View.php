@@ -402,7 +402,7 @@ class View extends Fn_base {
             $where .= ($where ? ' AND ' : ' ') . ' `' . $table . '`.`status`=1';
         }
         if (isset($fields['catid']) && $fields['catid']) { //栏目信息
-            $cats   = get_category_data($system['site']);
+            $cats   = get_category_data(APP::get_plugin_id(),$system['site']);
             $cat    = $cats[$fields['catid']];
         }
         if (isset($system['join']) && $system['join'] && $system['on']) { //JOIN联合查询
@@ -422,7 +422,11 @@ class View extends Fn_base {
         if (isset($system['more']) && $system['more']) { //附表
             $model = null;
             if ($table == $db->prefix . 'content_' . $system['site']) {
-                $models = get_model_data('content', $system['site']);
+                if(APP::get_plugin_id()){
+                    $models = get_model_data(APP::get_plugin_id() . '_model_content', $system['site']);
+                }else{
+                    $models = get_model_data('content', $system['site']);
+                }
                 if (isset($fields['catid']) && $fields['catid'] && isset($cat) && $cat) {
                     $model = $models[$cat['modelid']];
                 } elseif (isset($fields['modelid']) && $fields['modelid']) {
@@ -612,6 +616,7 @@ class View extends Fn_base {
             $start_id = $pagesize * ($system['page'] - 1);
             $limit    = ' LIMIT ' . $start_id . ',' . $pagesize;
             $pagelist = $pagelist->total($total)->url($pageurl)->num($pagesize)->page($system['page'])->output();
+
         }
         //查询字段筛选
         if (isset($system['fields']) && $system['fields']) {
