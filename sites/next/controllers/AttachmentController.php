@@ -250,7 +250,7 @@ class AttachmentController extends Common {
         // }else{
         // 	$realpath = $path . $fname;
         // }
-        $realpath = str_replace(APP_ROOT, '/', $path . $fname);
+        $realpath = str_replace(str_replace(DIRECTORY_SEPARATOR,'/',APP_ROOT), '/', $path . $fname);
         return array('result' => $result, 'path' => $realpath, 'file' => $file , 'ext' => $dir == 'image' ? 1 : $ext);
     }
 	
